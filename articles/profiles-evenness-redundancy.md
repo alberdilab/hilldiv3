@@ -138,22 +138,47 @@ samples to fit the curve:
 hillred(counts, tree = tree)
 #> Warning: Redundancy for "q0" could not be estimated: singular gradient matrix at initial
 #> parameter estimates
+#> Warning: Redundancy for "q1" could not be estimated: step factor 0.000488281 reduced
+#> below 'minFactor' of 0.000976562
 #> Warning: Redundancy for "q2" could not be estimated: step factor 0.000488281 reduced
 #> below 'minFactor' of 0.000976562
 #> <hilldiv3 result: phylogenetic>
 #> 3 rows x 5 cols
 #> 
-#>   q redundancy        a         b        c
-#> 1 0         NA       NA        NA       NA
-#> 2 1  0.8050446 4.223956 0.5251091 1.803386
-#> 3 2         NA       NA        NA       NA
+#>   q redundancy  a  b  c
+#> 1 0         NA NA NA NA
+#> 2 1         NA NA NA NA
+#> 3 2         NA NA NA NA
 ```
 
-The returned matrix has the `redundancy` summary plus the fitted `a`,
+The returned table has the `redundancy` summary plus the fitted `a`,
 `b`, `c` coefficients per order. Values near `1` mean the assemblage is
 highly redundant (taxa are phylogenetically/functionally
 interchangeable); values near `0` mean each taxon contributes largely
 unique diversity.
+
+Like the profile, the result has a ready-made
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) method. It
+draws the fit behind the redundancy number: each sample’s neutral
+diversity against its phylogenetic/functional diversity, with the fitted
+saturating curve per order. A curve that bends early and plateaus
+signals high redundancy.
+
+``` r
+
+red <- hillred(counts, tree = tree)
+#> Warning: Redundancy for "q0" could not be estimated: singular gradient matrix at initial
+#> parameter estimates
+#> Warning: Redundancy for "q1" could not be estimated: step factor 0.000488281 reduced
+#> below 'minFactor' of 0.000976562
+#> Warning: Redundancy for "q2" could not be estimated: step factor 0.000488281 reduced
+#> below 'minFactor' of 0.000976562
+plot(red)
+```
+
+![Per-sample neutral versus phylogenetic diversity with fitted
+saturating curves, one per
+order](profiles-evenness-redundancy_files/figure-html/hillred-plot-1.png)
 
 > **Note.** Redundancy is a curve fit across samples and can fail to
 > converge for some orders on small or degenerate datasets, in which

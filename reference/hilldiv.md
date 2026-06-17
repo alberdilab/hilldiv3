@@ -15,6 +15,7 @@ hilldiv(
   dist = NULL,
   tau = NULL,
   type = c("auto", "neutral", "phylogenetic", "functional"),
+  reference = c("pool", "sample"),
   out = c("tibble", "matrix")
 )
 ```
@@ -52,6 +53,20 @@ hilldiv(
   the type and is validated against the inputs (e.g. `"phylogenetic"`
   requires a `tree`; `"neutral"` ignores any tree/dist carried by the
   object).
+
+- reference:
+
+  Reference tree depth for *phylogenetic* Hill numbers (ignored for
+  neutral and functional types). `"pool"` (default) reads every sample
+  at one common depth `T = mean(T_j)`, so values share a comparable axis
+  (matching hilldiv2's `multi` behaviour); `"sample"` reads each sample
+  at its own depth `T_j` (effective lineages at that sample's depth).
+  The two coincide on ultrametric trees. This reference depth is
+  intentionally *not* offered by
+  [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md):
+  in a partition `T` is fixed at the mean per-sample depth of Chiu et
+  al. (2014), the unique value for which `gamma / alpha` is a valid
+  decomposition with `beta` in `[1, N]`.
 
 - out:
 
@@ -111,4 +126,6 @@ hilldiv(counts, q = c(0, 1, 2))
 #> 4 0     s2 3.000000
 #> 5 1     s2 2.137309
 #> 6 2     s2 1.753623
+plot(hilldiv(counts, q = c(0, 1, 2)))
+#> Computing neutral Hill numbers of "q0", "q1", and "q2".
 ```

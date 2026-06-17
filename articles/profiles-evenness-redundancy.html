@@ -194,21 +194,38 @@ fit the curve:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hillred.html">hillred</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q0"</span> could not be estimated: singular gradient matrix at initial</span></span>
 <span><span class="co">#&gt; parameter estimates</span></span>
+<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q1"</span> could not be estimated: step factor 0.000488281 reduced</span></span>
+<span><span class="co">#&gt; below 'minFactor' of 0.000976562</span></span>
 <span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q2"</span> could not be estimated: step factor 0.000488281 reduced</span></span>
 <span><span class="co">#&gt; below 'minFactor' of 0.000976562</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
 <span><span class="co">#&gt; 3 rows x 5 cols</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   q redundancy        a         b        c</span></span>
-<span><span class="co">#&gt; 1 0         NA       NA        NA       NA</span></span>
-<span><span class="co">#&gt; 2 1  0.8050446 4.223956 0.5251091 1.803386</span></span>
-<span><span class="co">#&gt; 3 2         NA       NA        NA       NA</span></span></code></pre></div>
-<p>The returned matrix has the <code>redundancy</code> summary plus the
+<span><span class="co">#&gt;   q redundancy  a  b  c</span></span>
+<span><span class="co">#&gt; 1 0         NA NA NA NA</span></span>
+<span><span class="co">#&gt; 2 1         NA NA NA NA</span></span>
+<span><span class="co">#&gt; 3 2         NA NA NA NA</span></span></code></pre></div>
+<p>The returned table has the <code>redundancy</code> summary plus the
 fitted <code>a</code>, <code>b</code>, <code>c</code> coefficients per
 order. Values near <code>1</code> mean the assemblage is highly
 redundant (taxa are phylogenetically/functionally interchangeable);
 values near <code>0</code> mean each taxon contributes largely unique
 diversity.</p>
+<p>Like the profile, the result has a ready-made <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>
+method. It draws the fit behind the redundancy number: each sample’s
+neutral diversity against its phylogenetic/functional diversity, with
+the fitted saturating curve per order. A curve that bends early and
+plateaus signals high redundancy.</p>
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">red</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillred.html">hillred</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q0"</span> could not be estimated: singular gradient matrix at initial</span></span>
+<span><span class="co">#&gt; parameter estimates</span></span>
+<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q1"</span> could not be estimated: step factor 0.000488281 reduced</span></span>
+<span><span class="co">#&gt; below 'minFactor' of 0.000976562</span></span>
+<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q2"</span> could not be estimated: step factor 0.000488281 reduced</span></span>
+<span><span class="co">#&gt; below 'minFactor' of 0.000976562</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">red</span><span class="op">)</span></span></code></pre></div>
+<p><img src="profiles-evenness-redundancy_files/figure-html/hillred-plot-1.png" class="r-plt" alt="Per-sample neutral versus phylogenetic diversity with fitted saturating curves, one per order" width="576"></p>
 <blockquote>
 <p><strong>Note.</strong> Redundancy is a curve fit across samples and
 can fail to converge for some orders on small or degenerate datasets, in

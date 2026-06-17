@@ -34,6 +34,8 @@ How much phylogenetic/functional structure is duplicated across taxa.
 
 - [`hillred()`](https://alberdilab.github.io/hilldiv3/reference/hillred.md)
   : Hill numbers redundancy
+- [`plot(`*`<hill_redundancy>`*`)`](https://alberdilab.github.io/hilldiv3/reference/plot.hill_redundancy.md)
+  : Plot a redundancy fit
 
 ## Data preparation
 

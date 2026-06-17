@@ -72,6 +72,13 @@
 <li>
 <code><a href="../reference/hillpair.html">hillpair()</a></code> computes the type-specific structure once over all samples and reuses it per pair (no more full re-partition per pair), and reports a <code>progressr</code> bar when available.</li>
 <li>Bundled, documented example data: <code>gut_counts</code>, <code>gut_tree</code>, <code>gut_traits</code>.</li>
+<li>
+<strong><code>reference</code> argument on <code><a href="../reference/hilldiv.html">hilldiv()</a></code></strong> — <code>reference = c("pool", "sample")</code> selects the reference tree depth for <em>phylogenetic</em> Hill numbers. <code>"pool"</code> (default) reads every sample at one common depth <code>T = mean(T_j)</code> so values are mutually comparable (hilldiv2’s <code>multi</code> behaviour); <code>"sample"</code> reads each sample at its own depth <code>T_j</code>. The two coincide on ultrametric trees. The option is deliberately absent from <code><a href="../reference/hillpart.html">hillpart()</a></code>, where <code>T</code> is fixed at the Chiu et al. (2014) mean per-sample depth — the unique value for which <code>gamma / alpha</code> is a valid decomposition with <code>beta</code> in <code>[1, N]</code>.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<ul><li>
+<strong>Phylogenetic <code><a href="../reference/hilldiv.html">hilldiv()</a></code> alpha corrected.</strong> The per-sample phylogenetic Hill number previously raised branch length <code>L_i</code> to the power <code>q</code> along with abundance (<code>(L_i a_i / T)^q</code>), which matched no standard quantity and disagreed with the partition engine. Branch length is now a linear weight (<code>(L_i / T) a_i^q</code>, Chao et al. 2010), so <code>q = 0</code> recovers Faith’s PD / T and the per-sample value matches <code><a href="../reference/hillpart.html">hillpart()</a></code> alpha at a single sample. <strong>This changes phylogenetic <code><a href="../reference/hilldiv.html">hilldiv()</a></code> and <code><a href="../reference/hillprof.html">hillprof()</a></code> outputs</strong> relative to earlier 3.0.0 development snapshots.</li>
 </ul></div>
 <div class="section level4">
 <h4 id="infrastructure-development-version">Infrastructure<a class="anchor" aria-label="anchor" href="#infrastructure-development-version"></a></h4>

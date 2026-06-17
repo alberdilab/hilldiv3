@@ -117,8 +117,9 @@ a single metric).</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A long-format <code>data.frame</code> of class <code>hill_similarity</code> (default), or a
-matrix/vector of similarities when <code>out = "matrix"</code>.</p>
+    <p>A long-format <code>data.frame</code> of class <code>hill_similarity</code> (default, with
+a <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method), or a matrix/vector of similarities when
+<code>out = "matrix"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -147,6 +148,9 @@ matrix/vector of similarities when <code>out = "matrix"</code>.</p>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 10 0      V 0.8000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 11 1      V 0.5630749</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 12 2      V 0.4241645</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">hillsim</span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> similarity from neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span>
+<span class="r-plt img"><img src="hillsim-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

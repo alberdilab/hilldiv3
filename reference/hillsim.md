@@ -67,7 +67,8 @@ hillsim(
 
 ## Value
 
-A long-format `data.frame` of class `hill_similarity` (default), or a
+A long-format `data.frame` of class `hill_similarity` (default, with a
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) method), or a
 matrix/vector of similarities when `out = "matrix"`.
 
 ## See also
@@ -97,4 +98,6 @@ hillsim(counts)
 #> 10 0      V 0.8000000
 #> 11 1      V 0.5630749
 #> 12 2      V 0.4241645
+plot(hillsim(counts))
+#> similarity from neutral Hill numbers of "q0", "q1", and "q2".
 ```

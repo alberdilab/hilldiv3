@@ -15,6 +15,7 @@ hillred(
   dist = NULL,
   tau = NULL,
   type = c("auto", "phylogenetic", "functional"),
+  reference = c("pool", "sample"),
   out = c("tibble", "matrix")
 )
 ```
@@ -52,6 +53,20 @@ hillred(
   requires a `tree`; `"neutral"` ignores any tree/dist carried by the
   object).
 
+- reference:
+
+  Reference tree depth for *phylogenetic* Hill numbers (ignored for
+  neutral and functional types). `"pool"` (default) reads every sample
+  at one common depth `T = mean(T_j)`, so values share a comparable axis
+  (matching hilldiv2's `multi` behaviour); `"sample"` reads each sample
+  at its own depth `T_j` (effective lineages at that sample's depth).
+  The two coincide on ultrametric trees. This reference depth is
+  intentionally *not* offered by
+  [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md):
+  in a partition `T` is fixed at the mean per-sample depth of Chiu et
+  al. (2014), the unique value for which `gamma / alpha` is a valid
+  decomposition with `beta` in `[1, N]`.
+
 - out:
 
   Output shape: `"tibble"` (default) returns a `data.frame` with one row
@@ -60,10 +75,32 @@ hillred(
 
 ## Value
 
-A `data.frame` of class `hill_redundancy` (default), or a matrix with
-columns `redundancy`, `a`, `b`, `c` (one row per `q`) when
-`out = "matrix"`.
+A `data.frame` of class `hill_redundancy` (default) with a
+[plot()](https://alberdilab.github.io/hilldiv3/reference/plot.hill_redundancy.md)
+method, or a matrix with columns `redundancy`, `a`, `b`, `c` (one row
+per `q`) when `out = "matrix"`. The tibble carries the per-sample
+neutral and phylogenetic/functional diversity used for the fit as a
+`"hill_fit"` attribute, which the plot method draws.
 
 ## See also
 
-[`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md)
+[`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md),
+[`plot.hill_redundancy()`](https://alberdilab.github.io/hilldiv3/reference/plot.hill_redundancy.md)
+
+## Examples
+
+``` r
+d <- traits2dist(gut_traits)
+red <- hillred(gut_counts, dist = d)
+#> Warning: Redundancy for "q0" could not be estimated: singular gradient matrix at initial
+#> parameter estimates
+red
+#> <hilldiv3 result: functional>
+#> 3 rows x 5 cols
+#> 
+#>   q redundancy         a        b       c
+#> 1 0         NA        NA       NA      NA
+#> 2 1  0.7227875 1.3763096 2.691066 1.86674
+#> 3 2  0.5767747 0.8048479 2.439157 1.87440
+plot(red)
+```

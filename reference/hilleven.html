@@ -110,9 +110,9 @@ legacy matrix (orders in rows, samples in columns).</p></dd>
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A long-format <code>data.frame</code> of class <code>hill_evenness</code> (default), or a
-matrix of evenness values (orders in rows, samples in columns) when
-<code>out = "matrix"</code>.</p>
+    <p>A long-format <code>data.frame</code> of class <code>hill_evenness</code> (default) with a
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method, or a matrix of evenness values (orders in rows, samples in
+columns) when <code>out = "matrix"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="see-also">See also<a class="anchor" aria-label="anchor" href="#see-also"></a></h2>
@@ -133,6 +133,9 @@ matrix of evenness values (orders in rows, samples in columns) when
 <span class="r-out co"><span class="r-pr">#&gt;</span> 2 2     s1 0.9000000</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 3 1     s2 0.7124362</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> 4 2     s2 0.5845411</span>
+<span class="r-in"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu">hilleven</span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">1.5</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing neutral evenness of <span style="color: #0000BB;">"q1"</span>, <span style="color: #0000BB;">"q1.5"</span>, and <span style="color: #0000BB;">"q2"</span>.</span>
+<span class="r-plt img"><img src="hilleven-1.png" alt="" width="700" height="433"></span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

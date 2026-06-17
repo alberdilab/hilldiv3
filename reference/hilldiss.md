@@ -68,7 +68,8 @@ hilldiss(
 
 ## Value
 
-A long-format `data.frame` of class `hill_dissimilarity` (default), or a
+A long-format `data.frame` of class `hill_dissimilarity` (default, with
+a [`plot()`](https://rdrr.io/r/graphics/plot.default.html) method), or a
 matrix/vector of dissimilarities when `out = "matrix"`.
 
 ## See also
@@ -100,4 +101,6 @@ hilldiss(counts)
 #> 10 0      V 0.2000000
 #> 11 1      V 0.4369251
 #> 12 2      V 0.5758355
+plot(hilldiss(counts))
+#> dissimilarity from neutral Hill numbers of "q0", "q1", and "q2".
 ```

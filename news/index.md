@@ -53,6 +53,35 @@ engine.
   `progressr` bar when available.
 - Bundled, documented example data: `gut_counts`, `gut_tree`,
   `gut_traits`.
+- **`reference` argument on
+  [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md)**
+  — `reference = c("pool", "sample")` selects the reference tree depth
+  for *phylogenetic* Hill numbers. `"pool"` (default) reads every sample
+  at one common depth `T = mean(T_j)` so values are mutually comparable
+  (hilldiv2’s `multi` behaviour); `"sample"` reads each sample at its
+  own depth `T_j`. The two coincide on ultrametric trees. The option is
+  deliberately absent from
+  [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md),
+  where `T` is fixed at the Chiu et al. (2014) mean per-sample depth —
+  the unique value for which `gamma / alpha` is a valid decomposition
+  with `beta` in `[1, N]`.
+
+#### Bug fixes
+
+- **Phylogenetic
+  [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md)
+  alpha corrected.** The per-sample phylogenetic Hill number previously
+  raised branch length `L_i` to the power `q` along with abundance
+  (`(L_i a_i / T)^q`), which matched no standard quantity and disagreed
+  with the partition engine. Branch length is now a linear weight
+  (`(L_i / T) a_i^q`, Chao et al. 2010), so `q = 0` recovers Faith’s PD
+  / T and the per-sample value matches
+  [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
+  alpha at a single sample. **This changes phylogenetic
+  [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md)
+  and
+  [`hillprof()`](https://alberdilab.github.io/hilldiv3/reference/hillprof.md)
+  outputs** relative to earlier 3.0.0 development snapshots.
 
 #### Infrastructure
 

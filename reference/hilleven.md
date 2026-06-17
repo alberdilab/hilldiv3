@@ -59,7 +59,8 @@ hilleven(
 
 ## Value
 
-A long-format `data.frame` of class `hill_evenness` (default), or a
+A long-format `data.frame` of class `hill_evenness` (default) with a
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) method, or a
 matrix of evenness values (orders in rows, samples in columns) when
 `out = "matrix"`.
 
@@ -82,4 +83,6 @@ hilleven(counts)
 #> 2 2     s1 0.9000000
 #> 3 1     s2 0.7124362
 #> 4 2     s2 0.5845411
+plot(hilleven(counts, q = c(1, 1.5, 2)))
+#> Computing neutral evenness of "q1", "q1.5", and "q2".
 ```

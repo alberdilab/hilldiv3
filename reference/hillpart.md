@@ -85,10 +85,13 @@ hillpart(
 
 ## Value
 
-A long-format `data.frame` of class `hill_partition` (default), or a
+A long-format `data.frame` of class `hill_partition` (default) with a
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) method, or a
 matrix with columns `alpha`, `gamma`, `beta` and diversity orders in
 rows when `out = "matrix"`. With `hierarchy`, a `hill_hierarchy`
-long-format `data.frame` (or the corresponding wide matrix).
+long-format `data.frame` (with its own
+[`plot()`](https://rdrr.io/r/graphics/plot.default.html) method) or the
+corresponding wide matrix.
 
 ## See also
 
@@ -116,6 +119,9 @@ hillpart(counts)
 #> 7 0      beta 1.200000
 #> 8 1      beta 1.436925
 #> 9 2      beta 1.575835
+plot(hillpart(counts))
+#> Partitioning neutral Hill numbers of "q0", "q1", and "q2".
+
 
 # Multi-scale partitioning across a nested design.
 set.seed(1)
