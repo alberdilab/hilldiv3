@@ -18,9 +18,9 @@
 #'   shared tree depth / `tau` across scales). Grouping variables are resolved
 #'   against `metadata` when supplied, otherwise against the calling
 #'   environment.
-#' @param metadata Optional per-sample `data.frame` supplying the variables named
-#'   in `hierarchy`; rows are matched to the count-table columns by name when
-#'   possible, otherwise by position.
+#' @param metadata Optional per-sample `data.frame` supplying the variables
+#'   named in `hierarchy`; rows are matched to the count-table columns by name
+#'   when possible, otherwise by position.
 #' @param out Output shape: `"tibble"` (default) returns a long-format
 #'   `data.frame` with columns `q`, `component`, `value`; `"matrix"` returns the
 #'   legacy matrix (orders in rows, `alpha`/`gamma`/`beta` in columns). With

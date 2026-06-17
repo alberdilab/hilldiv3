@@ -25,8 +25,8 @@
 #'   at its own depth `T_j` (effective lineages at that sample's depth). The two
 #'   coincide on ultrametric trees. This reference depth is intentionally *not*
 #'   offered by [hillpart()]: in a partition `T` is fixed at the mean per-sample
-#'   depth of Chiu et al. (2014), the unique value for which `gamma / alpha` is a
-#'   valid decomposition with `beta` in `[1, N]`.
+#'   depth of Chiu et al. (2014), the unique value for which `gamma / alpha`
+#'   is a valid decomposition with `beta` in `[1, N]`.
 #' @param out Output shape: `"tibble"` (default) returns a long-format
 #'   `data.frame` with columns `q`, `sample`, `value` and `print()`/`plot()`
 #'   methods; `"matrix"` returns the legacy matrix (orders in rows, samples in

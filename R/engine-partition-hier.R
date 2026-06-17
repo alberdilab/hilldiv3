@@ -11,14 +11,14 @@
 #'
 #' **Unified construction.** All three diversity types share one formula under
 #' global equal sample weights (every sample weighted \eqn{1/n}). Each type
-#' supplies (i) a per-feature, per-sample contribution \eqn{c_{ij}} (features are
-#' taxa for neutral/functional, branches for phylogenetic), (ii) a per-feature
-#' *measure* \eqn{w_i} (1 for neutral, branch length \eqn{L_i} for phylogenetic,
-#' attribute contribution \eqn{v_i} for functional), and (iii) a grand-total
-#' normaliser \eqn{C} (the number of samples \eqn{n} for neutral, the summed
-#' tree depth \eqn{T_+ = \sum_j T_j} for phylogenetic, the total count
-#' \eqn{n_+} for functional). At an aggregation scale \eqn{k} whose units are
-#' \eqn{u} (each pooling \eqn{n_u} of the \eqn{n} samples, with pooled
+#' supplies (i) a per-feature, per-sample contribution \eqn{c_{ij}} (features
+#' are taxa for neutral/functional, branches for phylogenetic), (ii) a
+#' per-feature *measure* \eqn{w_i} (1 for neutral, branch length \eqn{L_i} for
+#' phylogenetic, attribute contribution \eqn{v_i} for functional), and (iii) a
+#' grand-total normaliser \eqn{C} (the number of samples \eqn{n} for neutral,
+#' the summed tree depth \eqn{T_+ = \sum_j T_j} for phylogenetic, the total
+#' count \eqn{n_+} for functional). At an aggregation scale \eqn{k} whose units
+#' are \eqn{u} (each pooling \eqn{n_u} of the \eqn{n} samples, with pooled
 #' contribution \eqn{m_{u,i} = \sum_{j \in u} c_{ij}}), the diversity is
 #'
 #' \deqn{A_k = \frac{\left(\sum_{u,i} w_i (m_{u,i}/C)^q\right)^{1/(1-q)}}
@@ -37,8 +37,8 @@
 #'
 #' @section Limitations:
 #' * Sample weighting is fixed to equal per sample (`n_u / n`). This is what
-#'   keeps every beta independent of alpha for all `q` (Jost 2007); abundance- or
-#'   effort-weighting is not currently offered.
+#'   keeps every beta independent of alpha for all `q` (Jost 2007);
+#'   abundance- or effort-weighting is not currently offered.
 #' * **Phylogenetic.** Alpha and gamma are returned in effective-branch-length
 #'   (PD) units and share a single mean tree depth `T_+` across *all* scales, so
 #'   the betas telescope. For ultrametric trees the finest alpha equals the
@@ -114,9 +114,9 @@ hier_partition <- function(prep, groupings, q, level_names) {
 #' Type-specific set-up for hierarchical partitioning
 #'
 #' Reduces a count table to the `(contrib, measure, C)` triple consumed by
-#' [hier_partition()], mirroring the per-type maths of [part_prep()] but exposing
-#' the shared, table-wide quantities (one `T_+`; one `tau` and one `v_i`) so the
-#' nested chain telescopes.
+#' [hier_partition()], mirroring the per-type maths of [part_prep()] but
+#' exposing the shared, table-wide quantities (one `T_+`; one `tau` and one
+#' `v_i`) so the nested chain telescopes.
 #'
 #' @inheritParams hier_partition
 #' @param counts Numeric count table (features-as-taxa x samples), aligned.
@@ -141,7 +141,7 @@ hier_part_prep <- function(counts, type = "neutral", tree = NULL, dist = NULL,
         cli::cli_abort("A {.cls phylo} {.arg tree} is required for phylogenetic
                         partitioning.")
       }
-      ba <- branch_abundance(tree, tss(counts))    # Li (edges), ai (edges x samp)
+      ba <- branch_abundance(tree, tss(counts))   # Li, ai (edges x samples)
       list(contrib = ba$ai, measure = ba$Li,
            C = sum(ba$Li * rowSums(ba$ai)))         # T_+ = sum_j T_j
     },

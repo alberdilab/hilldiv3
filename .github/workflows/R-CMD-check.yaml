@@ -38,6 +38,11 @@ jobs:
           use-public-rspm: true
       - uses: r-lib/actions/setup-r-dependencies@v2
         with:
+          # Use the development build of pak: the release build intermittently
+          # fails the install phase on Windows with a file(con, "rb") /
+          # detect_package_archive_type error (a parallel-installer file-handle
+          # race), which devel pak retries instead of aborting.
+          pak-version: devel
           extra-packages: any::rcmdcheck
           needs: check
       - uses: r-lib/actions/check-r-package@v2

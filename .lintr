@@ -7,6 +7,8 @@ linters: linters_with_defaults(
 exclusions: list(
     "tests/testthat",
     "data-raw",
-    "vignettes"
+    "vignettes",
+    "inst/benchmarks",
+    "inst/manuscript"
   )
 encoding: "UTF-8"

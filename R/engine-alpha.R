@@ -67,7 +67,8 @@ hill_alpha_phylo <- function(p, q, tree, reference = "pool") {
   # The Hill transform itself always uses the sample's own T_j (so the branch
   # weights sum to 1 and the q -> 1 limit is continuous); the reference depth
   # enters only as the final rescaling D = PD / T_ref. For sample reference
-  # T_ref == T_j and this is the identity; the two coincide on ultrametric trees.
+  # T_ref == T_j and this is the identity; the two coincide on ultrametric
+  # trees.
   Tref <- switch(reference,
     pool   = rep(mean(Tj), ncol(p)),
     sample = Tj
