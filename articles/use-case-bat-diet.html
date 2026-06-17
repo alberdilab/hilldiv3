@@ -287,42 +287,19 @@ three diversity types from one engine — is unique to
 <code>hilldiv3</code>.</p>
 </div>
 <div class="section level2">
-<h2 id="ordinating-dietary-dissimilarity">Ordinating dietary dissimilarity<a class="anchor" aria-label="anchor" href="#ordinating-dietary-dissimilarity"></a>
-</h2>
-<p>To visualise how individual diets relate, <code><a href="../reference/hillpair.html">hillpair()</a></code>
-returns a <code>dist</code> of pairwise dissimilarities (here the
-abundance-sensitive, Morisita-Horn-type metric <code>C</code> at
-<code>q = 1</code>) that drops straight into ordination.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">d</span>   <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillpair.html">hillpair</a></span><span class="op">(</span><span class="va">bat_counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span>
-<span><span class="va">pco</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cmdscale.html" class="external-link">cmdscale</a></span><span class="op">(</span><span class="va">d</span>, k <span class="op">=</span> <span class="fl">2</span>, eig <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
-<span><span class="va">ord</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">pco</span><span class="op">$</span><span class="va">points</span>, bat <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pco</span><span class="op">$</span><span class="va">points</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ord</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"PCoA1"</span>, <span class="st">"PCoA2"</span><span class="op">)</span></span>
-<span><span class="va">ord</span><span class="op">$</span><span class="va">habitat</span> <span class="op">&lt;-</span> <span class="fu">hab</span><span class="op">(</span><span class="va">ord</span><span class="op">$</span><span class="va">bat</span><span class="op">)</span></span>
-<span><span class="va">ev</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="va">pco</span><span class="op">$</span><span class="va">eig</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">2</span><span class="op">]</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">pco</span><span class="op">$</span><span class="va">eig</span><span class="op">[</span><span class="va">pco</span><span class="op">$</span><span class="va">eig</span> <span class="op">&gt;</span> <span class="fl">0</span><span class="op">]</span><span class="op">)</span>, <span class="fl">1</span><span class="op">)</span></span>
-<span></span>
-<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">ord</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="va">PCoA1</span>, <span class="va">PCoA2</span>, colour <span class="op">=</span> <span class="va">habitat</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html" class="external-link">geom_point</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">2.4</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/stat_ellipse.html" class="external-link">stat_ellipse</a></span><span class="op">(</span>level <span class="op">=</span> <span class="fl">0.68</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_colour_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="va">pal</span>, name <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span> <span class="op">+</span></span>
-<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"PCoA 1 (%.1f%%)"</span>, <span class="va">ev</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">)</span>,</span>
-<span>       y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"PCoA 2 (%.1f%%)"</span>, <span class="va">ev</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-<p><img src="use-case-bat-diet_files/figure-html/ordination-1.png" class="r-plt" alt="PCoA of pairwise dietary dissimilarity, coloured by habitat" width="750"></p>
-<p>The first axis cleanly separates forest from farmland individuals,
-recovering the habitat-level dietary structure that the hierarchical
-partition quantified.</p>
-</div>
-<div class="section level2">
 <h2 id="summary">Summary<a class="anchor" aria-label="anchor" href="#summary"></a>
 </h2>
 <p>From a single ASV table and a prey tree, <code>hilldiv3</code>
 delivered: per-sample neutral and phylogenetic Hill numbers
 (<code><a href="../reference/hilldiv.html">hilldiv()</a></code>), full diversity profiles
-(<code><a href="../reference/hillprof.html">hillprof()</a></code>) and evenness (<code><a href="../reference/hilleven.html">hilleven()</a></code>), a
+(<code><a href="../reference/hillprof.html">hillprof()</a></code>) and evenness (<code><a href="../reference/hilleven.html">hilleven()</a></code>), and a
 scale-resolved nested partition of turnover under both flavours
-(<code><a href="../reference/hillpart.html">hillpart()</a></code> with a <code>hierarchy</code> formula), and a
-distance object for ordination (<code><a href="../reference/hillpair.html">hillpair()</a></code>) — a complete
-dietary-diversity analysis through one consistent interface.</p>
+(<code><a href="../reference/hillpart.html">hillpart()</a></code> with a <code>hierarchy</code> formula) — a
+complete dietary-diversity analysis through one consistent interface.
+The neutral-versus-phylogenetic contrast, resolved across the whole
+diversity profile <em>and</em> across every level of the nested design,
+is what lets a single study say not just <em>how much</em> diets differ
+but <em>in what currency</em> and <em>at which scale</em>.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

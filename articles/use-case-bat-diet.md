@@ -234,38 +234,6 @@ different parts of the insect tree. This neutral-vs-phylogenetic,
 scale-resolved contrast — available across all three diversity types
 from one engine — is unique to `hilldiv3`.
 
-## Ordinating dietary dissimilarity
-
-To visualise how individual diets relate,
-[`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md)
-returns a `dist` of pairwise dissimilarities (here the
-abundance-sensitive, Morisita-Horn-type metric `C` at `q = 1`) that
-drops straight into ordination.
-
-``` r
-
-d   <- hillpair(bat_counts, q = 1, metric = "C")
-pco <- cmdscale(d, k = 2, eig = TRUE)
-ord <- data.frame(pco$points, bat = rownames(pco$points))
-names(ord)[1:2] <- c("PCoA1", "PCoA2")
-ord$habitat <- hab(ord$bat)
-ev <- round(100 * pco$eig[1:2] / sum(pco$eig[pco$eig > 0]), 1)
-
-ggplot(ord, aes(PCoA1, PCoA2, colour = habitat)) +
-  geom_point(size = 2.4) +
-  stat_ellipse(level = 0.68) +
-  scale_colour_manual(values = pal, name = NULL) +
-  labs(x = sprintf("PCoA 1 (%.1f%%)", ev[1]),
-       y = sprintf("PCoA 2 (%.1f%%)", ev[2]))
-```
-
-![PCoA of pairwise dietary dissimilarity, coloured by
-habitat](use-case-bat-diet_files/figure-html/ordination-1.png)
-
-The first axis cleanly separates forest from farmland individuals,
-recovering the habitat-level dietary structure that the hierarchical
-partition quantified.
-
 ## Summary
 
 From a single ASV table and a prey tree, `hilldiv3` delivered:
@@ -275,12 +243,13 @@ full diversity profiles
 ([`hillprof()`](https://alberdilab.github.io/hilldiv3/reference/hillprof.md))
 and evenness
 ([`hilleven()`](https://alberdilab.github.io/hilldiv3/reference/hilleven.md)),
-a scale-resolved nested partition of turnover under both flavours
+and a scale-resolved nested partition of turnover under both flavours
 ([`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
-with a `hierarchy` formula), and a distance object for ordination
-([`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md))
-— a complete dietary-diversity analysis through one consistent
-interface.
+with a `hierarchy` formula) — a complete dietary-diversity analysis
+through one consistent interface. The neutral-versus-phylogenetic
+contrast, resolved across the whole diversity profile *and* across every
+level of the nested design, is what lets a single study say not just
+*how much* diets differ but *in what currency* and *at which scale*.
 
 ## References
 
