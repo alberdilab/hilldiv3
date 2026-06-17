@@ -23,6 +23,11 @@ navbar:
           href: articles/performance.html
         - text: Preparing your data
           href: articles/preparing-data.html
+        - text: -------
+        - text: Use case — dietary niches of insectivorous bats
+          href: articles/use-case-bat-diet.html
+        - text: Use case — three faces of diversity in a gut microbiome
+          href: articles/use-case-bacterial-mags.html
 
 reference:
   - title: Diversity measurement
