@@ -17,6 +17,11 @@
 #'     \item{ai}{Numeric matrix (edges x samples) of descendant-tip abundance
 #'       sums for each branch.}
 #'   }
+#'
+#' @details The accumulation works on a samples-by-nodes layout so that each
+#'   node's per-sample vector is contiguous in R's column-major storage; the
+#'   per-edge update is then a unit-stride column add, which is markedly faster
+#'   than the row-wise (strided) access a nodes-by-samples layout would force.
 #' @keywords internal
 #' @noRd
 branch_abundance <- function(tree, p) {
@@ -26,28 +31,27 @@ branch_abundance <- function(tree, p) {
   p <- p[tree$tip.label, , drop = FALSE]
 
   n_tip <- length(tree$tip.label)
-  n_node <- tree$Nnode
-  n_total <- n_tip + n_node
-  n_samp <- ncol(p)
+  n_total <- n_tip + tree$Nnode
 
-  # node_abund[node, sample] = summed abundance of tips below `node`.
-  node_abund <- matrix(0, nrow = n_total, ncol = n_samp)
-  node_abund[seq_len(n_tip), ] <- p
+  # node_abund[sample, node] = summed abundance of tips below `node`. The layout
+  # is samples-by-nodes (each node's per-sample vector contiguous) so the
+  # accumulation below is a unit-stride column add. Tip columns start at the
+  # observed abundances; internal-node columns start at zero.
+  node_abund <- matrix(0, nrow = ncol(p), ncol = n_total)
+  node_abund[, seq_len(n_tip)] <- t(p)
 
-  # Post-order: children before parents. ape stores edges parent->child; we
-  # accumulate child contributions into parents from tips upward.
-  # Process nodes in decreasing order of depth via edge ordering.
-  edge <- tree$edge
-  # Traverse edges in reverse of a root-to-tip order so children are summed
-  # before their parent is needed. ape's postorder reorder gives this directly.
+  # Post-order: children before parents. ape stores edges parent->child; ape's
+  # postorder reorder lists them so each child is summed before its parent is
+  # needed.
   tree_po <- ape::reorder.phylo(tree, order = "postorder")
-  for (e in seq_len(nrow(tree_po$edge))) {
-    parent <- tree_po$edge[e, 1]
-    child <- tree_po$edge[e, 2]
-    node_abund[parent, ] <- node_abund[parent, ] + node_abund[child, ]
+  parent <- tree_po$edge[, 1]
+  child <- tree_po$edge[, 2]
+  for (e in seq_along(parent)) {
+    node_abund[, parent[e]] <- node_abund[, parent[e]] + node_abund[, child[e]]
   }
 
-  # a_i for each edge = abundance below its child node.
-  ai <- node_abund[edge[, 2], , drop = FALSE]
+  # a_i for each edge = abundance below its child node; transpose back to the
+  # edges-by-samples shape the engines expect (original edge order).
+  ai <- t(node_abund[, tree$edge[, 2], drop = FALSE])
   list(Li = tree$edge.length, ai = ai)
 }
