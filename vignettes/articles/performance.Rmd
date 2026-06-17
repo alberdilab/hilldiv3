@@ -1,0 +1,164 @@
+---
+title: "Performance benchmarks"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+The benchmark suite compares `hilldiv3` with the legacy `hilldiv2` code and
+the external packages `hillR`, `entropart`, `vegan` and `BAT`.
+
+The goal is not to force every package into the same table when the operation
+is not equivalent. Each package-operation row is labelled as:
+
+| Status | Meaning |
+|---|---|
+| `yes` | The package has a directly comparable operation. |
+| `partial` | The package has a related operation, but the output or statistical definition differs. |
+| `no` | The package does not expose that operation. |
+| `unavailable` | The package was not installed when the benchmark was run. |
+| `failed` | The package was installed, but the benchmark call errored. |
+
+## Reproducing the benchmark
+
+Install the comparison packages, then run the benchmark script from the package
+root:
+
+```{r, eval = FALSE}
+install.packages(c("bench", "hillR", "entropart", "vegan", "BAT"))
+remotes::install_github("anttonalberdi/hilldiv2")
+
+Sys.setenv(
+  BENCH_ITERATIONS = 5,
+  BENCH_N_TAXA = 200,
+  BENCH_N_SAMPLES = 40
+)
+source("inst/benchmarks/run-benchmarks.R")
+```
+
+The script writes:
+
+| File | Contents |
+|---|---|
+| `inst/benchmarks/results/performance.csv` | Support status, timing and memory table. |
+| `inst/benchmarks/results/session-info.txt` | R version, platform and package versions. |
+
+Increase `BENCH_ITERATIONS`, `BENCH_N_TAXA` or `BENCH_N_SAMPLES` for the final
+publication run. Keep `session-info.txt` with the published results because
+benchmark times depend on hardware, BLAS, R version and package versions.
+
+```{r setup-results, include = FALSE}
+results_path <- file.path("..", "inst", "benchmarks", "results", "performance.csv")
+if (!file.exists(results_path)) {
+  results_path <- file.path("inst", "benchmarks", "results", "performance.csv")
+}
+has_results <- file.exists(results_path)
+
+format_seconds <- function(x) {
+  ifelse(is.na(x), "", format(round(x, 4), nsmall = 4, trim = TRUE))
+}
+
+format_bytes <- function(x) {
+  out <- rep("", length(x))
+  ok <- !is.na(x)
+  out[ok & x < 1024] <- paste0(round(x[ok & x < 1024]), " B")
+  kb <- ok & x >= 1024 & x < 1024^2
+  out[kb] <- paste0(round(x[kb] / 1024, 1), " KB")
+  mb <- ok & x >= 1024^2 & x < 1024^3
+  out[mb] <- paste0(round(x[mb] / 1024^2, 1), " MB")
+  gb <- ok & x >= 1024^3
+  out[gb] <- paste0(round(x[gb] / 1024^3, 2), " GB")
+  out
+}
+
+if (has_results) {
+  perf <- utils::read.csv(results_path, stringsAsFactors = FALSE)
+  perf$time_s <- format_seconds(perf$median_seconds)
+  perf$memory <- format_bytes(perf$memory_bytes)
+  perf$result_size <- format_bytes(perf$result_bytes)
+  perf$relative <- ifelse(
+    is.na(perf$relative_to_hilldiv3),
+    "",
+    paste0(round(perf$relative_to_hilldiv3, 2), "x")
+  )
+}
+```
+
+```{r no-results, echo = FALSE, results = "asis"}
+if (!has_results) {
+  cat("No benchmark results have been generated yet. Run `inst/benchmarks/run-benchmarks.R` and rebuild the pkgdown site to populate this page.\n")
+}
+```
+
+```{r run-summary, echo = FALSE}
+if (has_results) {
+  summary_table <- unique(perf[!is.na(perf$backend),
+                               c("n_taxa", "n_samples", "iterations", "backend")])
+  knitr::kable(summary_table, caption = "Benchmark configuration")
+}
+```
+
+## Support matrix
+
+```{r support-matrix, echo = FALSE}
+if (has_results) {
+  support <- perf[, c("operation", "facet", "package", "support", "note")]
+  support <- support[order(support$operation, support$facet, support$package), ]
+  knitr::kable(support, row.names = FALSE)
+}
+```
+
+## Timing and memory
+
+Rows marked `partial` are timed because they are useful context, but they should
+not be interpreted as exact replacements for the corresponding `hilldiv3`
+operation.
+
+```{r timing-table, echo = FALSE}
+if (has_results) {
+  timed <- perf[perf$support %in% c("yes", "partial", "failed"), ]
+  timed <- timed[, c(
+    "operation", "facet", "package", "support", "time_s", "relative",
+    "memory", "result_size", "error"
+  )]
+  timed <- timed[order(timed$operation, timed$facet, timed$package), ]
+  names(timed) <- c(
+    "Operation", "Facet", "Package", "Support", "Median seconds",
+    "Relative to hilldiv3", "Allocated memory", "Result size", "Error"
+  )
+  knitr::kable(timed, row.names = FALSE)
+}
+```
+
+## Notes on equivalence
+
+`hillR` is the closest external comparator for Hill-number alpha diversity,
+partitioning and pairwise comparisons across taxonomic, phylogenetic and
+functional diversity.
+
+`entropart` supports metacommunity alpha, beta and gamma diversity, including
+phylogenetic and similarity-based diversity, but some outputs and assumptions
+differ from the `hilldiv3` API.
+
+`vegan` provides neutral Hill numbers through Renyi diversity and many pairwise
+community dissimilarities, but it does not implement the phylogenetic,
+functional or Hill-number S/C/U/V dissimilarity operations used by `hilldiv3`.
+
+`BAT` includes biodiversity assessment tools for taxonomic, phylogenetic and
+functional diversity. Its Hill-number function is a neutral alpha-diversity
+comparator; its beta-diversity tools are related but not the same Hill-number
+partition/dissimilarity operations.
+
+```{r session-info, echo = FALSE, results = "asis"}
+session_path <- sub("performance[.]csv$", "session-info.txt", results_path)
+if (file.exists(session_path)) {
+  cat("## Session info\n\n")
+  cat("```text\n")
+  cat(readLines(session_path), sep = "\n")
+  cat("\n```\n")
+}
+```

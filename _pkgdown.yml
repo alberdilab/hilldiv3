@@ -19,6 +19,8 @@ navbar:
           href: articles/partitioning-and-dissimilarity.html
         - text: Profiles, evenness and redundancy
           href: articles/profiles-evenness-redundancy.html
+        - text: Performance benchmarks
+          href: articles/performance.html
         - text: Preparing your data
           href: articles/preparing-data.html
 

@@ -1,0 +1,67 @@
+R version 4.3.3 (2024-02-29)
+Platform: aarch64-apple-darwin20 (64-bit)
+Running under: macOS 15.6.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRblas.0.dylib 
+LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
+
+locale:
+[1] C.UTF-8/C.UTF-8/C.UTF-8/C/C.UTF-8/C.UTF-8
+
+time zone: Europe/Copenhagen
+tzcode source: internal
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+[1] hilldiv3_3.0.0.9000 testthat_3.3.2     
+
+loaded via a namespace (and not attached):
+  [1] RColorBrewer_1.1-3      subplex_1.9             magrittr_2.0.5         
+  [4] farver_2.1.2            vctrs_0.7.3             RCurl_1.98-1.16        
+  [7] terra_1.8-54            progress_1.2.3          DEoptim_2.2-8          
+ [10] deSolve_1.40            pROC_1.19.0.1           caret_7.0-1            
+ [13] parallelly_1.47.0       pracma_2.4.6            KernSmooth_2.23-26     
+ [16] desc_1.4.3              plyr_1.8.9              hillR_0.5.2            
+ [19] palmerpenguins_0.1.1    lubridate_1.9.5         hilldiv2_2.0.5         
+ [22] igraph_2.1.1            lifecycle_1.0.5         iterators_1.0.14       
+ [25] pkgconfig_2.0.3         Matrix_1.6-5            R6_2.6.1               
+ [28] rbibutils_2.4.1         future_1.70.0           magic_1.6-1            
+ [31] digest_0.6.39           numDeriv_2016.8-1.1     colorspace_2.1-2       
+ [34] rprojroot_2.1.1         pkgload_1.5.1           vegan_2.6-8            
+ [37] pdist_1.2.1             progressr_0.19.0        clusterGeneration_1.3.8
+ [40] timechange_0.4.0        abind_1.4-8             mgcv_1.9-1             
+ [43] compiler_4.3.3          proxy_0.4-29            withr_3.0.2            
+ [46] bit64_4.8.0             doParallel_1.0.17       S7_0.2.1-1             
+ [49] optimParallel_1.0-2     bench_1.1.4             pkgbuild_1.4.8         
+ [52] R.utils_2.13.0          maps_3.4.3              MASS_7.3-60.0.1        
+ [55] lava_1.9.0              scatterplot3d_0.3-45    permute_0.9-10         
+ [58] ModelMetrics_1.2.2.2    tools_4.3.3             otel_0.2.0             
+ [61] ape_5.8-1               entropart_1.6-16        phytools_2.5-2         
+ [64] future.apply_1.20.2     nnet_7.3-20             TreeTools_1.14.0       
+ [67] R.oo_1.27.1             glue_1.8.1              quadprog_1.5-8         
+ [70] BAT_2.10.0              profmem_0.7.0           nlme_3.1-166           
+ [73] R.cache_0.17.0          grid_4.3.3              ade4_1.7-22            
+ [76] cluster_2.1.8.2         reshape2_1.4.5          PlotTools_0.3.1        
+ [79] generics_0.1.4          recipes_1.3.2           gtable_0.3.6           
+ [82] R.methodsS3_1.8.2       class_7.3-23            data.table_1.18.2.1    
+ [85] hms_1.1.4               foreach_1.5.2           pillar_1.11.1          
+ [88] stringr_1.6.0           splines_4.3.3           dplyr_1.2.1            
+ [91] lattice_0.22-9          survival_3.8-6          bit_4.6.0              
+ [94] ks_1.15.1               tidyselect_1.2.1        stats4_4.3.3           
+ [97] expm_1.0-0              hardhat_1.4.3           timeDate_4052.112      
+[100] brio_1.1.5              proto_1.0.0             stringi_1.8.7          
+[103] geiger_2.0.11           codetools_0.2-20        tibble_3.3.1           
+[106] cli_3.6.6               nls2_0.3-4              rpart_4.1.27           
+[109] geometry_0.5.2          Rdpack_2.6.6            Rcpp_1.1.1-1           
+[112] globals_0.19.1          FD_1.0-12.3             tidyverse_2.0.0        
+[115] coda_0.19-4.1           fastcluster_1.3.0       parallel_4.3.3         
+[118] gower_1.0.2             ggplot2_4.0.2           prettyunits_1.2.0      
+[121] mclust_6.1.1            bitops_1.0-9            listenv_0.10.1         
+[124] phangorn_2.12.1         mvtnorm_1.3-1           ipred_0.9-15           
+[127] e1071_1.7-17            scales_1.4.0            prodlim_2026.03.11     
+[130] purrr_1.2.2             crayon_1.5.3            combinat_0.0-8         
+[133] rlang_1.2.0             fastmatch_1.1-8         mnormt_2.1.1           
+[136] hypervolume_3.1.6      
