@@ -5,12 +5,212 @@ title: "Performance benchmarks"
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
-  comment = "#>"
+  comment = "#>",
+  fig.width = 9,
+  fig.height = 5,
+  fig.retina = 2
 )
 ```
 
 The benchmark suite compares `hilldiv3` with the legacy `hilldiv2` code and
 the external packages `hillR`, `entropart`, `vegan` and `BAT`.
+
+```{r setup-results, include = FALSE}
+result_candidates <- c(
+  file.path("inst", "benchmarks", "results", "performance.csv"),
+  file.path("..", "inst", "benchmarks", "results", "performance.csv"),
+  file.path("..", "..", "inst", "benchmarks", "results", "performance.csv"),
+  system.file("benchmarks", "results", "performance.csv", package = "hilldiv3")
+)
+result_candidates <- result_candidates[nzchar(result_candidates)]
+result_candidates <- result_candidates[file.exists(result_candidates)]
+
+has_results <- length(result_candidates) > 0
+results_path <- if (has_results) result_candidates[[1]] else NA_character_
+
+format_seconds <- function(x) {
+  ifelse(is.na(x), "", format(round(x, 4), nsmall = 4, trim = TRUE))
+}
+
+format_bytes <- function(x) {
+  out <- rep("", length(x))
+  ok <- !is.na(x)
+  out[ok & x < 1024] <- paste0(round(x[ok & x < 1024]), " B")
+  kb <- ok & x >= 1024 & x < 1024^2
+  out[kb] <- paste0(round(x[kb] / 1024, 1), " KB")
+  mb <- ok & x >= 1024^2 & x < 1024^3
+  out[mb] <- paste0(round(x[mb] / 1024^2, 1), " MB")
+  gb <- ok & x >= 1024^3
+  out[gb] <- paste0(round(x[gb] / 1024^3, 2), " GB")
+  out
+}
+
+if (has_results) {
+  perf <- utils::read.csv(results_path, stringsAsFactors = FALSE)
+  perf$time_s <- format_seconds(perf$median_seconds)
+  perf$memory <- format_bytes(perf$memory_bytes)
+  perf$result_size <- format_bytes(perf$result_bytes)
+  perf$relative <- ifelse(
+    is.na(perf$relative_to_hilldiv3),
+    "",
+    paste0(round(perf$relative_to_hilldiv3, 2), "x")
+  )
+  perf$error[is.na(perf$error)] <- ""
+  perf$package <- factor(
+    perf$package,
+    levels = c("hilldiv3", "hilldiv2", "hillR", "entropart", "vegan", "BAT")
+  )
+
+  task_levels <- unique(perf$operation[order(perf$task)])
+  perf$operation <- factor(perf$operation, levels = task_levels)
+  perf$facet <- factor(
+    perf$facet,
+    levels = c("neutral", "phylogenetic", "functional")
+  )
+
+  timed_plot <- perf[
+    perf$support %in% c("yes", "partial") & !is.na(perf$median_seconds),
+  ]
+}
+
+has_ggplot <- requireNamespace("ggplot2", quietly = TRUE)
+```
+
+## Benchmark results
+
+```{r no-results, echo = FALSE, results = "asis"}
+if (!has_results) {
+  cat("No benchmark results have been generated yet. Run `inst/benchmarks/run-benchmarks.R` and rebuild the pkgdown site to populate this page.\n")
+}
+```
+
+```{r run-summary, echo = FALSE}
+if (has_results) {
+  summary_table <- unique(perf[!is.na(perf$backend),
+                               c("n_taxa", "n_samples", "iterations", "backend")])
+  knitr::kable(summary_table, caption = "Benchmark configuration")
+}
+```
+
+### Visual summary
+
+```{r support-figure, echo = FALSE, fig.cap = "Operation support by package."}
+if (has_results && has_ggplot) {
+  support_counts <- as.data.frame(table(
+    Package = perf$package,
+    Support = factor(
+      perf$support,
+      levels = c("yes", "partial", "failed", "no", "unavailable")
+    )
+  ))
+  support_counts <- support_counts[support_counts$Freq > 0, ]
+
+  ggplot2::ggplot(
+    support_counts,
+    ggplot2::aes(x = Package, y = Freq, fill = Support)
+  ) +
+    ggplot2::geom_col(width = 0.72) +
+    ggplot2::scale_fill_manual(
+      values = c(
+        yes = "#1b9e77",
+        partial = "#d95f02",
+        failed = "#b2182b",
+        no = "#7570b3",
+        unavailable = "#969696"
+      ),
+      drop = FALSE
+    ) +
+    ggplot2::labs(x = NULL, y = "Package-operation rows", fill = "Status") +
+    ggplot2::theme_minimal(base_size = 12) +
+    ggplot2::theme(
+      panel.grid.major.x = ggplot2::element_blank(),
+      legend.position = "top"
+    )
+}
+```
+
+```{r runtime-figure, echo = FALSE, fig.height = 6.5, fig.cap = "Median runtime for directly comparable and partially comparable operations. The x-axis is logarithmic."}
+if (has_results && has_ggplot && nrow(timed_plot) > 0) {
+  ggplot2::ggplot(
+    timed_plot,
+    ggplot2::aes(
+      x = median_seconds,
+      y = operation,
+      color = package,
+      shape = support
+    )
+  ) +
+    ggplot2::geom_point(size = 2.6, alpha = 0.9) +
+    ggplot2::facet_grid(facet ~ ., scales = "free_y", space = "free_y") +
+    ggplot2::scale_x_log10() +
+    ggplot2::scale_color_manual(
+      values = c(
+        hilldiv3 = "#1b9e77",
+        hilldiv2 = "#7570b3",
+        hillR = "#d95f02",
+        entropart = "#e7298a",
+        vegan = "#66a61e",
+        BAT = "#a6761d"
+      ),
+      drop = FALSE
+    ) +
+    ggplot2::labs(
+      x = "Median seconds, log10 scale",
+      y = NULL,
+      color = "Package",
+      shape = "Support"
+    ) +
+    ggplot2::theme_minimal(base_size = 12) +
+    ggplot2::theme(
+      legend.position = "top",
+      panel.grid.major.y = ggplot2::element_blank(),
+      strip.text.y = ggplot2::element_text(angle = 0)
+    )
+}
+```
+
+```{r memory-figure, echo = FALSE, fig.height = 6.5, fig.cap = "Allocated memory for directly comparable and partially comparable operations. The x-axis is logarithmic."}
+if (has_results && has_ggplot && nrow(timed_plot) > 0) {
+  memory_plot <- timed_plot[!is.na(timed_plot$memory_bytes) &
+                              timed_plot$memory_bytes > 0, ]
+
+  ggplot2::ggplot(
+    memory_plot,
+    ggplot2::aes(
+      x = memory_bytes / 1024^2,
+      y = operation,
+      color = package,
+      shape = support
+    )
+  ) +
+    ggplot2::geom_point(size = 2.6, alpha = 0.9) +
+    ggplot2::facet_grid(facet ~ ., scales = "free_y", space = "free_y") +
+    ggplot2::scale_x_log10() +
+    ggplot2::scale_color_manual(
+      values = c(
+        hilldiv3 = "#1b9e77",
+        hilldiv2 = "#7570b3",
+        hillR = "#d95f02",
+        entropart = "#e7298a",
+        vegan = "#66a61e",
+        BAT = "#a6761d"
+      ),
+      drop = FALSE
+    ) +
+    ggplot2::labs(
+      x = "Allocated memory, MB, log10 scale",
+      y = NULL,
+      color = "Package",
+      shape = "Support"
+    ) +
+    ggplot2::theme_minimal(base_size = 12) +
+    ggplot2::theme(
+      legend.position = "top",
+      panel.grid.major.y = ggplot2::element_blank(),
+      strip.text.y = ggplot2::element_text(angle = 0)
+    )
+}
+```
 
 The goal is not to force every package into the same table when the operation
 is not equivalent. Each package-operation row is labelled as:
@@ -22,6 +222,38 @@ is not equivalent. Each package-operation row is labelled as:
 | `no` | The package does not expose that operation. |
 | `unavailable` | The package was not installed when the benchmark was run. |
 | `failed` | The package was installed, but the benchmark call errored. |
+
+### Support matrix
+
+```{r support-matrix, echo = FALSE}
+if (has_results) {
+  support <- perf[, c("operation", "facet", "package", "support", "note")]
+  support <- support[order(support$operation, support$facet, support$package), ]
+  knitr::kable(support, row.names = FALSE)
+}
+```
+
+### Timing and memory
+
+Rows marked `partial` are timed because they are useful context, but they should
+not be interpreted as exact replacements for the corresponding `hilldiv3`
+operation.
+
+```{r timing-table, echo = FALSE}
+if (has_results) {
+  timed <- perf[perf$support %in% c("yes", "partial", "failed"), ]
+  timed <- timed[, c(
+    "operation", "facet", "package", "support", "time_s", "relative",
+    "memory", "result_size", "error"
+  )]
+  timed <- timed[order(timed$operation, timed$facet, timed$package), ]
+  names(timed) <- c(
+    "Operation", "Facet", "Package", "Support", "Median seconds",
+    "Relative to hilldiv3", "Allocated memory", "Result size", "Error"
+  )
+  knitr::kable(timed, row.names = FALSE)
+}
+```
 
 ## Reproducing the benchmark
 
@@ -51,89 +283,6 @@ Increase `BENCH_ITERATIONS`, `BENCH_N_TAXA` or `BENCH_N_SAMPLES` for the final
 publication run. Keep `session-info.txt` with the published results because
 benchmark times depend on hardware, BLAS, R version and package versions.
 
-```{r setup-results, include = FALSE}
-results_path <- file.path("..", "inst", "benchmarks", "results", "performance.csv")
-if (!file.exists(results_path)) {
-  results_path <- file.path("inst", "benchmarks", "results", "performance.csv")
-}
-has_results <- file.exists(results_path)
-
-format_seconds <- function(x) {
-  ifelse(is.na(x), "", format(round(x, 4), nsmall = 4, trim = TRUE))
-}
-
-format_bytes <- function(x) {
-  out <- rep("", length(x))
-  ok <- !is.na(x)
-  out[ok & x < 1024] <- paste0(round(x[ok & x < 1024]), " B")
-  kb <- ok & x >= 1024 & x < 1024^2
-  out[kb] <- paste0(round(x[kb] / 1024, 1), " KB")
-  mb <- ok & x >= 1024^2 & x < 1024^3
-  out[mb] <- paste0(round(x[mb] / 1024^2, 1), " MB")
-  gb <- ok & x >= 1024^3
-  out[gb] <- paste0(round(x[gb] / 1024^3, 2), " GB")
-  out
-}
-
-if (has_results) {
-  perf <- utils::read.csv(results_path, stringsAsFactors = FALSE)
-  perf$time_s <- format_seconds(perf$median_seconds)
-  perf$memory <- format_bytes(perf$memory_bytes)
-  perf$result_size <- format_bytes(perf$result_bytes)
-  perf$relative <- ifelse(
-    is.na(perf$relative_to_hilldiv3),
-    "",
-    paste0(round(perf$relative_to_hilldiv3, 2), "x")
-  )
-}
-```
-
-```{r no-results, echo = FALSE, results = "asis"}
-if (!has_results) {
-  cat("No benchmark results have been generated yet. Run `inst/benchmarks/run-benchmarks.R` and rebuild the pkgdown site to populate this page.\n")
-}
-```
-
-```{r run-summary, echo = FALSE}
-if (has_results) {
-  summary_table <- unique(perf[!is.na(perf$backend),
-                               c("n_taxa", "n_samples", "iterations", "backend")])
-  knitr::kable(summary_table, caption = "Benchmark configuration")
-}
-```
-
-## Support matrix
-
-```{r support-matrix, echo = FALSE}
-if (has_results) {
-  support <- perf[, c("operation", "facet", "package", "support", "note")]
-  support <- support[order(support$operation, support$facet, support$package), ]
-  knitr::kable(support, row.names = FALSE)
-}
-```
-
-## Timing and memory
-
-Rows marked `partial` are timed because they are useful context, but they should
-not be interpreted as exact replacements for the corresponding `hilldiv3`
-operation.
-
-```{r timing-table, echo = FALSE}
-if (has_results) {
-  timed <- perf[perf$support %in% c("yes", "partial", "failed"), ]
-  timed <- timed[, c(
-    "operation", "facet", "package", "support", "time_s", "relative",
-    "memory", "result_size", "error"
-  )]
-  timed <- timed[order(timed$operation, timed$facet, timed$package), ]
-  names(timed) <- c(
-    "Operation", "Facet", "Package", "Support", "Median seconds",
-    "Relative to hilldiv3", "Allocated memory", "Result size", "Error"
-  )
-  knitr::kable(timed, row.names = FALSE)
-}
-```
-
 ## Notes on equivalence
 
 `hillR` is the closest external comparator for Hill-number alpha diversity,
@@ -154,8 +303,10 @@ comparator; its beta-diversity tools are related but not the same Hill-number
 partition/dissimilarity operations.
 
 ```{r session-info, echo = FALSE, results = "asis"}
-session_path <- sub("performance[.]csv$", "session-info.txt", results_path)
-if (file.exists(session_path)) {
+if (has_results) {
+  session_path <- sub("performance[.]csv$", "session-info.txt", results_path)
+}
+if (has_results && file.exists(session_path)) {
   cat("## Session info\n\n")
   cat("```text\n")
   cat(readLines(session_path), sep = "\n")
