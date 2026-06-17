@@ -30,7 +30,7 @@
     <div id="navbar" class="collapse navbar-collapse ms-3">
       <ul class="navbar-nav me-auto">
 <li class="nav-item"><a class="nav-link" href="../articles/hilldiv3.html">Get started</a></li>
-<li class="active nav-item dropdown">
+<li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/diversity-types.html">Diversity types (neutral, phylogenetic, functional)</a></li>
@@ -38,9 +38,13 @@
     <li><a class="dropdown-item" href="../articles/profiles-evenness-redundancy.html">Profiles, evenness and redundancy</a></li>
     <li><a class="dropdown-item" href="../articles/performance.html">Performance benchmarks</a></li>
     <li><a class="dropdown-item" href="../articles/preparing-data.html">Preparing your data</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/use-case-bat-diet.html">Use case — dietary niches of insectivorous bats</a></li>
-    <li><a class="dropdown-item" href="../articles/use-case-bacterial-mags.html">Use case — three faces of diversity in a gut microbiome</a></li>
+  </ul>
+</li>
+<li class="active nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
+<li><a class="dropdown-item" href="../articles/use-case-bat-diet.html">Dietary niches of insectivorous bats</a></li>
+    <li><a class="dropdown-item" href="../articles/use-case-bacterial-mags.html">Three faces of diversity in a gut microbiome</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -295,8 +299,8 @@ below the spread of neutral diversity means many genomes share functions
 <code class="sourceCode R"><span><span class="va">red</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillred.html">hillred</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
 <span><span class="fu">as_df</span><span class="op">(</span><span class="va">red</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"q"</span>, <span class="st">"redundancy"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;   q redundancy</span></span>
-<span><span class="co">#&gt; 1 1  0.7227861</span></span>
-<span><span class="co">#&gt; 2 2  0.5767745</span></span>
+<span><span class="co">#&gt; 1 1  0.7227875</span></span>
+<span><span class="co">#&gt; 2 2  0.5767747</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">red</span><span class="op">)</span></span></code></pre></div>
 <p><img src="use-case-bacterial-mags_files/figure-html/redundancy-1.png" class="r-plt" alt="Per-sample neutral versus functional diversity with fitted saturating curves" width="750"></p>
 <p>The fitted redundancy is high (well above 0.5), so adding genomes

@@ -12,12 +12,12 @@ and the external packages `hillR`, `entropart`, `vegan` and `BAT`.
 Benchmark configuration {.table}
 
 Each benchmark is shown with three panels: **time** per iteration (left,
-boxplots over the benchmark iterations), **peak memory** (centre,
-resident set size of the forked worker) and **comparability** (right).
-Within every benchmark the facets are ordered neutral (top),
-phylogenetic (middle) and functional (bottom), and the packages are
-named on the y axis. Numbers in the comparability column are footnotes,
-explained below each figure.
+boxplots over the benchmark iterations), **memory** (centre, bytes
+allocated per evaluation) and **comparability** (right). Within every
+benchmark the facets are ordered neutral (top), phylogenetic (middle)
+and functional (bottom), and the packages are named on the y axis.
+Numbers in the comparability column are footnotes, explained below each
+figure.
 
 ## B1: Alpha diversity
 
@@ -85,15 +85,16 @@ are listed as footnotes under the corresponding figure above.
 
 ## Full results
 
-Peak memory is the maximum resident set size (RSS) of the forked worker
-process during the run, so it includes the base R session and loaded
-packages, not only the operation’s own allocations. The complete
-per-operation and per-iteration tables are written next to the benchmark
-script:
+Memory is the number of bytes allocated during one evaluation, measured
+by `bench`’s allocation profiler. Unlike the resident set size of the
+worker process, it reflects the operation’s own allocations rather than
+the size of the loaded R session, so it is comparable across packages
+and independent of how long the call runs. The complete per-operation
+and per-iteration tables are written next to the benchmark script:
 
 - [`performance-summary.csv`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance-summary.csv)
-  — aggregated median time, peak memory, result size and speed relative
-  to `hilldiv3` for each package-operation.
+  — aggregated median time, allocated memory, result size and speed
+  relative to `hilldiv3` for each package-operation.
 - [`performance.csv`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance.csv)
   — per-iteration timings used for the boxplots.
 - [`session-info.txt`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/session-info.txt)

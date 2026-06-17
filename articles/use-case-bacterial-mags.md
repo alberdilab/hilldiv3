@@ -243,8 +243,8 @@ resilient, community.
 red <- hillred(gut_counts, q = c(1, 2), dist = fdist)
 as_df(red)[, c("q", "redundancy")]
 #>   q redundancy
-#> 1 1  0.7227861
-#> 2 2  0.5767745
+#> 1 1  0.7227875
+#> 2 2  0.5767747
 plot(red)
 ```
 

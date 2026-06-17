@@ -38,9 +38,13 @@
     <li><a class="dropdown-item" href="../articles/profiles-evenness-redundancy.html">Profiles, evenness and redundancy</a></li>
     <li><a class="dropdown-item" href="../articles/performance.html">Performance benchmarks</a></li>
     <li><a class="dropdown-item" href="../articles/preparing-data.html">Preparing your data</a></li>
-    <li><hr class="dropdown-divider"></li>
-    <li><a class="dropdown-item" href="../articles/use-case-bat-diet.html">Use case — dietary niches of insectivorous bats</a></li>
-    <li><a class="dropdown-item" href="../articles/use-case-bacterial-mags.html">Use case — three faces of diversity in a gut microbiome</a></li>
+  </ul>
+</li>
+<li class="nav-item dropdown">
+  <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
+  <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
+<li><a class="dropdown-item" href="../articles/use-case-bat-diet.html">Dietary niches of insectivorous bats</a></li>
+    <li><a class="dropdown-item" href="../articles/use-case-bacterial-mags.html">Three faces of diversity in a gut microbiome</a></li>
   </ul>
 </li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
@@ -103,8 +107,8 @@
 </tr></tbody>
 </table>
 <p>Each benchmark is shown with three panels: <strong>time</strong> per
-iteration (left, boxplots over the benchmark iterations), <strong>peak
-memory</strong> (centre, resident set size of the forked worker) and
+iteration (left, boxplots over the benchmark iterations),
+<strong>memory</strong> (centre, bytes allocated per evaluation) and
 <strong>comparability</strong> (right). Within every benchmark the
 facets are ordered neutral (top), phylogenetic (middle) and functional
 (bottom), and the packages are named on the y axis. Numbers in the
@@ -309,16 +313,18 @@ above.</p>
 <div class="section level2">
 <h2 id="full-results">Full results<a class="anchor" aria-label="anchor" href="#full-results"></a>
 </h2>
-<p>Peak memory is the maximum resident set size (RSS) of the forked
-worker process during the run, so it includes the base R session and
-loaded packages, not only the operation’s own allocations. The complete
-per-operation and per-iteration tables are written next to the benchmark
-script:</p>
+<p>Memory is the number of bytes allocated during one evaluation,
+measured by <code>bench</code>’s allocation profiler. Unlike the
+resident set size of the worker process, it reflects the operation’s own
+allocations rather than the size of the loaded R session, so it is
+comparable across packages and independent of how long the call runs.
+The complete per-operation and per-iteration tables are written next to
+the benchmark script:</p>
 <ul>
 <li>
 <a href="https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance-summary.csv" class="external-link"><code>performance-summary.csv</code></a>
-— aggregated median time, peak memory, result size and speed relative to
-<code>hilldiv3</code> for each package-operation.</li>
+— aggregated median time, allocated memory, result size and speed
+relative to <code>hilldiv3</code> for each package-operation.</li>
 <li>
 <a href="https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance.csv" class="external-link"><code>performance.csv</code></a>
 — per-iteration timings used for the boxplots.</li>
