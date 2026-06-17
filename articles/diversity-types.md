@@ -53,10 +53,22 @@ weight rare taxa carry:
 hilldiv(counts, q = c(0, 1, 2))
 #> Computing neutral Hill numbers of "q0", "q1", and
 #> "q2".
-#>          s1       s2       s3       s4
-#> q0 2.000000 3.000000 2.000000 3.000000
-#> q1 1.889882 2.137309 1.979626 2.693484
-#> q2 1.800000 1.753623 1.960000 2.528090
+#> <hilldiv3 result: neutral>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 2.000000
+#> 2  1     s1 1.889882
+#> 3  2     s1 1.800000
+#> 4  0     s2 3.000000
+#> 5  1     s2 2.137309
+#> 6  2     s2 1.753623
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 3.000000
+#> 11 1     s4 2.693484
+#> 12 2     s4 2.528090
 ```
 
 All Hill numbers are in **effective number of taxa** (“how many
@@ -74,10 +86,22 @@ equally distinct:
 hilldiv(counts)
 #> Computing neutral Hill numbers of "q0", "q1", and
 #> "q2".
-#>          s1       s2       s3       s4
-#> q0 2.000000 3.000000 2.000000 3.000000
-#> q1 1.889882 2.137309 1.979626 2.693484
-#> q2 1.800000 1.753623 1.960000 2.528090
+#> <hilldiv3 result: neutral>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 2.000000
+#> 2  1     s1 1.889882
+#> 3  2     s1 1.800000
+#> 4  0     s2 3.000000
+#> 5  1     s2 2.137309
+#> 6  2     s2 1.753623
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 3.000000
+#> 11 1     s4 2.693484
+#> 12 2     s4 2.528090
 ```
 
 ## Phylogenetic diversity
@@ -94,10 +118,22 @@ tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
 hilldiv(counts, tree = tree)
 #> Computing phylogenetic Hill numbers of "q0", "q1", and
 #> "q2".
-#>     s1       s2       s3       s4
-#> q0 1.5 2.000000 1.500000 2.000000
-#> q1 1.5 1.598520 1.406992 1.677678
-#> q2 1.5 1.406977 1.324324 1.500000
+#> <hilldiv3 result: phylogenetic>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.500000
+#> 2  1     s1 1.500000
+#> 3  2     s1 1.500000
+#> 4  0     s2 2.000000
+#> 5  1     s2 1.598520
+#> 6  2     s2 1.406977
+#> 7  0     s3 1.500000
+#> 8  1     s3 1.406992
+#> 9  2     s3 1.324324
+#> 10 0     s4 2.000000
+#> 11 1     s4 1.677678
+#> 12 2     s4 1.500000
 ```
 
 The tip labels must cover the same taxa as the count table. `hilldiv3`
@@ -127,10 +163,22 @@ fdist <- as.matrix(dist(
 hilldiv(counts, dist = fdist)
 #> Computing functional Hill numbers of "q0", "q1", and
 #> "q2".
-#>          s1       s2       s3       s4
-#> q0 1.601908 2.046926 2.000000 1.946876
-#> q1 1.566804 1.739361 1.979626 1.909900
-#> q2 1.535588 1.569081 1.960000 1.878525
+#> <hilldiv3 result: functional>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.601908
+#> 2  1     s1 1.566804
+#> 3  2     s1 1.535588
+#> 4  0     s2 2.046926
+#> 5  1     s2 1.739361
+#> 6  2     s2 1.569081
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 1.946876
+#> 11 1     s4 1.909900
+#> 12 2     s4 1.878525
 ```
 
 ### Building distances from traits
@@ -169,17 +217,41 @@ diversity:
 hilldiv(counts, dist = fdist, tau = max(fdist))   # default
 #> Computing functional Hill numbers of "q0", "q1", and
 #> "q2".
-#>          s1       s2       s3       s4
-#> q0 1.353846 1.911682 2.000000 1.650074
-#> q1 1.343253 1.658248 1.979626 1.617041
-#> q2 1.333333 1.517241 1.960000 1.590106
+#> <hilldiv3 result: functional>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.353846
+#> 2  1     s1 1.343253
+#> 3  2     s1 1.333333
+#> 4  0     s2 1.911682
+#> 5  1     s2 1.658248
+#> 6  2     s2 1.517241
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 1.650074
+#> 11 1     s4 1.617041
+#> 12 2     s4 1.590106
 hilldiv(counts, dist = fdist, tau = max(fdist) / 2)
 #> Computing functional Hill numbers of "q0", "q1", and
 #> "q2".
-#>          s1       s2       s3       s4
-#> q0 2.000000 2.484615 2.000000 2.661169
-#> q1 1.889882 1.984284 1.979626 2.524573
-#> q2 1.800000 1.704225 1.960000 2.432432
+#> <hilldiv3 result: functional>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 2.000000
+#> 2  1     s1 1.889882
+#> 3  2     s1 1.800000
+#> 4  0     s2 2.484615
+#> 5  1     s2 1.984284
+#> 6  2     s2 1.704225
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 2.661169
+#> 11 1     s4 2.524573
+#> 12 2     s4 2.432432
 ```
 
 ## One taxon, many flavours
@@ -198,22 +270,58 @@ list(
 #> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
 #> Computing functional Hill numbers of "q0", "q1", and "q2".
 #> $neutral
-#>          s1       s2       s3       s4
-#> q0 2.000000 3.000000 2.000000 3.000000
-#> q1 1.889882 2.137309 1.979626 2.693484
-#> q2 1.800000 1.753623 1.960000 2.528090
+#> <hilldiv3 result: neutral>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 2.000000
+#> 2  1     s1 1.889882
+#> 3  2     s1 1.800000
+#> 4  0     s2 3.000000
+#> 5  1     s2 2.137309
+#> 6  2     s2 1.753623
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 3.000000
+#> 11 1     s4 2.693484
+#> 12 2     s4 2.528090
 #> 
 #> $phylogenetic
-#>     s1       s2       s3       s4
-#> q0 1.5 2.000000 1.500000 2.000000
-#> q1 1.5 1.598520 1.406992 1.677678
-#> q2 1.5 1.406977 1.324324 1.500000
+#> <hilldiv3 result: phylogenetic>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.500000
+#> 2  1     s1 1.500000
+#> 3  2     s1 1.500000
+#> 4  0     s2 2.000000
+#> 5  1     s2 1.598520
+#> 6  2     s2 1.406977
+#> 7  0     s3 1.500000
+#> 8  1     s3 1.406992
+#> 9  2     s3 1.324324
+#> 10 0     s4 2.000000
+#> 11 1     s4 1.677678
+#> 12 2     s4 1.500000
 #> 
 #> $functional
-#>          s1       s2       s3       s4
-#> q0 1.353846 1.911682 2.000000 1.650074
-#> q1 1.343253 1.658248 1.979626 1.617041
-#> q2 1.333333 1.517241 1.960000 1.590106
+#> <hilldiv3 result: functional>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.353846
+#> 2  1     s1 1.343253
+#> 3  2     s1 1.333333
+#> 4  0     s2 1.911682
+#> 5  1     s2 1.658248
+#> 6  2     s2 1.517241
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 1.650074
+#> 11 1     s4 1.617041
+#> 12 2     s4 1.590106
 ```
 
 A sample can be neutrally diverse yet phylogenetically or functionally

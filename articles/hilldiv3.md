@@ -21,7 +21,9 @@ diversity **partitioning**, **(dis)similarity**, **profiles**,
 | **Functional**   | trait dissimilarity      | counts + `dist`    |
 
 The diversity *type* is inferred from the inputs you pass — you call the
-same functions either way.
+same functions either way. You can also state it explicitly with
+`type = "neutral" | "phylogenetic" | "functional"` to have it validated
+against your inputs.
 
 ## The data
 
@@ -50,6 +52,10 @@ Data frames, tibbles, `phyloseq` objects and `TreeSummarizedExperiment`
 objects work too — see `vignette("preparing-data")` *(article on the
 website)*.
 
+The package also ships a small **simulated** gut-microbiome example —
+`gut_counts` (a MAG count table), `gut_tree` (a phylogeny) and
+`gut_traits` (a trait table) — used throughout the website articles.
+
 ## Alpha diversity
 
 [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md)
@@ -61,10 +67,22 @@ returns Hill numbers per sample. By default it computes orders `q = 0`
 hilldiv(counts)
 #> Computing neutral Hill numbers of "q0", "q1", and
 #> "q2".
-#>          s1       s2       s3       s4
-#> q0 2.000000 3.000000 2.000000 3.000000
-#> q1 1.889882 2.137309 1.979626 2.693484
-#> q2 1.800000 1.753623 1.960000 2.528090
+#> <hilldiv3 result: neutral>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 2.000000
+#> 2  1     s1 1.889882
+#> 3  2     s1 1.800000
+#> 4  0     s2 3.000000
+#> 5  1     s2 2.137309
+#> 6  2     s2 1.753623
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 3.000000
+#> 11 1     s4 2.693484
+#> 12 2     s4 2.528090
 ```
 
 Higher `q` down-weights rare taxa, so `qD` decreases as `q` grows unless
@@ -77,10 +95,22 @@ tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
 hilldiv(counts, tree = tree)              # phylogenetic
 #> Computing phylogenetic Hill numbers of "q0", "q1", and
 #> "q2".
-#>     s1       s2       s3       s4
-#> q0 1.5 2.000000 1.500000 2.000000
-#> q1 1.5 1.598520 1.406992 1.677678
-#> q2 1.5 1.406977 1.324324 1.500000
+#> <hilldiv3 result: phylogenetic>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.500000
+#> 2  1     s1 1.500000
+#> 3  2     s1 1.500000
+#> 4  0     s2 2.000000
+#> 5  1     s2 1.598520
+#> 6  2     s2 1.406977
+#> 7  0     s3 1.500000
+#> 8  1     s3 1.406992
+#> 9  2     s3 1.324324
+#> 10 0     s4 2.000000
+#> 11 1     s4 1.677678
+#> 12 2     s4 1.500000
 ```
 
 ## Partitioning and dissimilarity
@@ -95,10 +125,19 @@ effectively distinct communities):
 hillpart(counts)
 #> Partitioning neutral Hill numbers of "q0", "q1", and
 #> "q2".
-#>       alpha    gamma     beta
-#> q0 2.500000 3.000000 1.200000
-#> q1 2.154269 2.905735 1.348827
-#> q2 1.968927 2.828374 1.436505
+#> <hilldiv3 result: neutral>
+#> 9 rows x 3 cols
+#> 
+#>   q component    value
+#> 1 0     alpha 2.500000
+#> 2 1     alpha 2.154269
+#> 3 2     alpha 1.968927
+#> 4 0     gamma 3.000000
+#> 5 1     gamma 2.905735
+#> 6 2     gamma 2.828374
+#> 7 0      beta 1.200000
+#> 8 1      beta 1.348827
+#> 9 2      beta 1.436505
 ```
 
 [`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md)
@@ -114,8 +153,14 @@ ordination:
 
 hilldiss(counts, q = 1)
 #> dissimilarity from neutral Hill numbers of "q1".
-#>            S         C         U         V
-#> q1 0.3448199 0.2158525 0.2158525 0.1162756
+#> <hilldiv3 result: neutral>
+#> 4 rows x 3 cols
+#> 
+#>   q metric     value
+#> 1 1      S 0.3448199
+#> 2 1      C 0.2158525
+#> 3 1      U 0.2158525
+#> 4 1      V 0.1162756
 ```
 
 ## Where to next

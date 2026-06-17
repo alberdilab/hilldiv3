@@ -8,7 +8,15 @@ phylogenetic; counts + `dist` -\> functional.
 ## Usage
 
 ``` r
-hilldiv(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL)
+hilldiv(
+  data,
+  q = c(0, 1, 2),
+  tree = NULL,
+  dist = NULL,
+  tau = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
+  out = c("tibble", "matrix")
+)
 ```
 
 ## Arguments
@@ -36,10 +44,28 @@ hilldiv(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL)
 
   Optional functional distance threshold. Defaults to `max(dist)`.
 
+- type:
+
+  Diversity type: `"auto"` (default) infers it from the inputs (counts
+  only -\> neutral, `+tree` -\> phylogenetic, `+dist` -\> functional);
+  an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts
+  the type and is validated against the inputs (e.g. `"phylogenetic"`
+  requires a `tree`; `"neutral"` ignores any tree/dist carried by the
+  object).
+
+- out:
+
+  Output shape: `"tibble"` (default) returns a long-format `data.frame`
+  with columns `q`, `sample`, `value` and
+  [`print()`](https://rdrr.io/r/base/print.html)/[`plot()`](https://rdrr.io/r/graphics/plot.default.html)
+  methods; `"matrix"` returns the legacy matrix (orders in rows, samples
+  in columns).
+
 ## Value
 
-A matrix of Hill numbers with diversity orders in rows (`q0`, `q1`, ...)
-and samples in columns.
+A long-format `data.frame` of class `hill_diversity` (default), or a
+matrix of Hill numbers with diversity orders in rows (`q0`, `q1`, ...)
+and samples in columns when `out = "matrix"`.
 
 ## References
 
@@ -63,14 +89,26 @@ counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 hilldiv(counts)
 #> Computing neutral Hill numbers of "q0", "q1", and "q2".
-#>          s1       s2
-#> q0 2.000000 3.000000
-#> q1 1.889882 2.137309
-#> q2 1.800000 1.753623
+#> <hilldiv3 result: neutral>
+#> 6 rows x 3 cols
+#> 
+#>   q sample    value
+#> 1 0     s1 2.000000
+#> 2 1     s1 1.889882
+#> 3 2     s1 1.800000
+#> 4 0     s2 3.000000
+#> 5 1     s2 2.137309
+#> 6 2     s2 1.753623
 hilldiv(counts, q = c(0, 1, 2))
 #> Computing neutral Hill numbers of "q0", "q1", and "q2".
-#>          s1       s2
-#> q0 2.000000 3.000000
-#> q1 1.889882 2.137309
-#> q2 1.800000 1.753623
+#> <hilldiv3 result: neutral>
+#> 6 rows x 3 cols
+#> 
+#>   q sample    value
+#> 1 0     s1 2.000000
+#> 2 1     s1 1.889882
+#> 3 2     s1 1.800000
+#> 4 0     s2 3.000000
+#> 5 1     s2 2.137309
+#> 6 2     s2 1.753623
 ```

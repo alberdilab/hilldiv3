@@ -117,7 +117,9 @@ order</em> <code>q</code>. From the same framework it derives diversity
 </tbody>
 </table>
 <p>The diversity <em>type</em> is inferred from the inputs you pass —
-you call the same functions either way.</p>
+you call the same functions either way. You can also state it explicitly
+with <code>type = "neutral" | "phylogenetic" | "functional"</code> to
+have it validated against your inputs.</p>
 </div>
 <div class="section level2">
 <h2 id="the-data">The data<a class="anchor" aria-label="anchor" href="#the-data"></a>
@@ -144,6 +146,10 @@ simplest form:</p>
 <code>TreeSummarizedExperiment</code> objects work too — see
 <code>vignette("preparing-data")</code> <em>(article on the
 website)</em>.</p>
+<p>The package also ships a small <strong>simulated</strong>
+gut-microbiome example — <code>gut_counts</code> (a MAG count table),
+<code>gut_tree</code> (a phylogeny) and <code>gut_traits</code> (a trait
+table) — used throughout the website articles.</p>
 </div>
 <div class="section level2">
 <h2 id="alpha-diversity">Alpha diversity<a class="anchor" aria-label="anchor" href="#alpha-diversity"></a>
@@ -155,10 +161,22 @@ computes orders <code>q = 0</code> (richness), <code>q = 1</code>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
-<span><span class="co">#&gt;          s1       s2       s3       s4</span></span>
-<span><span class="co">#&gt; q0 2.000000 3.000000 2.000000 3.000000</span></span>
-<span><span class="co">#&gt; q1 1.889882 2.137309 1.979626 2.693484</span></span>
-<span><span class="co">#&gt; q2 1.800000 1.753623 1.960000 2.528090</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    q sample    value</span></span>
+<span><span class="co">#&gt; 1  0     s1 2.000000</span></span>
+<span><span class="co">#&gt; 2  1     s1 1.889882</span></span>
+<span><span class="co">#&gt; 3  2     s1 1.800000</span></span>
+<span><span class="co">#&gt; 4  0     s2 3.000000</span></span>
+<span><span class="co">#&gt; 5  1     s2 2.137309</span></span>
+<span><span class="co">#&gt; 6  2     s2 1.753623</span></span>
+<span><span class="co">#&gt; 7  0     s3 2.000000</span></span>
+<span><span class="co">#&gt; 8  1     s3 1.979626</span></span>
+<span><span class="co">#&gt; 9  2     s3 1.960000</span></span>
+<span><span class="co">#&gt; 10 0     s4 3.000000</span></span>
+<span><span class="co">#&gt; 11 1     s4 2.693484</span></span>
+<span><span class="co">#&gt; 12 2     s4 2.528090</span></span></code></pre></div>
 <p>Higher <code>q</code> down-weights rare taxa, so <code>qD</code>
 decreases as <code>q</code> grows unless the sample is perfectly even.
 Add a tree or a distance matrix to switch flavour:</p>
@@ -167,10 +185,22 @@ Add a tree or a distance matrix to switch flavour:</p>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span>              <span class="co"># phylogenetic</span></span>
 <span><span class="co">#&gt; Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
-<span><span class="co">#&gt;     s1       s2       s3       s4</span></span>
-<span><span class="co">#&gt; q0 1.5 2.000000 1.500000 2.000000</span></span>
-<span><span class="co">#&gt; q1 1.5 1.598520 1.406992 1.677678</span></span>
-<span><span class="co">#&gt; q2 1.5 1.406977 1.324324 1.500000</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
+<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    q sample    value</span></span>
+<span><span class="co">#&gt; 1  0     s1 1.500000</span></span>
+<span><span class="co">#&gt; 2  1     s1 1.500000</span></span>
+<span><span class="co">#&gt; 3  2     s1 1.500000</span></span>
+<span><span class="co">#&gt; 4  0     s2 2.000000</span></span>
+<span><span class="co">#&gt; 5  1     s2 1.598520</span></span>
+<span><span class="co">#&gt; 6  2     s2 1.406977</span></span>
+<span><span class="co">#&gt; 7  0     s3 1.500000</span></span>
+<span><span class="co">#&gt; 8  1     s3 1.406992</span></span>
+<span><span class="co">#&gt; 9  2     s3 1.324324</span></span>
+<span><span class="co">#&gt; 10 0     s4 2.000000</span></span>
+<span><span class="co">#&gt; 11 1     s4 1.677678</span></span>
+<span><span class="co">#&gt; 12 2     s4 1.500000</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="partitioning-and-dissimilarity">Partitioning and dissimilarity<a class="anchor" aria-label="anchor" href="#partitioning-and-dissimilarity"></a>
@@ -183,10 +213,19 @@ effectively distinct communities):</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Partitioning neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
-<span><span class="co">#&gt;       alpha    gamma     beta</span></span>
-<span><span class="co">#&gt; q0 2.500000 3.000000 1.200000</span></span>
-<span><span class="co">#&gt; q1 2.154269 2.905735 1.348827</span></span>
-<span><span class="co">#&gt; q2 1.968927 2.828374 1.436505</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 9 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   q component    value</span></span>
+<span><span class="co">#&gt; 1 0     alpha 2.500000</span></span>
+<span><span class="co">#&gt; 2 1     alpha 2.154269</span></span>
+<span><span class="co">#&gt; 3 2     alpha 1.968927</span></span>
+<span><span class="co">#&gt; 4 0     gamma 3.000000</span></span>
+<span><span class="co">#&gt; 5 1     gamma 2.905735</span></span>
+<span><span class="co">#&gt; 6 2     gamma 2.828374</span></span>
+<span><span class="co">#&gt; 7 0      beta 1.200000</span></span>
+<span><span class="co">#&gt; 8 1      beta 1.348827</span></span>
+<span><span class="co">#&gt; 9 2      beta 1.436505</span></span></code></pre></div>
 <p><code><a href="../reference/hilldiss.html">hilldiss()</a></code> and <code><a href="../reference/hillsim.html">hillsim()</a></code> turn beta into
 bounded dissimilarity / similarity metrics (Sorensen-, Jaccard-, and
 Unifrac-type), and <code><a href="../reference/hillpair.html">hillpair()</a></code> returns a <code>dist</code>
@@ -194,8 +233,14 @@ object of pairwise dissimilarities ready for ordination:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiss.html">hilldiss</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; dissimilarity from neutral Hill numbers of <span style="color: #0000BB;">"q1"</span>.</span></span>
-<span><span class="co">#&gt;            S         C         U         V</span></span>
-<span><span class="co">#&gt; q1 0.3448199 0.2158525 0.2158525 0.1162756</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 4 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   q metric     value</span></span>
+<span><span class="co">#&gt; 1 1      S 0.3448199</span></span>
+<span><span class="co">#&gt; 2 1      C 0.2158525</span></span>
+<span><span class="co">#&gt; 3 1      U 0.2158525</span></span>
+<span><span class="co">#&gt; 4 1      V 0.1162756</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="where-to-next">Where to next<a class="anchor" aria-label="anchor" href="#where-to-next"></a>

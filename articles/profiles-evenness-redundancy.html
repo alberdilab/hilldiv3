@@ -108,6 +108,9 @@ evaluates a fine grid of orders (0 to 3 by default):</p>
 <code class="sourceCode R"><span><span class="va">prof</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillprof.html">hillprof</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing neutral diversity profile over 31 orders.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">prof</span><span class="op">)</span></span>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 6 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
 <span><span class="co">#&gt;     q sample    value</span></span>
 <span><span class="co">#&gt; 1 0.0     s1 2.000000</span></span>
 <span><span class="co">#&gt; 2 0.1     s1 1.988282</span></span>
@@ -156,9 +159,18 @@ dominance.</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilleven.html">hilleven</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing neutral evenness of <span style="color: #0000BB;">"q1"</span> and <span style="color: #0000BB;">"q2"</span>.</span></span>
-<span><span class="co">#&gt;           s1        s2        s3        s4</span></span>
-<span><span class="co">#&gt; q1 0.9449408 0.7124362 0.9898132 0.8978279</span></span>
-<span><span class="co">#&gt; q2 0.9000000 0.5845411 0.9800000 0.8426966</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 8 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   q sample     value</span></span>
+<span><span class="co">#&gt; 1 1     s1 0.9449408</span></span>
+<span><span class="co">#&gt; 2 2     s1 0.9000000</span></span>
+<span><span class="co">#&gt; 3 1     s2 0.7124362</span></span>
+<span><span class="co">#&gt; 4 2     s2 0.5845411</span></span>
+<span><span class="co">#&gt; 5 1     s3 0.9898132</span></span>
+<span><span class="co">#&gt; 6 2     s3 0.9800000</span></span>
+<span><span class="co">#&gt; 7 1     s4 0.8978279</span></span>
+<span><span class="co">#&gt; 8 2     s4 0.8426966</span></span></code></pre></div>
 <p>This is exactly the <em>normalised height</em> of the diversity
 profile — a single sample’s profile flatness summarised as a number.
 Reading down a column tells you how dominated each sample is;
@@ -184,10 +196,13 @@ fit the curve:</p>
 <span><span class="co">#&gt; parameter estimates</span></span>
 <span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q2"</span> could not be estimated: step factor 0.000488281 reduced</span></span>
 <span><span class="co">#&gt; below 'minFactor' of 0.000976562</span></span>
-<span><span class="co">#&gt;    redundancy        a         b        c</span></span>
-<span><span class="co">#&gt; q0         NA       NA        NA       NA</span></span>
-<span><span class="co">#&gt; q1  0.8050446 4.223956 0.5251091 1.803386</span></span>
-<span><span class="co">#&gt; q2         NA       NA        NA       NA</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
+<span><span class="co">#&gt; 3 rows x 5 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   q redundancy        a         b        c</span></span>
+<span><span class="co">#&gt; 1 0         NA       NA        NA       NA</span></span>
+<span><span class="co">#&gt; 2 1  0.8050446 4.223956 0.5251091 1.803386</span></span>
+<span><span class="co">#&gt; 3 2         NA       NA        NA       NA</span></span></code></pre></div>
 <p>The returned matrix has the <code>redundancy</code> summary plus the
 fitted <code>a</code>, <code>b</code>, <code>c</code> coefficients per
 order. Values near <code>1</code> mean the assemblage is highly

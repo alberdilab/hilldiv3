@@ -62,7 +62,15 @@ counts + <code>dist</code> -&gt; functional.</p>
 
     <div class="section level2">
     <h2 id="ref-usage">Usage<a class="anchor" aria-label="anchor" href="#ref-usage"></a></h2>
-    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hilldiv</span><span class="op">(</span><span class="va">data</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, tree <span class="op">=</span> <span class="cn">NULL</span>, dist <span class="op">=</span> <span class="cn">NULL</span>, tau <span class="op">=</span> <span class="cn">NULL</span><span class="op">)</span></span></code></pre></div>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span><span class="fu">hilldiv</span><span class="op">(</span></span>
+<span>  <span class="va">data</span>,</span>
+<span>  q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  tree <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  dist <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  tau <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  type <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"auto"</span>, <span class="st">"neutral"</span>, <span class="st">"phylogenetic"</span>, <span class="st">"functional"</span><span class="op">)</span>,</span>
+<span>  out <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"tibble"</span>, <span class="st">"matrix"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span></code></pre></div>
     </div>
 
     <div class="section level2">
@@ -91,11 +99,27 @@ taxa in <code>data</code>.</p></dd>
 <dt id="arg-tau">tau<a class="anchor" aria-label="anchor" href="#arg-tau"></a></dt>
 <dd><p>Optional functional distance threshold. Defaults to <code>max(dist)</code>.</p></dd>
 
+
+<dt id="arg-type">type<a class="anchor" aria-label="anchor" href="#arg-type"></a></dt>
+<dd><p>Diversity type: <code>"auto"</code> (default) infers it from the inputs
+(counts only -&gt; neutral, <code>+tree</code> -&gt; phylogenetic, <code>+dist</code> -&gt; functional);
+an explicit <code>"neutral"</code>, <code>"phylogenetic"</code> or <code>"functional"</code> asserts the
+type and is validated against the inputs (e.g. <code>"phylogenetic"</code> requires a
+<code>tree</code>; <code>"neutral"</code> ignores any tree/dist carried by the object).</p></dd>
+
+
+<dt id="arg-out">out<a class="anchor" aria-label="anchor" href="#arg-out"></a></dt>
+<dd><p>Output shape: <code>"tibble"</code> (default) returns a long-format
+<code>data.frame</code> with columns <code>q</code>, <code>sample</code>, <code>value</code> and <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>/<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>
+methods; <code>"matrix"</code> returns the legacy matrix (orders in rows, samples in
+columns).</p></dd>
+
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
-    <p>A matrix of Hill numbers with diversity orders in rows (<code>q0</code>, <code>q1</code>,
-...) and samples in columns.</p>
+    <p>A long-format <code>data.frame</code> of class <code>hill_diversity</code> (default), or a
+matrix of Hill numbers with diversity orders in rows (<code>q0</code>, <code>q1</code>, ...) and
+samples in columns when <code>out = "matrix"</code>.</p>
     </div>
     <div class="section level2">
     <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a></h2>
@@ -115,16 +139,28 @@ numbers to DNA-based diversity analyses. Mol. Ecol. Resour., 19, 804-817.</p>
 <span class="r-in"><span>                 dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"t1"</span>, <span class="st">"t2"</span>, <span class="st">"t3"</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"s1"</span>, <span class="st">"s2"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu">hilldiv</span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          s1       s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> q0 2.000000 3.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> q1 1.889882 2.137309</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> q2 1.800000 1.753623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hilldiv3 result: neutral&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 rows x 3 cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   q sample    value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0     s1 2.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1     s1 1.889882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2     s1 1.800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0     s2 3.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 1     s2 2.137309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2     s2 1.753623</span>
 <span class="r-in"><span><span class="fu">hilldiv</span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>          s1       s2</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> q0 2.000000 3.000000</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> q1 1.889882 2.137309</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> q2 1.800000 1.753623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hilldiv3 result: neutral&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 rows x 3 cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> </span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>   q sample    value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1 0     s1 2.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2 1     s1 1.889882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3 2     s1 1.800000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4 0     s2 3.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5 1     s2 2.137309</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6 2     s2 1.753623</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

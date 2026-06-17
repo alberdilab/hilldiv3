@@ -20,12 +20,24 @@ partitioning, (dis)similarity, profiles, evenness and redundancy.
 - **Dual input support**: matrices, data frames, tibbles, `phyloseq` and
   `TreeSummarizedExperiment` objects via `as_hill_input()`.
 - Faster phylogenetic computation using an `ape` post-order traversal in
-  place of `geiger::tips()`.
+  place of `geiger::tips()`;
+  [`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md)
+  computes the shared structure once and reuses it across all sample
+  pairs.
+- **Tidy by default**: every `hill*` function returns a long-format
+  `data.frame` with
+  [`print()`](https://rdrr.io/r/base/print.html)/[`plot()`](https://rdrr.io/r/graphics/plot.default.html)/`autoplot()`
+  methods; pass `out = "matrix"` for the legacy shape.
+- An explicit
+  `type = c("auto", "neutral", "phylogenetic", "functional")` argument
+  that asserts and validates the diversity type (auto-detected by
+  default).
 - New:
   [`hillprof()`](https://alberdilab.github.io/hilldiv3/reference/hillprof.md)
   (diversity profiles) and
   [`hilleven()`](https://alberdilab.github.io/hilldiv3/reference/hilleven.md)
-  (evenness).
+  (evenness), plus bundled example data (`gut_counts`, `gut_tree`,
+  `gut_traits`).
 - The familiar
   [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md),
   [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md),
@@ -67,12 +79,16 @@ changed.
 
 library(hilldiv3)
 
-counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
-                 dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
+# Bundled simulated gut-microbiome MAG data.
+hilldiv(gut_counts)                    # neutral Hill numbers q = 0, 1, 2
+hilldiv(gut_counts, tree = gut_tree)   # phylogenetic
 
-hilldiv(counts)              # neutral Hill numbers q = 0, 1, 2
-hilldiv(counts, tree = tree) # phylogenetic
-hilldiv(counts, dist = dist) # functional
+dist <- traits2dist(gut_traits)
+hilldiv(gut_counts, dist = dist)       # functional
+
+# Results are tidy by default and plot directly.
+plot(hillprof(gut_counts))             # diversity profile
+hilldiv(gut_counts, out = "matrix")    # legacy matrix shape
 ```
 
 ## References

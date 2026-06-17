@@ -65,10 +65,22 @@
 <li>
 <code><a href="../reference/hilleven.html">hilleven()</a></code> — evenness from Hill numbers.</li>
 <li>Real <code><a href="../reference/match_data.html">match_data()</a></code> helper (previously only referenced in the docs).</li>
+<li>
+<strong>Tidy output by default.</strong> <code><a href="../reference/hilldiv.html">hilldiv()</a></code>, <code><a href="../reference/hillpart.html">hillpart()</a></code>, <code><a href="../reference/hilldiss.html">hilldiss()</a></code>, <code><a href="../reference/hillsim.html">hillsim()</a></code>, <code><a href="../reference/hilleven.html">hilleven()</a></code>, <code><a href="../reference/hillprof.html">hillprof()</a></code> and <code><a href="../reference/hillred.html">hillred()</a></code> now return long-format <code>data.frame</code>s with <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>, <code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> and (when <code>ggplot2</code> is installed) <code>autoplot()</code> methods. Pass <code>out = "matrix"</code> for the legacy shape.</li>
+<li>
+<strong>Explicit <code>type</code> argument</strong> — <code>type = c("auto", "neutral", "phylogenetic", "functional")</code> on every entry point; <code>"auto"</code> keeps input-based detection, an explicit value asserts and validates the diversity type.</li>
+<li>
+<code><a href="../reference/hillpair.html">hillpair()</a></code> computes the type-specific structure once over all samples and reuses it per pair (no more full re-partition per pair), and reports a <code>progressr</code> bar when available.</li>
+<li>Bundled, documented example data: <code>gut_counts</code>, <code>gut_tree</code>, <code>gut_traits</code>.</li>
+</ul></div>
+<div class="section level4">
+<h4 id="infrastructure-development-version">Infrastructure<a class="anchor" aria-label="anchor" href="#infrastructure-development-version"></a></h4>
+<ul><li>Added test-coverage (Codecov) and lint (lintr) GitHub Actions workflows.</li>
+<li>Added golden-value tests cross-checking the engine against <code>vegan</code> and hand-computed constants, plus edge cases (single taxon, empty sample, q = 1).</li>
 </ul></div>
 <div class="section level4">
 <h4 id="compatibility-development-version">Compatibility<a class="anchor" aria-label="anchor" href="#compatibility-development-version"></a></h4>
-<ul><li>The <code><a href="../reference/hilldiv.html">hilldiv()</a></code>, <code><a href="../reference/hillpart.html">hillpart()</a></code>, <code><a href="../reference/hilldiss.html">hilldiss()</a></code>, <code><a href="../reference/hillsim.html">hillsim()</a></code>, <code><a href="../reference/hillpair.html">hillpair()</a></code>, <code><a href="../reference/hillred.html">hillred()</a></code>, <code><a href="../reference/tss.html">tss()</a></code> and <code><a href="../reference/traits2dist.html">traits2dist()</a></code> names and core behaviour from hilldiv2 are preserved.</li>
+<ul><li>The <code><a href="../reference/hilldiv.html">hilldiv()</a></code>, <code><a href="../reference/hillpart.html">hillpart()</a></code>, <code><a href="../reference/hilldiss.html">hilldiss()</a></code>, <code><a href="../reference/hillsim.html">hillsim()</a></code>, <code><a href="../reference/hillpair.html">hillpair()</a></code>, <code><a href="../reference/hillred.html">hillred()</a></code>, <code><a href="../reference/tss.html">tss()</a></code> and <code><a href="../reference/traits2dist.html">traits2dist()</a></code> names from hilldiv2 are preserved. The default return shape is now a tidy <code>data.frame</code>; use <code>out = "matrix"</code> for the hilldiv2-style matrix.</li>
 </ul></div>
 </div>
 </div>

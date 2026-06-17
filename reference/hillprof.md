@@ -14,6 +14,7 @@ hillprof(
   tree = NULL,
   dist = NULL,
   tau = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
   out = c("tibble", "matrix")
 )
 ```
@@ -42,6 +43,15 @@ hillprof(
 - tau:
 
   Optional functional distance threshold. Defaults to `max(dist)`.
+
+- type:
+
+  Diversity type: `"auto"` (default) infers it from the inputs (counts
+  only -\> neutral, `+tree` -\> phylogenetic, `+dist` -\> functional);
+  an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts
+  the type and is validated against the inputs (e.g. `"phylogenetic"`
+  requires a `tree`; `"neutral"` ignores any tree/dist carried by the
+  object).
 
 - out:
 

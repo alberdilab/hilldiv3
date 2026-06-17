@@ -46,6 +46,17 @@ Normalise, build functional distances, and align inputs.
 - [`match_data()`](https://alberdilab.github.io/hilldiv3/reference/match_data.md)
   : Match and align a count table to a tree or distance matrix
 
+## Datasets
+
+Bundled simulated gut-microbiome example data.
+
+- [`gut_counts`](https://alberdilab.github.io/hilldiv3/reference/gut_counts.md)
+  : Simulated gut microbiome MAG count table
+- [`gut_tree`](https://alberdilab.github.io/hilldiv3/reference/gut_tree.md)
+  : Phylogeny for the simulated gut MAGs
+- [`gut_traits`](https://alberdilab.github.io/hilldiv3/reference/gut_traits.md)
+  : Functional traits for the simulated gut MAGs
+
 ## Package
 
 - [`hilldiv3`](https://alberdilab.github.io/hilldiv3/reference/hilldiv3-package.md)

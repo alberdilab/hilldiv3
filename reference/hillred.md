@@ -8,7 +8,15 @@ summarised as `1 - b / max(x)`.
 ## Usage
 
 ``` r
-hillred(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL)
+hillred(
+  data,
+  q = c(0, 1, 2),
+  tree = NULL,
+  dist = NULL,
+  tau = NULL,
+  type = c("auto", "phylogenetic", "functional"),
+  out = c("tibble", "matrix")
+)
 ```
 
 ## Arguments
@@ -35,9 +43,26 @@ hillred(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL)
 
   Optional functional distance threshold. Defaults to `max(dist)`.
 
+- type:
+
+  Diversity type: `"auto"` (default) infers it from the inputs (counts
+  only -\> neutral, `+tree` -\> phylogenetic, `+dist` -\> functional);
+  an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts
+  the type and is validated against the inputs (e.g. `"phylogenetic"`
+  requires a `tree`; `"neutral"` ignores any tree/dist carried by the
+  object).
+
+- out:
+
+  Output shape: `"tibble"` (default) returns a `data.frame` with one row
+  per `q` and columns `q`, `redundancy`, `a`, `b`, `c`; `"matrix"`
+  returns the legacy matrix (orders in rows).
+
 ## Value
 
-A matrix with columns `redundancy`, `a`, `b`, `c`, one row per `q`.
+A `data.frame` of class `hill_redundancy` (default), or a matrix with
+columns `redundancy`, `a`, `b`, `c` (one row per `q`) when
+`out = "matrix"`.
 
 ## See also
 

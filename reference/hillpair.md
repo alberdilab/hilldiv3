@@ -13,6 +13,7 @@ hillpair(
   tree = NULL,
   dist = NULL,
   tau = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
   out = c("dist", "tibble"),
   parallel = FALSE
 )
@@ -48,6 +49,15 @@ hillpair(
 
   Optional functional distance threshold. Defaults to `max(dist)`.
 
+- type:
+
+  Diversity type: `"auto"` (default) infers it from the inputs (counts
+  only -\> neutral, `+tree` -\> phylogenetic, `+dist` -\> functional);
+  an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts
+  the type and is validated against the inputs (e.g. `"phylogenetic"`
+  requires a `tree`; `"neutral"` ignores any tree/dist carried by the
+  object).
+
 - out:
 
   Output type: `"dist"` (default) returns a `dist` object per requested
@@ -67,13 +77,17 @@ only one combination is requested. For `out = "tibble"`, a long-format
 
 ## Details
 
-Each pair is partitioned through the shared
-[`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
-engine (so the maths are identical to
+The type-specific structure (per-sample normalisation, the tree
+traversal or the functional similarity product) is computed **once**
+over all samples via the partitioning engine; each pair then only
+combines its two precomputed columns into beta, which is turned into the
+requested overlap metrics. The maths are therefore identical to
 [`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md)
-on two samples) and the resulting beta is turned into the requested
-overlap metrics. When `parallel = TRUE` and the `furrr` package is
-installed, pairs are computed in parallel via the active `future` plan.
+on two samples, without re-running the full engine per pair. When
+`parallel = TRUE` and the `furrr` package is installed, pairs are
+computed in parallel via the active `future` plan. A `progressr`
+progress bar is reported when that package is installed and a handler is
+active.
 
 ## See also
 

@@ -36,10 +36,19 @@ returns the three components per diversity order:
 hillpart(counts)
 #> Partitioning neutral Hill numbers of "q0", "q1", and
 #> "q2".
-#>       alpha    gamma     beta
-#> q0 2.500000 3.000000 1.200000
-#> q1 2.154269 2.905735 1.348827
-#> q2 1.968927 2.828374 1.436505
+#> <hilldiv3 result: neutral>
+#> 9 rows x 3 cols
+#> 
+#>   q component    value
+#> 1 0     alpha 2.500000
+#> 2 1     alpha 2.154269
+#> 3 2     alpha 1.968927
+#> 4 0     gamma 3.000000
+#> 5 1     gamma 2.905735
+#> 6 2     gamma 2.828374
+#> 7 0      beta 1.200000
+#> 8 1      beta 1.348827
+#> 9 2      beta 1.436505
 ```
 
 - **alpha** — the effective diversity of a typical single sample.
@@ -74,17 +83,41 @@ al. (2014):
 hilldiss(counts)            # dissimilarities, one column per metric
 #> dissimilarity from neutral Hill numbers of "q0", "q1",
 #> and "q2".
-#>            S          C         U          V
-#> q0 0.2222222 0.06666667 0.2222222 0.06666667
-#> q1 0.3448199 0.21585249 0.2158525 0.11627556
-#> q2 0.4051548 0.40515478 0.1455017 0.14550174
+#> <hilldiv3 result: neutral>
+#> 12 rows x 3 cols
+#> 
+#>    q metric      value
+#> 1  0      S 0.22222222
+#> 2  1      S 0.34481987
+#> 3  2      S 0.40515478
+#> 4  0      C 0.06666667
+#> 5  1      C 0.21585249
+#> 6  2      C 0.40515478
+#> 7  0      U 0.22222222
+#> 8  1      U 0.21585249
+#> 9  2      U 0.14550174
+#> 10 0      V 0.06666667
+#> 11 1      V 0.11627556
+#> 12 2      V 0.14550174
 hillsim(counts)             # similarities = 1 - dissimilarity
 #> similarity from neutral Hill numbers of "q0", "q1", and
 #> "q2".
-#>            S         C         U         V
-#> q0 0.7777778 0.9333333 0.7777778 0.9333333
-#> q1 0.6551801 0.7841475 0.7841475 0.8837244
-#> q2 0.5948452 0.5948452 0.8544983 0.8544983
+#> <hilldiv3 result: neutral>
+#> 12 rows x 3 cols
+#> 
+#>    q metric     value
+#> 1  0      S 0.7777778
+#> 2  1      S 0.6551801
+#> 3  2      S 0.5948452
+#> 4  0      C 0.9333333
+#> 5  1      C 0.7841475
+#> 6  2      C 0.5948452
+#> 7  0      U 0.7777778
+#> 8  1      U 0.7841475
+#> 9  2      U 0.8544983
+#> 10 0      V 0.9333333
+#> 11 1      V 0.8837244
+#> 12 2      V 0.8544983
 ```
 
 Request a single metric and order to get a plain matrix slice:
@@ -93,7 +126,11 @@ Request a single metric and order to get a plain matrix slice:
 
 hilldiss(counts, q = 1, metric = "C")
 #> dissimilarity from neutral Hill numbers of "q1".
-#> [1] 0.2158525
+#> <hilldiv3 result: neutral>
+#> 1 rows x 3 cols
+#> 
+#>   q metric     value
+#> 1 1      C 0.2158525
 ```
 
 The choice of `q` matters as much as the metric: `q = 0` weights

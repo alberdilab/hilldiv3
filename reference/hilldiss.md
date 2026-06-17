@@ -14,7 +14,9 @@ hilldiss(
   metric = c("S", "C", "U", "V"),
   tree = NULL,
   dist = NULL,
-  tau = NULL
+  tau = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
+  out = c("tibble", "matrix")
 )
 ```
 
@@ -48,10 +50,26 @@ hilldiss(
 
   Optional functional distance threshold. Defaults to `max(dist)`.
 
+- type:
+
+  Diversity type: `"auto"` (default) infers it from the inputs (counts
+  only -\> neutral, `+tree` -\> phylogenetic, `+dist` -\> functional);
+  an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts
+  the type and is validated against the inputs (e.g. `"phylogenetic"`
+  requires a `tree`; `"neutral"` ignores any tree/dist carried by the
+  object).
+
+- out:
+
+  Output shape: `"tibble"` (default) returns a long-format `data.frame`
+  with columns `q`, `metric`, `value`; `"matrix"` returns the legacy
+  matrix (orders in rows, metrics in columns, dropped to a vector for a
+  single metric).
+
 ## Value
 
-A matrix of dissimilarities (diversity orders in rows, metrics in
-columns), or a vector if a single metric is requested.
+A long-format `data.frame` of class `hill_dissimilarity` (default), or a
+matrix/vector of dissimilarities when `out = "matrix"`.
 
 ## See also
 
@@ -66,8 +84,20 @@ counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 hilldiss(counts)
 #> dissimilarity from neutral Hill numbers of "q0", "q1", and "q2".
-#>            S         C         U         V
-#> q0 0.3333333 0.2000000 0.3333333 0.2000000
-#> q1 0.6081390 0.5229848 0.5229848 0.4369251
-#> q2 0.7308320 0.7308320 0.5758355 0.5758355
+#> <hilldiv3 result: neutral>
+#> 12 rows x 3 cols
+#> 
+#>    q metric     value
+#> 1  0      S 0.3333333
+#> 2  1      S 0.6081390
+#> 3  2      S 0.7308320
+#> 4  0      C 0.2000000
+#> 5  1      C 0.5229848
+#> 6  2      C 0.7308320
+#> 7  0      U 0.3333333
+#> 8  1      U 0.5229848
+#> 9  2      U 0.5758355
+#> 10 0      V 0.2000000
+#> 11 1      V 0.4369251
+#> 12 2      V 0.5758355
 ```

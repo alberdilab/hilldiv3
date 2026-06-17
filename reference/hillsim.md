@@ -13,7 +13,9 @@ hillsim(
   metric = c("S", "C", "U", "V"),
   tree = NULL,
   dist = NULL,
-  tau = NULL
+  tau = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
+  out = c("tibble", "matrix")
 )
 ```
 
@@ -47,10 +49,26 @@ hillsim(
 
   Optional functional distance threshold. Defaults to `max(dist)`.
 
+- type:
+
+  Diversity type: `"auto"` (default) infers it from the inputs (counts
+  only -\> neutral, `+tree` -\> phylogenetic, `+dist` -\> functional);
+  an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts
+  the type and is validated against the inputs (e.g. `"phylogenetic"`
+  requires a `tree`; `"neutral"` ignores any tree/dist carried by the
+  object).
+
+- out:
+
+  Output shape: `"tibble"` (default) returns a long-format `data.frame`
+  with columns `q`, `metric`, `value`; `"matrix"` returns the legacy
+  matrix (orders in rows, metrics in columns, dropped to a vector for a
+  single metric).
+
 ## Value
 
-A matrix of similarities (diversity orders in rows, metrics in columns),
-or a vector if a single metric is requested.
+A long-format `data.frame` of class `hill_similarity` (default), or a
+matrix/vector of similarities when `out = "matrix"`.
 
 ## See also
 
@@ -63,8 +81,20 @@ counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 hillsim(counts)
 #> similarity from neutral Hill numbers of "q0", "q1", and "q2".
-#>            S         C         U         V
-#> q0 0.6666667 0.8000000 0.6666667 0.8000000
-#> q1 0.3918610 0.4770152 0.4770152 0.5630749
-#> q2 0.2691680 0.2691680 0.4241645 0.4241645
+#> <hilldiv3 result: neutral>
+#> 12 rows x 3 cols
+#> 
+#>    q metric     value
+#> 1  0      S 0.6666667
+#> 2  1      S 0.3918610
+#> 3  2      S 0.2691680
+#> 4  0      C 0.8000000
+#> 5  1      C 0.4770152
+#> 6  2      C 0.2691680
+#> 7  0      U 0.6666667
+#> 8  1      U 0.4770152
+#> 9  2      U 0.4241645
+#> 10 0      V 0.8000000
+#> 11 1      V 0.5630749
+#> 12 2      V 0.4241645
 ```

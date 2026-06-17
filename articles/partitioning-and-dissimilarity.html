@@ -105,10 +105,19 @@ order:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Partitioning neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
-<span><span class="co">#&gt;       alpha    gamma     beta</span></span>
-<span><span class="co">#&gt; q0 2.500000 3.000000 1.200000</span></span>
-<span><span class="co">#&gt; q1 2.154269 2.905735 1.348827</span></span>
-<span><span class="co">#&gt; q2 1.968927 2.828374 1.436505</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 9 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   q component    value</span></span>
+<span><span class="co">#&gt; 1 0     alpha 2.500000</span></span>
+<span><span class="co">#&gt; 2 1     alpha 2.154269</span></span>
+<span><span class="co">#&gt; 3 2     alpha 1.968927</span></span>
+<span><span class="co">#&gt; 4 0     gamma 3.000000</span></span>
+<span><span class="co">#&gt; 5 1     gamma 2.905735</span></span>
+<span><span class="co">#&gt; 6 2     gamma 2.828374</span></span>
+<span><span class="co">#&gt; 7 0      beta 1.200000</span></span>
+<span><span class="co">#&gt; 8 1      beta 1.348827</span></span>
+<span><span class="co">#&gt; 9 2      beta 1.436505</span></span></code></pre></div>
 <ul>
 <li>
 <strong>alpha</strong> — the effective diversity of a typical single
@@ -171,22 +180,50 @@ overlap measures of Chiu et al. (2014):</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiss.html">hilldiss</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>            <span class="co"># dissimilarities, one column per metric</span></span>
 <span><span class="co">#&gt; dissimilarity from neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>,</span></span>
 <span><span class="co">#&gt; and <span style="color: #0000BB;">"q2"</span>.</span></span>
-<span><span class="co">#&gt;            S          C         U          V</span></span>
-<span><span class="co">#&gt; q0 0.2222222 0.06666667 0.2222222 0.06666667</span></span>
-<span><span class="co">#&gt; q1 0.3448199 0.21585249 0.2158525 0.11627556</span></span>
-<span><span class="co">#&gt; q2 0.4051548 0.40515478 0.1455017 0.14550174</span></span>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    q metric      value</span></span>
+<span><span class="co">#&gt; 1  0      S 0.22222222</span></span>
+<span><span class="co">#&gt; 2  1      S 0.34481987</span></span>
+<span><span class="co">#&gt; 3  2      S 0.40515478</span></span>
+<span><span class="co">#&gt; 4  0      C 0.06666667</span></span>
+<span><span class="co">#&gt; 5  1      C 0.21585249</span></span>
+<span><span class="co">#&gt; 6  2      C 0.40515478</span></span>
+<span><span class="co">#&gt; 7  0      U 0.22222222</span></span>
+<span><span class="co">#&gt; 8  1      U 0.21585249</span></span>
+<span><span class="co">#&gt; 9  2      U 0.14550174</span></span>
+<span><span class="co">#&gt; 10 0      V 0.06666667</span></span>
+<span><span class="co">#&gt; 11 1      V 0.11627556</span></span>
+<span><span class="co">#&gt; 12 2      V 0.14550174</span></span>
 <span><span class="fu"><a href="../reference/hillsim.html">hillsim</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>             <span class="co"># similarities = 1 - dissimilarity</span></span>
 <span><span class="co">#&gt; similarity from neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
-<span><span class="co">#&gt;            S         C         U         V</span></span>
-<span><span class="co">#&gt; q0 0.7777778 0.9333333 0.7777778 0.9333333</span></span>
-<span><span class="co">#&gt; q1 0.6551801 0.7841475 0.7841475 0.8837244</span></span>
-<span><span class="co">#&gt; q2 0.5948452 0.5948452 0.8544983 0.8544983</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    q metric     value</span></span>
+<span><span class="co">#&gt; 1  0      S 0.7777778</span></span>
+<span><span class="co">#&gt; 2  1      S 0.6551801</span></span>
+<span><span class="co">#&gt; 3  2      S 0.5948452</span></span>
+<span><span class="co">#&gt; 4  0      C 0.9333333</span></span>
+<span><span class="co">#&gt; 5  1      C 0.7841475</span></span>
+<span><span class="co">#&gt; 6  2      C 0.5948452</span></span>
+<span><span class="co">#&gt; 7  0      U 0.7777778</span></span>
+<span><span class="co">#&gt; 8  1      U 0.7841475</span></span>
+<span><span class="co">#&gt; 9  2      U 0.8544983</span></span>
+<span><span class="co">#&gt; 10 0      V 0.9333333</span></span>
+<span><span class="co">#&gt; 11 1      V 0.8837244</span></span>
+<span><span class="co">#&gt; 12 2      V 0.8544983</span></span></code></pre></div>
 <p>Request a single metric and order to get a plain matrix slice:</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiss.html">hilldiss</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; dissimilarity from neutral Hill numbers of <span style="color: #0000BB;">"q1"</span>.</span></span>
-<span><span class="co">#&gt; [1] 0.2158525</span></span></code></pre></div>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 1 rows x 3 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;   q metric     value</span></span>
+<span><span class="co">#&gt; 1 1      C 0.2158525</span></span></code></pre></div>
 <p>The choice of <code>q</code> matters as much as the metric:
 <code>q = 0</code> weights presence/ absence (turnover of rare taxa),
 while <code>q = 2</code> reflects shifts among dominant taxa.</p>

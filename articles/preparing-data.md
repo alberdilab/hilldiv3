@@ -58,10 +58,13 @@ the same representation, so you call the functions the same way:
 hilldiv(c(t1 = 10, t2 = 2, t3 = 3))
 #> Computing neutral Hill numbers of "q0", "q1", and
 #> "q2".
-#>     sample1
-#> q0 3.000000
-#> q1 2.365174
-#> q2 1.991150
+#> <hilldiv3 result: neutral>
+#> 3 rows x 3 cols
+#> 
+#>   q  sample    value
+#> 1 0 sample1 3.000000
+#> 2 1 sample1 2.365174
+#> 3 2 sample1 1.991150
 ```
 
 When you pass a `phyloseq` or `TreeSummarizedExperiment` that already
@@ -78,10 +81,22 @@ ps <- phyloseq(
 hilldiv(ps)        # phylogenetic, tree taken from the object
 #> Computing phylogenetic Hill numbers of "q0", "q1", and
 #> "q2".
-#>     s1       s2       s3       s4
-#> q0 1.5 2.000000 1.500000 2.000000
-#> q1 1.5 1.598520 1.406992 1.677678
-#> q2 1.5 1.406977 1.324324 1.500000
+#> <hilldiv3 result: phylogenetic>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.500000
+#> 2  1     s1 1.500000
+#> 3  2     s1 1.500000
+#> 4  0     s2 2.000000
+#> 5  1     s2 1.598520
+#> 6  2     s2 1.406977
+#> 7  0     s3 1.500000
+#> 8  1     s3 1.406992
+#> 9  2     s3 1.324324
+#> 10 0     s4 2.000000
+#> 11 1     s4 1.677678
+#> 12 2     s4 1.500000
 ```
 
 ## Normalisation with `tss()`
@@ -131,10 +146,22 @@ round(fdist, 3)
 hilldiv(counts, dist = fdist)
 #> Computing functional Hill numbers of "q0", "q1", and
 #> "q2".
-#>          s1       s2       s3       s4
-#> q0 1.353846 1.911682 2.000000 1.650074
-#> q1 1.343253 1.658248 1.979626 1.617041
-#> q2 1.333333 1.517241 1.960000 1.590106
+#> <hilldiv3 result: functional>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.353846
+#> 2  1     s1 1.343253
+#> 3  2     s1 1.333333
+#> 4  0     s2 1.911682
+#> 5  1     s2 1.658248
+#> 6  2     s2 1.517241
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 1.650074
+#> 11 1     s4 1.617041
+#> 12 2     s4 1.590106
 ```
 
 ## Matching counts to a tree or distances
@@ -190,10 +217,22 @@ tree3 <- ape::read.tree(text = "(t1:1,t2:1);")
 hilldiv(match_data(counts, tree = tree3), tree = tree3)
 #> Dropped 1 taxon from `data` not in the tree tips.
 #> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
-#>    s1       s2       s3       s4
-#> q0  1 2.000000 2.000000 2.000000
-#> q1  1 1.649385 1.979626 1.754765
-#> q2  1 1.470588 1.960000 1.600000
+#> <hilldiv3 result: phylogenetic>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.000000
+#> 2  1     s1 1.000000
+#> 3  2     s1 1.000000
+#> 4  0     s2 2.000000
+#> 5  1     s2 1.649385
+#> 6  2     s2 1.470588
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 2.000000
+#> 11 1     s4 1.754765
+#> 12 2     s4 1.600000
 ```
 
 [`match_data()`](https://alberdilab.github.io/hilldiv3/reference/match_data.md)
@@ -222,12 +261,30 @@ counts2 <- match_data(counts, dist = fdist)
 hilldiv(counts2, dist = fdist)
 #> Computing functional Hill numbers of "q0", "q1", and
 #> "q2".
-#>          s1       s2       s3       s4
-#> q0 1.353846 1.911682 2.000000 1.650074
-#> q1 1.343253 1.658248 1.979626 1.617041
-#> q2 1.333333 1.517241 1.960000 1.590106
+#> <hilldiv3 result: functional>
+#> 12 rows x 3 cols
+#> 
+#>    q sample    value
+#> 1  0     s1 1.353846
+#> 2  1     s1 1.343253
+#> 3  2     s1 1.333333
+#> 4  0     s2 1.911682
+#> 5  1     s2 1.658248
+#> 6  2     s2 1.517241
+#> 7  0     s3 2.000000
+#> 8  1     s3 1.979626
+#> 9  2     s3 1.960000
+#> 10 0     s4 1.650074
+#> 11 1     s4 1.617041
+#> 12 2     s4 1.590106
 hilldiss(counts2, dist = fdist, q = 1)
 #> dissimilarity from functional Hill numbers of "q1".
-#>            S         C         U          V
-#> q1 0.1629541 0.0940307 0.0940307 0.04641062
+#> <hilldiv3 result: functional>
+#> 4 rows x 3 cols
+#> 
+#>   q metric      value
+#> 1 1      S 0.16295408
+#> 2 1      C 0.09403070
+#> 3 1      U 0.09403070
+#> 4 1      V 0.04641062
 ```

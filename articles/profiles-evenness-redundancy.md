@@ -38,6 +38,9 @@ evaluates a fine grid of orders (0 to 3 by default):
 prof <- hillprof(counts)
 #> Computing neutral diversity profile over 31 orders.
 head(prof)
+#> <hilldiv3 result: neutral>
+#> 6 rows x 3 cols
+#> 
 #>     q sample    value
 #> 1 0.0     s1 2.000000
 #> 2 0.1     s1 1.988282
@@ -96,9 +99,18 @@ values mean stronger dominance.
 
 hilleven(counts)
 #> Computing neutral evenness of "q1" and "q2".
-#>           s1        s2        s3        s4
-#> q1 0.9449408 0.7124362 0.9898132 0.8978279
-#> q2 0.9000000 0.5845411 0.9800000 0.8426966
+#> <hilldiv3 result: neutral>
+#> 8 rows x 3 cols
+#> 
+#>   q sample     value
+#> 1 1     s1 0.9449408
+#> 2 2     s1 0.9000000
+#> 3 1     s2 0.7124362
+#> 4 2     s2 0.5845411
+#> 5 1     s3 0.9898132
+#> 6 2     s3 0.9800000
+#> 7 1     s4 0.8978279
+#> 8 2     s4 0.8426966
 ```
 
 This is exactly the *normalised height* of the diversity profile — a
@@ -128,10 +140,13 @@ hillred(counts, tree = tree)
 #> parameter estimates
 #> Warning: Redundancy for "q2" could not be estimated: step factor 0.000488281 reduced
 #> below 'minFactor' of 0.000976562
-#>    redundancy        a         b        c
-#> q0         NA       NA        NA       NA
-#> q1  0.8050446 4.223956 0.5251091 1.803386
-#> q2         NA       NA        NA       NA
+#> <hilldiv3 result: phylogenetic>
+#> 3 rows x 5 cols
+#> 
+#>   q redundancy        a         b        c
+#> 1 0         NA       NA        NA       NA
+#> 2 1  0.8050446 4.223956 0.5251091 1.803386
+#> 3 2         NA       NA        NA       NA
 ```
 
 The returned matrix has the `redundancy` summary plus the fitted `a`,
