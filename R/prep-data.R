@@ -72,9 +72,53 @@ prep_data <- function(x, q) {
 #' @param dist A distance matrix (optional).
 #'
 #' @return The count matrix restricted to and ordered by the shared taxa.
+#' @examples
+#' counts <- matrix(1:6, nrow = 3,
+#'                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
+#' tree <- ape::read.tree(text = "((t1:1,t2:1):1,t4:2);")
+#' match_data(counts, tree = tree)
 #' @export
 match_data <- function(data, tree = NULL, dist = NULL) {
-  # TODO: implement intersection-based matching with informative messaging
-  # about how many taxa were dropped from each side.
-  .NotYetImplemented()
+  if (!is.null(tree) && !is.null(dist)) {
+    cli::cli_abort("Supply either {.arg tree} or {.arg dist}, not both.")
+  }
+  if (is.null(tree) && is.null(dist)) {
+    cli::cli_abort("Provide a {.arg tree} or {.arg dist} to match {.arg data}
+                    against.")
+  }
+
+  counts <- as_hill_input(data)$counts
+  taxa <- rownames(counts)
+  if (is.null(taxa)) {
+    cli::cli_abort("{.arg data} must have row names (taxa) to match.")
+  }
+
+  if (!is.null(tree)) {
+    ref <- tree$tip.label
+    what <- "tree tips"
+  } else {
+    ref <- rownames(as.matrix(dist))
+    what <- "distance matrix"
+    if (is.null(ref)) {
+      cli::cli_abort("{.arg dist} must have names to match against.")
+    }
+  }
+
+  shared <- intersect(ref, taxa)            # keep the reference ordering
+  if (length(shared) == 0) {
+    cli::cli_abort("No taxa in common between {.arg data} and the {what}.")
+  }
+
+  n_drop_data <- length(setdiff(taxa, ref))
+  n_drop_ref <- length(setdiff(ref, taxa))
+  if (n_drop_data > 0) {
+    cli::cli_inform("Dropped {n_drop_data} taxon{?s} from {.arg data} not in the
+                     {what}.")
+  }
+  if (n_drop_ref > 0) {
+    cli::cli_inform("{n_drop_ref} taxon{?s} in the {what} {?has/have} no counts;
+                     prune {?it/them} before downstream analysis.")
+  }
+
+  counts[shared, , drop = FALSE]
 }

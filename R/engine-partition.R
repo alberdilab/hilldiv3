@@ -13,6 +13,12 @@
 #' the per-sample `T` used by [hill_alpha()], so partition alpha is not the mean
 #' of [hilldiv()] phylogenetic values.
 #'
+#' Functional partitioning follows Chiu & Chao (2014): the distance matrix is
+#' capped at `tau`, turned into an attribute similarity `1 - d/tau`, and the
+#' resulting effective abundances are pooled across samples. Unlike the neutral
+#' and phylogenetic paths it works on the raw counts normalised only by the
+#' grand total (no per-sample `tss`), matching hilldiv2's `hillpart.functional`.
+#'
 #' @inheritParams hill_alpha
 #'
 #' @return Numeric matrix with columns `alpha`, `gamma`, `beta` (q in rows).
@@ -85,8 +91,47 @@ hill_part_phylo <- function(p, q, tree) {
 }
 
 hill_part_func <- function(p, q, dist, tau) {
-  # TODO(engine): port functional partitioning from hilldiv2 (hillpart.functional).
-  .NotYetImplemented()
+  if (is.null(dist)) {
+    cli::cli_abort("A {.arg dist} matrix is required for functional
+                    partitioning.")
+  }
+  N <- ncol(p)
+  dij <- as.matrix(dist)
+  if (is.null(tau)) tau <- max(dij)
+  dij[dij > tau] <- tau
+  sim <- 1 - dij / tau                   # attribute similarity (1 - d/tau)
+
+  # Raw counts (not per-sample normalised) divided by the grand total, matching
+  # hilldiv2's hillpart.functional: pooled effective abundance a_i+ and the
+  # per-attribute contributions v_i = n_i+ / a_i+ (Chiu & Chao 2014).
+  aik <- sim %*% p                       # taxa x samples (a_ik)
+  aiplus <- rowSums(aik)                 # pooled per-taxon (a_i+)
+  vi <- rowSums(p) / aiplus              # attribute contributions v_i
+  nplus <- sum(p)
+
+  # Gamma uses pooled taxa; alpha uses every (taxon, sample) cell. Restrict to
+  # nonzero entries so q = 0 and the q = 1 log limit stay well defined.
+  keep_g <- aiplus != 0
+  vg <- vi[keep_g]
+  ag <- aiplus[keep_g] / nplus
+  vmat <- matrix(vi, nrow = nrow(aik), ncol = N)
+  keep_a <- aik != 0
+  va <- vmat[keep_a]
+  aa <- aik[keep_a] / nplus
+
+  out <- .part_matrix(q)
+  for (r in seq_along(q)) {
+    qv <- q[r]
+    if (qv == 1) {
+      alpha <- (1 / N) * exp(-sum(va * aa * log(aa)))
+      gamma <- exp(-sum(vg * ag * log(ag)))
+    } else {
+      alpha <- (1 / N) * sum(va * aa^qv)^(1 / (1 - qv))
+      gamma <- sum(vg * ag^qv)^(1 / (1 - qv))
+    }
+    out[r, ] <- c(alpha, gamma, gamma / alpha)
+  }
+  out
 }
 
 # Empty alpha/gamma/beta result matrix.
