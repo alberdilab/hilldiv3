@@ -145,7 +145,8 @@ autoplot.hill_hierarchy <- function(object, ...) {
   ) +
     ggplot2::geom_line(linewidth = 1) +
     ggplot2::geom_point() +
-    ggplot2::labs(x = "Diversity order (q)", y = "Beta (turnover)", colour = NULL)
+    ggplot2::labs(x = "Diversity order (q)", y = "Beta (turnover)",
+                  colour = NULL)
 }
 autoplot.hill_dissimilarity <- function(object, ...) {
   .hill_autoplot(object, "metric", "Dissimilarity", ...)

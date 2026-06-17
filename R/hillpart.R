@@ -2,8 +2,8 @@
 #'
 #' Partition neutral, phylogenetic or functional Hill-number diversity into
 #' alpha, gamma and beta components across a set of samples. With a `hierarchy`
-#' formula it instead performs *multi-scale* (nested) partitioning, returning one
-#' beta per hierarchical level.
+#' formula it instead performs *multi-scale* (nested) partitioning, returning
+#' one beta per hierarchical level.
 #'
 #' @inheritParams hilldiv
 #' @param data A count table (taxa x samples) or a supported object; a single
@@ -12,9 +12,12 @@
 #'   `~ region / site`, requesting multi-scale (nested) partitioning instead of
 #'   the default single-level partition. One beta is returned per hierarchical
 #'   transition and the chain telescopes exactly:
-#'   `gamma = alpha_finest * prod(beta)`. Currently supported for neutral Hill
-#'   numbers only. Grouping variables are resolved against `metadata` when
-#'   supplied, otherwise against the calling environment.
+#'   `gamma = alpha_finest * prod(beta)`. Works for all three diversity types
+#'   (neutral, phylogenetic, functional); see the partitioning vignette for the
+#'   shared construction and its assumptions (equal per-sample weighting; one
+#'   shared tree depth / `tau` across scales). Grouping variables are resolved
+#'   against `metadata` when supplied, otherwise against the calling
+#'   environment.
 #' @param metadata Optional per-sample `data.frame` supplying the variables named
 #'   in `hierarchy`; rows are matched to the count-table columns by name when
 #'   possible, otherwise by position.
@@ -54,17 +57,14 @@ hillpart <- function(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL,
   type <- attr(x, "type")
 
   if (!is.null(hierarchy)) {
-    if (type != "neutral") {
-      cli::cli_abort("Hierarchical {.arg hierarchy} partitioning currently
-                      supports {.val neutral} Hill numbers only.")
-    }
     if (is.null(metadata)) metadata <- x$metadata
-    pi <- tss(as.matrix(x$counts))
-    spec <- .parse_hierarchy(hierarchy, metadata, colnames(pi))
+    spec <- .parse_hierarchy(hierarchy, metadata, colnames(x$counts))
     levs <- paste(c("sample", spec$level_names, "total"), collapse = " < ")
-    cli::cli_inform("Partitioning neutral Hill numbers across scales
+    cli::cli_inform("Partitioning {type} Hill numbers across scales
                      {.val {levs}}.")
-    df <- hier_partition_neutral(pi, spec$groupings, q, spec$level_names)
+    prep <- hier_part_prep(x$counts, type = type, tree = x$tree,
+                           dist = x$dist, tau = tau)
+    df <- hier_partition(prep, spec$groupings, q, spec$level_names)
     if (out == "matrix") return(.hier_to_matrix(df, q))
     return(new_hill_result(df, "hill_hierarchy", type))
   }

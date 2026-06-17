@@ -146,14 +146,13 @@ test_that("matrix output has alpha, per-level betas and gamma", {
   }
 })
 
-test_that("hierarchical partitioning rejects non-neutral types", {
-  tree <- ape::rtree(10, tip.label = rownames(tab))
-  expect_error(
-    suppressMessages(
-      hillpart(tab, metadata = md, tree = tree, hierarchy = ~ region / site)
-    ),
-    "neutral"
+test_that("type is auto-detected from inputs for hierarchical partitioning", {
+  tree <- ape::rtree(nrow(tab), tip.label = rownames(tab))
+  df <- suppressMessages(
+    hillpart(tab, metadata = md, tree = tree, hierarchy = ~ region / site)
   )
+  expect_identical(attr(df, "hill_type"), "phylogenetic")
+  expect_s3_class(df, "hill_hierarchy")
 })
 
 test_that("a length-mismatched hierarchy variable is rejected", {
@@ -162,4 +161,85 @@ test_that("a length-mismatched hierarchy variable is rejected", {
     suppressMessages(hillpart(tab, metadata = bad, hierarchy = ~ region)),
     "length"
   )
+})
+
+# ---- Phylogenetic ----------------------------------------------------------
+
+test_that("phylogenetic chain telescopes and matches the single-level engine", {
+  set.seed(11)
+  tree <- ape::compute.brlen(ape::rtree(nrow(tab), tip.label = rownames(tab)),
+                             method = "Grafen")  # ultrametric
+  std <- suppressMessages(hillpart(tab, q = q_set, tree = tree, out = "matrix"))
+  df <- suppressMessages(
+    hillpart(tab, metadata = md, q = q_set, tree = tree,
+             hierarchy = ~ region / site)
+  )
+  for (i in seq_along(q_set)) {
+    rows <- df[df$q == q_set[i], ]
+    alpha <- rows$diversity[rows$scale == "sample"]
+    gamma <- rows$diversity[rows$scale == "total"]
+    betas <- rows$beta[!is.na(rows$beta)]
+    expect_equal(alpha * prod(betas), gamma, tolerance = 1e-9)
+    # Endpoints reproduce the single-level phylogenetic engine (ultrametric).
+    expect_equal(alpha, unname(std[i, "alpha"]), tolerance = 1e-9)
+    expect_equal(gamma, unname(std[i, "gamma"]), tolerance = 1e-9)
+    expect_equal(prod(betas), unname(std[i, "beta"]), tolerance = 1e-9)
+    expect_true(all(betas >= 1 - 1e-9))
+  }
+})
+
+test_that("phylogenetic hierarchy telescopes on a non-ultrametric tree", {
+  set.seed(12)
+  tree <- ape::rtree(nrow(tab), tip.label = rownames(tab))  # not ultrametric
+  df <- suppressMessages(
+    hillpart(tab, metadata = md, q = q_set, tree = tree,
+             hierarchy = ~ region / site)
+  )
+  for (qv in q_set) {
+    rows <- df[df$q == qv, ]
+    alpha <- rows$diversity[rows$scale == "sample"]
+    gamma <- rows$diversity[rows$scale == "total"]
+    expect_equal(alpha * prod(rows$beta, na.rm = TRUE), gamma, tolerance = 1e-9)
+    expect_true(all(rows$beta >= 1 - 1e-9, na.rm = TRUE))
+  }
+})
+
+# ---- Functional ------------------------------------------------------------
+
+test_that("functional chain telescopes and matches the single-level engine", {
+  set.seed(13)
+  d <- as.matrix(dist(matrix(runif(nrow(tab) * 3), nrow = nrow(tab))))
+  dimnames(d) <- list(rownames(tab), rownames(tab))
+  std <- suppressMessages(hillpart(tab, q = q_set, dist = d, out = "matrix"))
+  df <- suppressMessages(
+    hillpart(tab, metadata = md, q = q_set, dist = d,
+             hierarchy = ~ region / site)
+  )
+  for (i in seq_along(q_set)) {
+    rows <- df[df$q == q_set[i], ]
+    alpha <- rows$diversity[rows$scale == "sample"]
+    gamma <- rows$diversity[rows$scale == "total"]
+    betas <- rows$beta[!is.na(rows$beta)]
+    expect_equal(alpha * prod(betas), gamma, tolerance = 1e-9)
+    expect_equal(alpha, unname(std[i, "alpha"]), tolerance = 1e-9)
+    expect_equal(gamma, unname(std[i, "gamma"]), tolerance = 1e-9)
+    expect_equal(prod(betas), unname(std[i, "beta"]), tolerance = 1e-9)
+    expect_true(all(betas >= 1 - 1e-9))
+  }
+})
+
+test_that("functional respects a custom tau and stays consistent across scales", {
+  set.seed(14)
+  d <- as.matrix(dist(matrix(runif(nrow(tab) * 3), nrow = nrow(tab))))
+  dimnames(d) <- list(rownames(tab), rownames(tab))
+  df <- suppressMessages(
+    hillpart(tab, metadata = md, q = q_set, dist = d, tau = 0.5,
+             hierarchy = ~ region / site)
+  )
+  for (qv in q_set) {
+    rows <- df[df$q == qv, ]
+    alpha <- rows$diversity[rows$scale == "sample"]
+    gamma <- rows$diversity[rows$scale == "total"]
+    expect_equal(alpha * prod(rows$beta, na.rm = TRUE), gamma, tolerance = 1e-9)
+  }
 })

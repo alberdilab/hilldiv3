@@ -34,9 +34,12 @@ taxa in \code{data}.}
 \code{~ region / site}, requesting multi-scale (nested) partitioning instead of
 the default single-level partition. One beta is returned per hierarchical
 transition and the chain telescopes exactly:
-\code{gamma = alpha_finest * prod(beta)}. Currently supported for neutral Hill
-numbers only. Grouping variables are resolved against \code{metadata} when
-supplied, otherwise against the calling environment.}
+\code{gamma = alpha_finest * prod(beta)}. Works for all three diversity types
+(neutral, phylogenetic, functional); see the partitioning vignette for the
+shared construction and its assumptions (equal per-sample weighting; one
+shared tree depth / \code{tau} across scales). Grouping variables are resolved
+against \code{metadata} when supplied, otherwise against the calling
+environment.}
 
 \item{metadata}{Optional per-sample \code{data.frame} supplying the variables named
 in \code{hierarchy}; rows are matched to the count-table columns by name when
@@ -63,8 +66,8 @@ when \code{out = "matrix"}. With \code{hierarchy}, a \code{hill_hierarchy} long-
 \description{
 Partition neutral, phylogenetic or functional Hill-number diversity into
 alpha, gamma and beta components across a set of samples. With a \code{hierarchy}
-formula it instead performs \emph{multi-scale} (nested) partitioning, returning one
-beta per hierarchical level.
+formula it instead performs \emph{multi-scale} (nested) partitioning, returning
+one beta per hierarchical level.
 }
 \examples{
 counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
