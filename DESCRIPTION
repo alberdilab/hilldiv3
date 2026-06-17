@@ -36,6 +36,7 @@ Suggests:
     future,
     ggplot2,
     knitr,
+    patchwork,
     phyloseq,
     progressr,
     rmarkdown,

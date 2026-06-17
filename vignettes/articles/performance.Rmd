@@ -173,113 +173,163 @@ if (has_results) {
 }
 ```
 
-```{r benchmark-section-boxplots, echo = FALSE, results = "asis", fig.height = 5.2}
-if (has_results && has_ggplot && nrow(timing_samples) > 0) {
+Each benchmark is shown with three panels: **time** per iteration (left,
+boxplots over the benchmark iterations), **peak memory** (centre, resident set
+size of the forked worker) and **comparability** (right). Within every
+benchmark the facets are ordered neutral (top), phylogenetic (middle) and
+functional (bottom), and the packages are named on the y axis. Numbers in the
+comparability column are footnotes, explained below each figure.
+
+```{r benchmark-section-figures, echo = FALSE, results = "asis", fig.width = 9, fig.height = 6.5}
+has_patchwork <- requireNamespace("patchwork", quietly = TRUE)
+
+if (has_results && has_ggplot && has_patchwork) {
+  package_palette <- c(
+    hilldiv3 = "#1b9e77", hilldiv2 = "#7570b3", hillR = "#d95f02",
+    entropart = "#e7298a", vegan = "#66a61e", BAT = "#a6761d"
+  )
+  status_label <- c(yes = "comparable", partial = "partial",
+                    failed = "failed", out_of_memory = "out of memory")
+  status_fill <- c(comparable = "#a6dba0", partial = "#fdd49e",
+                   failed = "#fbb4ae", `out of memory` = "#cccccc")
+  facet_order <- c("neutral", "phylogenetic", "functional")
+  pkg_levels <- levels(perf$package)
+
+  base_theme <- ggplot2::theme_minimal(base_size = 11) +
+    ggplot2::theme(
+      legend.position = "none",
+      panel.grid.major.y = ggplot2::element_blank(),
+      plot.title = ggplot2::element_text(size = 11, face = "bold")
+    )
+
   section_info <- unique(perf[order(perf$section), c("section", "section_title")])
   for (i in seq_len(nrow(section_info))) {
     section_id <- as.character(section_info$section[[i]])
     section_title <- as.character(section_info$section_title[[i]])
-    section_data <- timing_samples[
-      timing_samples$section == section_id &
-        timing_samples$support %in% c("yes", "partial") &
-        !is.na(timing_samples$seconds) &
-        timing_samples$seconds > 0,
-    ]
-    if (nrow(section_data) == 0L) {
-      next
-    }
+
+    sec <- perf[perf$section == section_id &
+                  perf$support %in% c("yes", "partial", "failed", "out_of_memory"), ]
+    if (nrow(sec) == 0L) next
+
+    present <- pkg_levels[pkg_levels %in% as.character(sec$package)]
+    fac <- function(x) factor(as.character(x), levels = facet_order)
+    pkg <- function(x) factor(as.character(x), levels = rev(present))
+
+    sec$facet <- fac(sec$facet)
+    sec$package <- pkg(sec$package)
+
+    caveats <- unique(sec$note[sec$support != "yes" &
+                                 !is.na(sec$note) & nzchar(sec$note)])
+    fn <- stats::setNames(seq_along(caveats), caveats)
+    sec$footnote <- ifelse(sec$note %in% caveats, fn[sec$note], NA_integer_)
+    sec$status <- factor(status_label[as.character(sec$support)],
+                         levels = c("comparable", "partial", "failed", "out of memory"))
+    sec$status_text <- ifelse(is.na(sec$footnote),
+                              as.character(sec$status),
+                              paste0(as.character(sec$status), " [", sec$footnote, "]"))
+
+    tim <- timing_samples[timing_samples$section == section_id &
+                            timing_samples$support %in% c("yes", "partial") &
+                            !is.na(timing_samples$seconds) &
+                            timing_samples$seconds > 0,
+                          c("facet", "package", "seconds")]
+    scaffold <- unique(sec[, c("facet", "package")])
+    scaffold$seconds <- NA_real_
+    tim <- rbind(tim, scaffold)
+    tim$facet <- fac(tim$facet)
+    tim$package <- pkg(tim$package)
+
+    p_time <- ggplot2::ggplot(tim, ggplot2::aes(seconds, package, fill = package)) +
+      ggplot2::geom_boxplot(outlier.alpha = 0.5, width = 0.6, na.rm = TRUE) +
+      ggplot2::facet_grid(facet ~ ., scales = "free_y", space = "free_y", switch = "y") +
+      ggplot2::scale_x_log10() +
+      ggplot2::scale_fill_manual(values = package_palette, drop = FALSE) +
+      ggplot2::labs(title = "Time", x = "Seconds / iteration (log10)", y = NULL) +
+      base_theme +
+      ggplot2::theme(
+        strip.placement = "outside",
+        strip.text.y.left = ggplot2::element_text(angle = 0, face = "bold")
+      )
+
+    p_mem <- ggplot2::ggplot(sec, ggplot2::aes(memory_bytes, package, fill = package)) +
+      ggplot2::geom_col(width = 0.6, na.rm = TRUE) +
+      ggplot2::facet_grid(facet ~ ., scales = "free_y", space = "free_y") +
+      ggplot2::scale_x_continuous(labels = function(x) format_bytes(x), n.breaks = 3) +
+      ggplot2::scale_fill_manual(values = package_palette, drop = FALSE) +
+      ggplot2::labs(title = "Peak memory", x = "RSS", y = NULL) +
+      base_theme +
+      ggplot2::theme(axis.text.y = ggplot2::element_blank(),
+                     strip.text.y = ggplot2::element_blank())
+
+    p_status <- ggplot2::ggplot(sec, ggplot2::aes(x = 1, y = package)) +
+      ggplot2::geom_tile(ggplot2::aes(fill = status), color = "white", height = 0.9) +
+      ggplot2::geom_text(ggplot2::aes(label = status_text), size = 2.7) +
+      ggplot2::facet_grid(facet ~ ., scales = "free_y", space = "free_y") +
+      ggplot2::scale_fill_manual(values = status_fill, drop = FALSE) +
+      ggplot2::scale_x_continuous(limits = c(0.5, 1.5), expand = c(0, 0)) +
+      ggplot2::labs(title = "Comparability", x = NULL, y = NULL) +
+      base_theme +
+      ggplot2::theme(axis.text = ggplot2::element_blank(),
+                     panel.grid = ggplot2::element_blank(),
+                     strip.text.y = ggplot2::element_blank())
 
     cat("\n\n## ", section_id, ": ", section_title, "\n\n", sep = "")
-    print(
-      ggplot2::ggplot(
-        section_data,
-        ggplot2::aes(
-          x = seconds,
-          y = benchmark_label,
-          fill = package
-        )
-      ) +
-        ggplot2::geom_boxplot(
-          alpha = 0.76,
-          outlier.alpha = 0.55,
-          width = 0.68,
-          position = ggplot2::position_dodge2(width = 0.78, preserve = "single")
-        ) +
-        ggplot2::scale_x_log10() +
-        ggplot2::scale_fill_manual(
-          values = c(
-            hilldiv3 = "#1b9e77",
-            hilldiv2 = "#7570b3",
-            hillR = "#d95f02",
-            entropart = "#e7298a",
-            vegan = "#66a61e",
-            BAT = "#a6761d"
-          ),
-          drop = FALSE
-        ) +
-        ggplot2::labs(
-          x = "Seconds per iteration, log10 scale",
-          y = NULL,
-          fill = "Package"
-        ) +
-        ggplot2::theme_minimal(base_size = 12) +
-        ggplot2::theme(
-          legend.position = "top",
-          panel.grid.major.y = ggplot2::element_blank()
-        )
-    )
+    print(patchwork::wrap_plots(p_time, p_mem, p_status, widths = c(3, 2, 2)))
+
+    if (length(caveats) > 0L) {
+      cat("\n\n")
+      for (k in seq_along(caveats)) {
+        cat("[", k, "] ", caveats[[k]], "  \n", sep = "")
+      }
+      cat("\n")
+    }
   }
 }
 ```
 
-## Support and Detail
+## What each tool can do
 
-The goal is not to force every package into the same table when the operation
-is not equivalent. Each package-operation row is labelled as:
+`hilldiv3` is the reference implementation. The contingency table below shows,
+for every benchmark, whether each package offers a directly comparable
+operation (**Yes**), a related but not identical operation (**Partial**), or no
+equivalent (**No**). `n/a` means the package was not installed when the
+benchmark ran. The caveats behind each *Partial* are listed as footnotes under
+the corresponding figure above.
 
-| Status | Meaning |
-|---|---|
-| `yes` | The package has a directly comparable operation. |
-| `partial` | The package has a related operation, but the output or statistical definition differs. |
-| `no` | The package does not expose that operation. |
-| `unavailable` | The package was not installed when the benchmark was run. |
-| `failed` | The package was installed, but the benchmark call errored. |
-| `out_of_memory` | The benchmark call exceeded the memory limit and was stopped. |
-
-### Support matrix
-
-```{r support-matrix, echo = FALSE}
+```{r comparability-table, echo = FALSE}
 if (has_results) {
-  support <- perf[, c("benchmark", "operation", "facet", "package", "support", "note")]
-  support <- support[order(support$benchmark, support$facet, support$package), ]
-  names(support) <- c("Benchmark", "Operation", "Facet", "Package", "Support", "Note")
-  knitr::kable(support, row.names = FALSE)
-}
-```
-
-### Timing and memory
-
-Rows marked `partial` are timed because they are useful context, but they should
-not be interpreted as exact replacements for the corresponding `hilldiv3`
-operation. Peak memory is the maximum resident set size (RSS) of the forked
-worker process during the run, so it includes the base R session and loaded
-packages, not only the operation's own allocations.
-
-```{r timing-table, echo = FALSE}
-if (has_results) {
-  timed <- perf[perf$support %in% c("yes", "partial", "failed", "out_of_memory"), ]
-  timed <- timed[, c(
-    "benchmark", "operation", "facet", "package", "support", "time_s", "relative",
-    "memory", "result_size", "error"
-  )]
-  timed <- timed[order(timed$benchmark, timed$facet, timed$package), ]
-  names(timed) <- c(
-    "Benchmark", "Operation", "Facet", "Package", "Support", "Median seconds",
-    "Relative to hilldiv3", "Peak memory (RSS)", "Result size", "Error"
+  sym <- c(yes = "Yes", partial = "Partial", no = "No",
+           unavailable = "n/a", failed = "Failed", out_of_memory = "OOM")
+  cont <- perf[order(perf$benchmark, perf$facet), ]
+  cont$row <- paste0(cont$benchmark, " (", cont$facet, ")")
+  pkgs <- levels(perf$package)
+  rows <- unique(cont[, c("row", "operation")])
+  mat <- matrix("", nrow = nrow(rows), ncol = length(pkgs),
+                dimnames = list(rows$row, pkgs))
+  for (j in seq_len(nrow(cont))) {
+    mat[cont$row[[j]], as.character(cont$package[[j]])] <- sym[cont$support[[j]]]
+  }
+  contingency <- data.frame(
+    Benchmark = rows$row,
+    Operation = rows$operation,
+    mat,
+    check.names = FALSE,
+    row.names = NULL
   )
-  knitr::kable(timed, row.names = FALSE)
+  knitr::kable(contingency, row.names = FALSE)
 }
 ```
+
+## Full results
+
+Peak memory is the maximum resident set size (RSS) of the forked worker process
+during the run, so it includes the base R session and loaded packages, not only
+the operation's own allocations. The complete per-operation and per-iteration
+tables are written next to the benchmark script:
+
+- [`performance-summary.csv`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance-summary.csv) — aggregated median time, peak memory, result size and speed relative to `hilldiv3` for each package-operation.
+- [`performance.csv`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance.csv) — per-iteration timings used for the boxplots.
+- [`session-info.txt`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/session-info.txt) — R version, platform and package versions.
 
 ## Reproducing the benchmark
 
