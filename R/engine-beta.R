@@ -24,8 +24,8 @@ beta_to_dissim <- function(beta, N, q) {
   # V: Sorensen-type turnover.
   V <- 1 - ((N - beta) / (N - 1))
 
-  # C (Sorensen-type overlap-complement) and U (Jaccard-type overlap-complement).
-  # Both converge to the same log-based limit as q -> 1 (verified by
+  # C and U are the Sorensen- and Jaccard-type overlap complements. Both
+  # converge to the same log-based limit as q -> 1 (verified by
   # L'Hopital on the hilldiv2 expressions): C = U = log(beta) / log(N).
   if (q == 1) {
     C <- log(beta) / log(N)

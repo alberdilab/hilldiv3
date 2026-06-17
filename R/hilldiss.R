@@ -7,9 +7,13 @@
 #' @inheritParams hillpart
 #' @param metric Dissimilarity metric(s) to return, any of `"S"`, `"C"`, `"U"`,
 #'   `"V"`. Defaults to all four.
+#' @param out Output shape: `"tibble"` (default) returns a long-format
+#'   `data.frame` with columns `q`, `metric`, `value`; `"matrix"` returns the
+#'   legacy matrix (orders in rows, metrics in columns, dropped to a vector for
+#'   a single metric).
 #'
-#' @return A matrix of dissimilarities (diversity orders in rows, metrics in
-#'   columns), or a vector if a single metric is requested.
+#' @return A long-format `data.frame` of class `hill_dissimilarity` (default),
+#'   or a matrix/vector of dissimilarities when `out = "matrix"`.
 #'
 #' @seealso [hillsim()], [hillpair()], [hillpart()]
 #' @examples
@@ -18,8 +22,11 @@
 #' hilldiss(counts)
 #' @export
 hilldiss <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
-                     tree = NULL, dist = NULL, tau = NULL) {
-  .hill_overlap(data, q, metric, tree, dist, tau, kind = "dissimilarity")
+                     tree = NULL, dist = NULL, tau = NULL,
+                     type = c("auto", "neutral", "phylogenetic", "functional"),
+                     out = c("tibble", "matrix")) {
+  .hill_overlap(data, q, metric, tree, dist, tau, kind = "dissimilarity",
+                type = match.arg(type), out = match.arg(out))
 }
 
 #' Hill numbers-based similarity
@@ -28,8 +35,8 @@ hilldiss <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
 #' (Chiu et al. 2014). These are `1 -` the dissimilarities from [hilldiss()].
 #'
 #' @inheritParams hilldiss
-#' @return A matrix of similarities (diversity orders in rows, metrics in
-#'   columns), or a vector if a single metric is requested.
+#' @return A long-format `data.frame` of class `hill_similarity` (default), or a
+#'   matrix/vector of similarities when `out = "matrix"`.
 #' @seealso [hilldiss()]
 #' @examples
 #' counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
@@ -37,14 +44,17 @@ hilldiss <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
 #' hillsim(counts)
 #' @export
 hillsim <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
-                    tree = NULL, dist = NULL, tau = NULL) {
-  .hill_overlap(data, q, metric, tree, dist, tau, kind = "similarity")
+                    tree = NULL, dist = NULL, tau = NULL,
+                    type = c("auto", "neutral", "phylogenetic", "functional"),
+                    out = c("tibble", "matrix")) {
+  .hill_overlap(data, q, metric, tree, dist, tau, kind = "similarity",
+                type = match.arg(type), out = match.arg(out))
 }
 
 # Shared implementation for hilldiss()/hillsim().
-.hill_overlap <- function(data, q, metric, tree, dist, tau, kind) {
+.hill_overlap <- function(data, q, metric, tree, dist, tau, kind, type, out) {
   metric <- match.arg(metric, c("S", "C", "U", "V"), several.ok = TRUE)
-  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q)
+  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q, type)
   type <- attr(x, "type")
   N <- ncol(x$counts)
   cli::cli_inform("{kind} from {type} Hill numbers of {.val {paste0('q', q)}}.")
@@ -58,5 +68,14 @@ hillsim <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
                   function(i) fun(betas[i], N, q[i]),
                   c(S = 0, C = 0, U = 0, V = 0)))
   rownames(res) <- paste0("q", q)
-  res[, metric, drop = length(metric) == 1]
+  res <- res[, metric, drop = FALSE]
+  if (out == "matrix") {
+    return(res[, , drop = length(metric) == 1])
+  }
+  subclass <- if (kind == "similarity") {
+    "hill_similarity"
+  } else {
+    "hill_dissimilarity"
+  }
+  new_hill_result(.hill_longify(res, q, "metric"), subclass, type)
 }

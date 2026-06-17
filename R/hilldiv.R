@@ -13,9 +13,19 @@
 #'   taxa in `data`.
 #' @param dist A functional distance matrix (or `dist`) over the taxa.
 #' @param tau Optional functional distance threshold. Defaults to `max(dist)`.
+#' @param type Diversity type: `"auto"` (default) infers it from the inputs
+#'   (counts only -> neutral, `+tree` -> phylogenetic, `+dist` -> functional);
+#'   an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts the
+#'   type and is validated against the inputs (e.g. `"phylogenetic"` requires a
+#'   `tree`; `"neutral"` ignores any tree/dist carried by the object).
+#' @param out Output shape: `"tibble"` (default) returns a long-format
+#'   `data.frame` with columns `q`, `sample`, `value` and `print()`/`plot()`
+#'   methods; `"matrix"` returns the legacy matrix (orders in rows, samples in
+#'   columns).
 #'
-#' @return A matrix of Hill numbers with diversity orders in rows (`q0`, `q1`,
-#'   ...) and samples in columns.
+#' @return A long-format `data.frame` of class `hill_diversity` (default), or a
+#'   matrix of Hill numbers with diversity orders in rows (`q0`, `q1`, ...) and
+#'   samples in columns when `out = "matrix"`.
 #'
 #' @references
 #' Chao, A., Chiu, C.-H. & Jost, L. (2010). Phylogenetic diversity measures
@@ -30,10 +40,16 @@
 #' hilldiv(counts)
 #' hilldiv(counts, q = c(0, 1, 2))
 #' @export
-hilldiv <- function(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL) {
-  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q)
+hilldiv <- function(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL,
+                    type = c("auto", "neutral", "phylogenetic", "functional"),
+                    out = c("tibble", "matrix")) {
+  out <- match.arg(out)
+  type <- match.arg(type)
+  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q, type)
   type <- attr(x, "type")
   cli::cli_inform("Computing {type} Hill numbers of {.val {paste0('q', q)}}.")
-  hill_alpha(x$counts, q = q, type = type,
-             tree = x$tree, dist = x$dist, tau = tau)
+  mat <- hill_alpha(x$counts, q = q, type = type,
+                    tree = x$tree, dist = x$dist, tau = tau)
+  if (out == "matrix") return(mat)
+  new_hill_result(.hill_longify(mat, q, "sample"), "hill_diversity", type)
 }

@@ -4,7 +4,15 @@
 \alias{hilldiv}
 \title{Hill numbers computation}
 \usage{
-hilldiv(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL)
+hilldiv(
+  data,
+  q = c(0, 1, 2),
+  tree = NULL,
+  dist = NULL,
+  tau = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
+  out = c("tibble", "matrix")
+)
 }
 \arguments{
 \item{data}{Counts: a numeric vector (one sample), a matrix/data.frame
@@ -19,10 +27,22 @@ taxa in \code{data}.}
 \item{dist}{A functional distance matrix (or \code{dist}) over the taxa.}
 
 \item{tau}{Optional functional distance threshold. Defaults to \code{max(dist)}.}
+
+\item{type}{Diversity type: \code{"auto"} (default) infers it from the inputs
+(counts only -> neutral, \code{+tree} -> phylogenetic, \code{+dist} -> functional);
+an explicit \code{"neutral"}, \code{"phylogenetic"} or \code{"functional"} asserts the
+type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
+\code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
+
+\item{out}{Output shape: \code{"tibble"} (default) returns a long-format
+\code{data.frame} with columns \code{q}, \code{sample}, \code{value} and \code{print()}/\code{plot()}
+methods; \code{"matrix"} returns the legacy matrix (orders in rows, samples in
+columns).}
 }
 \value{
-A matrix of Hill numbers with diversity orders in rows (\code{q0}, \code{q1},
-...) and samples in columns.
+A long-format \code{data.frame} of class \code{hill_diversity} (default), or a
+matrix of Hill numbers with diversity orders in rows (\code{q0}, \code{q1}, ...) and
+samples in columns when \code{out = "matrix"}.
 }
 \description{
 Compute neutral, phylogenetic or functional Hill numbers (alpha diversity)

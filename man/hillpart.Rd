@@ -4,7 +4,17 @@
 \alias{hillpart}
 \title{Hill numbers diversity partitioning}
 \usage{
-hillpart(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL)
+hillpart(
+  data,
+  q = c(0, 1, 2),
+  tree = NULL,
+  dist = NULL,
+  tau = NULL,
+  hierarchy = NULL,
+  metadata = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
+  out = c("tibble", "matrix")
+)
 }
 \arguments{
 \item{data}{A count table (taxa x samples) or a supported object; a single
@@ -19,19 +29,56 @@ taxa in \code{data}.}
 \item{dist}{A functional distance matrix (or \code{dist}) over the taxa.}
 
 \item{tau}{Optional functional distance threshold. Defaults to \code{max(dist)}.}
+
+\item{hierarchy}{Optional one-sided nesting formula, coarsest to finest, e.g.
+\code{~ region / site}, requesting multi-scale (nested) partitioning instead of
+the default single-level partition. One beta is returned per hierarchical
+transition and the chain telescopes exactly:
+\code{gamma = alpha_finest * prod(beta)}. Currently supported for neutral Hill
+numbers only. Grouping variables are resolved against \code{metadata} when
+supplied, otherwise against the calling environment.}
+
+\item{metadata}{Optional per-sample \code{data.frame} supplying the variables named
+in \code{hierarchy}; rows are matched to the count-table columns by name when
+possible, otherwise by position.}
+
+\item{type}{Diversity type: \code{"auto"} (default) infers it from the inputs
+(counts only -> neutral, \code{+tree} -> phylogenetic, \code{+dist} -> functional);
+an explicit \code{"neutral"}, \code{"phylogenetic"} or \code{"functional"} asserts the
+type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
+\code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
+
+\item{out}{Output shape: \code{"tibble"} (default) returns a long-format
+\code{data.frame} with columns \code{q}, \code{component}, \code{value}; \code{"matrix"} returns the
+legacy matrix (orders in rows, \code{alpha}/\code{gamma}/\code{beta} in columns). With
+\code{hierarchy}, \code{"tibble"} returns one row per \verb{(q, scale)} and \code{"matrix"}
+returns \code{alpha}, one \verb{beta_<level>} per nesting level, and \code{gamma}.}
 }
 \value{
-A matrix with columns \code{alpha}, \code{gamma}, \code{beta} and diversity orders
-in rows.
+A long-format \code{data.frame} of class \code{hill_partition} (default), or a
+matrix with columns \code{alpha}, \code{gamma}, \code{beta} and diversity orders in rows
+when \code{out = "matrix"}. With \code{hierarchy}, a \code{hill_hierarchy} long-format
+\code{data.frame} (or the corresponding wide matrix).
 }
 \description{
 Partition neutral, phylogenetic or functional Hill-number diversity into
-alpha, gamma and beta components across a set of samples.
+alpha, gamma and beta components across a set of samples. With a \code{hierarchy}
+formula it instead performs \emph{multi-scale} (nested) partitioning, returning one
+beta per hierarchical level.
 }
 \examples{
 counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 hillpart(counts)
+
+# Multi-scale partitioning across a nested design.
+set.seed(1)
+tab <- matrix(rpois(12 * 8, 5), nrow = 12,
+              dimnames = list(paste0("t", 1:12), paste0("s", 1:8)))
+md <- data.frame(region = rep(c("N", "S"), each = 4),
+                 site = rep(c("a", "b", "c", "d"), each = 2),
+                 row.names = paste0("s", 1:8))
+hillpart(tab, hierarchy = ~ region / site, metadata = md)
 }
 \seealso{
 \code{\link[=hilldiv]{hilldiv()}}, \code{\link[=hilldiss]{hilldiss()}}, \code{\link[=hillsim]{hillsim()}}

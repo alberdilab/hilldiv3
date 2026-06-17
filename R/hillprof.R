@@ -22,24 +22,19 @@
 #' plot(prof)
 #' @export
 hillprof <- function(data, q = seq(0, 3, by = 0.1), tree = NULL, dist = NULL,
-                     tau = NULL, out = c("tibble", "matrix")) {
+                     tau = NULL,
+                     type = c("auto", "neutral", "phylogenetic", "functional"),
+                     out = c("tibble", "matrix")) {
   out <- match.arg(out)
-  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q)
+  type <- match.arg(type)
+  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q, type)
   type <- attr(x, "type")
   cli::cli_inform("Computing {type} diversity profile over
                    {length(q)} order{?s}.")
   mat <- hill_alpha(x$counts, q = q, type = type,
                     tree = x$tree, dist = x$dist, tau = tau)
   if (out == "matrix") return(mat)
-
-  samples <- colnames(mat)
-  df <- data.frame(
-    q = rep(q, times = length(samples)),
-    sample = rep(samples, each = length(q)),
-    value = as.vector(mat),
-    stringsAsFactors = FALSE
-  )
-  structure(df, class = c("hill_profile", "data.frame"))
+  new_hill_result(.hill_longify(mat, q, "sample"), "hill_profile", type)
 }
 
 #' Plot a diversity profile
@@ -52,18 +47,7 @@ hillprof <- function(data, q = seq(0, 3, by = 0.1), tree = NULL, dist = NULL,
 #' @return The `hill_profile` object, invisibly.
 #' @exportS3Method graphics::plot hill_profile
 plot.hill_profile <- function(x, ...) {
-  samples <- unique(x$sample)
-  cols <- grDevices::hcl.colors(max(length(samples), 2), "Dark 3")
-  plot(NA, xlim = range(x$q), ylim = range(x$value),
-       xlab = "Diversity order (q)", ylab = "Hill number (qD)", ...)
-  for (i in seq_along(samples)) {
-    s <- x[x$sample == samples[i], ]
-    s <- s[order(s$q), ]
-    graphics::lines(s$q, s$value, col = cols[i], lwd = 2)
-  }
-  graphics::legend("topright", legend = samples, col = cols[seq_along(samples)],
-                   lwd = 2, bty = "n")
-  invisible(x)
+  .hill_lineplot(x, "sample", "Hill number (qD)", ...)
 }
 
 #' Hill-number evenness
@@ -74,16 +58,25 @@ plot.hill_profile <- function(x, ...) {
 #' @inheritParams hilldiv
 #' @param q Numeric vector of diversity orders (> 0 are meaningful for
 #'   evenness). Defaults to `c(1, 2)`.
+#' @param out Output shape: `"tibble"` (default) returns a long-format
+#'   `data.frame` with columns `q`, `sample`, `value`; `"matrix"` returns the
+#'   legacy matrix (orders in rows, samples in columns).
 #'
-#' @return A matrix of evenness values (orders in rows, samples in columns).
+#' @return A long-format `data.frame` of class `hill_evenness` (default), or a
+#'   matrix of evenness values (orders in rows, samples in columns) when
+#'   `out = "matrix"`.
 #' @seealso [hilldiv()]
 #' @examples
 #' counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
 #'                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 #' hilleven(counts)
 #' @export
-hilleven <- function(data, q = c(1, 2), tree = NULL, dist = NULL, tau = NULL) {
-  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q)
+hilleven <- function(data, q = c(1, 2), tree = NULL, dist = NULL, tau = NULL,
+                     type = c("auto", "neutral", "phylogenetic", "functional"),
+                     out = c("tibble", "matrix")) {
+  out <- match.arg(out)
+  type <- match.arg(type)
+  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q, type)
   type <- attr(x, "type")
   cli::cli_inform("Computing {type} evenness of {.val {paste0('q', q)}}.")
 
@@ -93,5 +86,7 @@ hilleven <- function(data, q = c(1, 2), tree = NULL, dist = NULL, tau = NULL) {
                    tree = x$tree, dist = x$dist, tau = tau)
   even <- sweep(qd, 2, q0[1, ], "/")
   rownames(even) <- paste0("q", q)
-  even
+  if (out == "matrix") return(even)
+  new_hill_result(.hill_longify(even, q, "sample"), "hill_evenness", type,
+                  value_label = "Evenness")
 }

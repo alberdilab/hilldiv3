@@ -11,6 +11,7 @@ hillpair(
   tree = NULL,
   dist = NULL,
   tau = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
   out = c("dist", "tibble"),
   parallel = FALSE
 )
@@ -32,6 +33,12 @@ taxa in \code{data}.}
 
 \item{tau}{Optional functional distance threshold. Defaults to \code{max(dist)}.}
 
+\item{type}{Diversity type: \code{"auto"} (default) infers it from the inputs
+(counts only -> neutral, \code{+tree} -> phylogenetic, \code{+dist} -> functional);
+an explicit \code{"neutral"}, \code{"phylogenetic"} or \code{"functional"} asserts the
+type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
+\code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
+
 \item{out}{Output type: \code{"dist"} (default) returns a \code{dist} object per
 requested metric/order combination; \code{"tibble"} returns a long-format table.}
 
@@ -49,11 +56,15 @@ Compute dissimilarity metrics for every pair of samples, returning distance
 objects suitable for ordination (e.g. NMDS, PCoA).
 }
 \details{
-Each pair is partitioned through the shared \code{\link[=hillpart]{hillpart()}} engine (so the
-maths are identical to \code{\link[=hilldiss]{hilldiss()}} on two samples) and the resulting beta is
-turned into the requested overlap metrics. When \code{parallel = TRUE} and the
-\code{furrr} package is installed, pairs are computed in parallel via the active
-\code{future} plan.
+The type-specific structure (per-sample normalisation, the tree traversal or
+the functional similarity product) is computed \strong{once} over all samples via
+the partitioning engine; each pair then only combines its two precomputed
+columns into beta, which is turned into the requested overlap metrics. The
+maths are therefore identical to \code{\link[=hilldiss]{hilldiss()}} on two samples, without
+re-running the full engine per pair. When \code{parallel = TRUE} and the \code{furrr}
+package is installed, pairs are computed in parallel via the active \code{future}
+plan. A \code{progressr} progress bar is reported when that package is installed
+and a handler is active.
 }
 \examples{
 counts <- matrix(c(10, 0, 5, 2, 8, 1, 3, 4, 0, 6, 2, 7), nrow = 3,

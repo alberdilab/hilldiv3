@@ -36,7 +36,9 @@ unifies richness, Shannon and Simpson diversity through one parameter, the
 | **Functional** | trait dissimilarity | counts + `dist` |
 
 The diversity *type* is inferred from the inputs you pass — you call the same
-functions either way.
+functions either way. You can also state it explicitly with
+`type = "neutral" | "phylogenetic" | "functional"` to have it validated against
+your inputs.
 
 ## The data
 
@@ -58,6 +60,10 @@ counts
 
 Data frames, tibbles, `phyloseq` objects and `TreeSummarizedExperiment`
 objects work too — see `vignette("preparing-data")` *(article on the website)*.
+
+The package also ships a small **simulated** gut-microbiome example —
+`gut_counts` (a MAG count table), `gut_tree` (a phylogeny) and `gut_traits`
+(a trait table) — used throughout the website articles.
 
 ## Alpha diversity
 

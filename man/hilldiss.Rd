@@ -10,7 +10,9 @@ hilldiss(
   metric = c("S", "C", "U", "V"),
   tree = NULL,
   dist = NULL,
-  tau = NULL
+  tau = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
+  out = c("tibble", "matrix")
 )
 }
 \arguments{
@@ -29,10 +31,21 @@ taxa in \code{data}.}
 \item{dist}{A functional distance matrix (or \code{dist}) over the taxa.}
 
 \item{tau}{Optional functional distance threshold. Defaults to \code{max(dist)}.}
+
+\item{type}{Diversity type: \code{"auto"} (default) infers it from the inputs
+(counts only -> neutral, \code{+tree} -> phylogenetic, \code{+dist} -> functional);
+an explicit \code{"neutral"}, \code{"phylogenetic"} or \code{"functional"} asserts the
+type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
+\code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
+
+\item{out}{Output shape: \code{"tibble"} (default) returns a long-format
+\code{data.frame} with columns \code{q}, \code{metric}, \code{value}; \code{"matrix"} returns the
+legacy matrix (orders in rows, metrics in columns, dropped to a vector for
+a single metric).}
 }
 \value{
-A matrix of dissimilarities (diversity orders in rows, metrics in
-columns), or a vector if a single metric is requested.
+A long-format \code{data.frame} of class \code{hill_dissimilarity} (default),
+or a matrix/vector of dissimilarities when \code{out = "matrix"}.
 }
 \description{
 Compute overall (multi-sample) dissimilarity metrics from the Hill-number

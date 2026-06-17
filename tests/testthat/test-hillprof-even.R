@@ -10,7 +10,7 @@ tree <- ape::read.tree(text = "((t1:1,t2:1):1,(t3:1,t4:2):1.5);")
 test_that("hillprof matrix equals hilldiv across orders", {
   q <- c(0, 0.5, 1, 2, 3)
   prof <- suppressMessages(hillprof(counts, q = q, out = "matrix"))
-  ref <- suppressMessages(hilldiv(counts, q = q))
+  ref <- suppressMessages(hilldiv(counts, q = q, out = "matrix"))
   expect_equal(prof, ref)
 })
 
@@ -36,9 +36,9 @@ test_that("hill_profile has a working plot method", {
 
 test_that("hilleven returns qD / 0D in (0, 1]", {
   q <- c(1, 2)
-  ev <- suppressMessages(hilleven(counts, q = q))
-  qd <- suppressMessages(hilldiv(counts, q = q))
-  q0 <- suppressMessages(hilldiv(counts, q = 0))
+  ev <- suppressMessages(hilleven(counts, q = q, out = "matrix"))
+  qd <- suppressMessages(hilldiv(counts, q = q, out = "matrix"))
+  q0 <- suppressMessages(hilldiv(counts, q = 0, out = "matrix"))
   expect_equal(ev, sweep(qd, 2, q0[1, ], "/"))
   expect_true(all(ev > 0 & ev <= 1 + 1e-9))
 })
@@ -46,16 +46,17 @@ test_that("hilleven returns qD / 0D in (0, 1]", {
 test_that("a perfectly even community has evenness 1", {
   even <- matrix(rep(5, 9), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2", "s3")))
-  ev <- suppressMessages(hilleven(even, q = c(1, 2)))
+  ev <- suppressMessages(hilleven(even, q = c(1, 2), out = "matrix"))
   expect_equal(unname(ev), matrix(1, 2, 3))
 })
 
 test_that("profile and evenness route through phylogenetic type", {
   prof <- suppressMessages(hillprof(counts, q = c(0, 1), tree = tree,
                                     out = "matrix"))
-  ref <- suppressMessages(hilldiv(counts, q = c(0, 1), tree = tree))
+  ref <- suppressMessages(hilldiv(counts, q = c(0, 1), tree = tree,
+                                  out = "matrix"))
   expect_equal(prof, ref)
 
-  ev <- suppressMessages(hilleven(counts, q = 2, tree = tree))
+  ev <- suppressMessages(hilleven(counts, q = 2, tree = tree, out = "matrix"))
   expect_equal(dim(ev), c(1, ncol(counts)))
 })

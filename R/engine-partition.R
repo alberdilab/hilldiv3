@@ -1,23 +1,31 @@
 #' Hill-number diversity partitioning engine
 #'
 #' Internal compute engine for alpha / gamma / beta partitioning. Single source
-#' of truth used by [hillpart()], [hilldiss()] and [hillsim()]. Inputs are
-#' assumed validated and aligned.
+#' of truth used by [hillpart()], [hilldiss()], [hillsim()] and [hillpair()].
+#' Inputs are assumed validated and aligned.
+#'
+#' The engine is split into two steps so callers that partition many subsets of
+#' the same samples (notably [hillpair()], which partitions every pair) pay the
+#' per-type set-up cost once:
+#' * `part_prep()` does the type-specific, sample-independent work -- per-sample
+#'   normalisation, the `ape` tree traversal, or the functional similarity
+#'   product -- over the whole table.
+#' * `part_eval()` combines a chosen subset of columns into alpha/gamma/beta.
 #'
 #' Phylogenetic partitioning follows Chiu, Jost & Chao (2014). A single mean
-#' tree depth `T = sum_j T_j` (the sum of per-sample tree depths) is shared by
-#' alpha and gamma so that `beta = gamma / alpha` lies in `[1, N]`. Alpha and
-#' gamma are returned in PD units (effective branch length); dividing both by
-#' `T / N` would give effective-species units but leaves beta unchanged. This
-#' matches hilldiv2's `hillpart.phylogenetic`. Note the shared `T` differs from
-#' the per-sample `T` used by [hill_alpha()], so partition alpha is not the mean
-#' of [hilldiv()] phylogenetic values.
+#' tree depth `T = sum_j T_j` (the sum of per-sample tree depths over the chosen
+#' subset) is shared by alpha and gamma so that `beta = gamma / alpha` lies in
+#' `[1, N]`. Alpha and gamma are returned in PD units (effective branch length).
+#' This matches hilldiv2's `hillpart.phylogenetic`. Note the shared `T` differs
+#' from the per-sample `T` used by [hill_alpha()], so partition alpha is not the
+#' mean of [hilldiv()] phylogenetic values.
 #'
 #' Functional partitioning follows Chiu & Chao (2014): the distance matrix is
 #' capped at `tau`, turned into an attribute similarity `1 - d/tau`, and the
-#' resulting effective abundances are pooled across samples. Unlike the neutral
-#' and phylogenetic paths it works on the raw counts normalised only by the
-#' grand total (no per-sample `tss`), matching hilldiv2's `hillpart.functional`.
+#' resulting effective abundances are pooled across the subset. Unlike the
+#' neutral and phylogenetic paths it works on the raw counts normalised only by
+#' the grand total (no per-sample `tss`), matching hilldiv2's
+#' `hillpart.functional`.
 #'
 #' @inheritParams hill_alpha
 #'
@@ -27,20 +35,50 @@
 hill_partition <- function(p, q = c(0, 1, 2), type = "neutral",
                            tree = NULL, dist = NULL, tau = NULL) {
   p <- as.matrix(p)
+  prep <- part_prep(p, type, tree = tree, dist = dist, tau = tau)
+  part_eval(prep, seq_len(ncol(p)), q)
+}
+
+# Sample-independent set-up, done once over the full count table.
+part_prep <- function(p, type = "neutral", tree = NULL, dist = NULL,
+                      tau = NULL) {
+  p <- as.matrix(p)
   switch(type,
-    # Drop all-zero taxa for the neutral path; for phylogenetic/functional the
-    # full taxon set must be kept to stay aligned with the tree / distance
-    # matrix (empty lineages are excluded internally instead).
-    neutral = hill_part_neutral(p[rowSums(p) > 0, , drop = FALSE], q),
-    phylogenetic = hill_part_phylo(p, q, tree),
-    functional = hill_part_func(p, q, dist, tau),
+    neutral = list(type = "neutral", pi = tss(p)),
+    phylogenetic = {
+      if (is.null(tree)) {
+        cli::cli_abort("A {.cls phylo} {.arg tree} is required for phylogenetic
+                        partitioning.")
+      }
+      ba <- branch_abundance(tree, tss(p))
+      list(type = "phylogenetic", Li = ba$Li, aij = ba$ai)
+    },
+    functional = {
+      if (is.null(dist)) {
+        cli::cli_abort("A {.arg dist} matrix is required for functional
+                        partitioning.")
+      }
+      dij <- as.matrix(dist)
+      if (is.null(tau)) tau <- max(dij)
+      dij[dij > tau] <- tau
+      list(type = "functional", p = p, aik = (1 - dij / tau) %*% p)
+    },
     cli::cli_abort("Unknown diversity type {.val {type}}.")
   )
 }
 
-hill_part_neutral <- function(p, q) {
-  N <- ncol(p)
-  pi <- tss(p)
+# Combine the chosen columns (sample indices) into an alpha/gamma/beta matrix.
+part_eval <- function(prep, cols, q) {
+  switch(prep$type,
+    neutral = .part_eval_neutral(prep, cols, q),
+    phylogenetic = .part_eval_phylo(prep, cols, q),
+    functional = .part_eval_func(prep, cols, q)
+  )
+}
+
+.part_eval_neutral <- function(prep, cols, q) {
+  pi <- prep$pi[, cols, drop = FALSE]
+  N <- length(cols)
   gamma_props <- rowSums(pi / N)
   out <- .part_matrix(q)
   for (r in seq_along(q)) {
@@ -52,18 +90,12 @@ hill_part_neutral <- function(p, q) {
   out
 }
 
-hill_part_phylo <- function(p, q, tree) {
-  if (is.null(tree)) {
-    cli::cli_abort("A {.cls phylo} {.arg tree} is required for phylogenetic
-                    partitioning.")
-  }
-  N <- ncol(p)
-  pi <- tss(p)                          # normalise each sample to sum 1
-  ba <- branch_abundance(tree, pi)
-  Li <- ba$Li                           # branch lengths (edges)
-  aij <- ba$ai                          # edges x samples (a_ik)
-  ai <- rowSums(aij)                    # pooled per-edge abundance (a_i+)
-  Tval <- sum(Li * ai)                  # shared T = sum_j T_j (Chiu et al. 2014)
+.part_eval_phylo <- function(prep, cols, q) {
+  Li <- prep$Li
+  aij <- prep$aij[, cols, drop = FALSE]      # edges x subset
+  N <- length(cols)
+  ai <- rowSums(aij)                          # pooled per-edge abundance (a_i+)
+  Tval <- sum(Li * ai)                        # shared T = sum_j T_j
 
   # Gamma uses pooled branches; alpha uses every (edge, sample) cell. Restrict
   # to nonzero entries so q = 0 and the q = 1 log limit stay well defined.
@@ -90,23 +122,12 @@ hill_part_phylo <- function(p, q, tree) {
   out
 }
 
-hill_part_func <- function(p, q, dist, tau) {
-  if (is.null(dist)) {
-    cli::cli_abort("A {.arg dist} matrix is required for functional
-                    partitioning.")
-  }
-  N <- ncol(p)
-  dij <- as.matrix(dist)
-  if (is.null(tau)) tau <- max(dij)
-  dij[dij > tau] <- tau
-  sim <- 1 - dij / tau                   # attribute similarity (1 - d/tau)
-
-  # Raw counts (not per-sample normalised) divided by the grand total, matching
-  # hilldiv2's hillpart.functional: pooled effective abundance a_i+ and the
-  # per-attribute contributions v_i = n_i+ / a_i+ (Chiu & Chao 2014).
-  aik <- sim %*% p                       # taxa x samples (a_ik)
-  aiplus <- rowSums(aik)                 # pooled per-taxon (a_i+)
-  vi <- rowSums(p) / aiplus              # attribute contributions v_i
+.part_eval_func <- function(prep, cols, q) {
+  p <- prep$p[, cols, drop = FALSE]
+  aik <- prep$aik[, cols, drop = FALSE]       # taxa x subset (a_ik)
+  N <- length(cols)
+  aiplus <- rowSums(aik)                       # pooled per-taxon (a_i+)
+  vi <- rowSums(p) / aiplus                    # attribute contributions v_i
   nplus <- sum(p)
 
   # Gamma uses pooled taxa; alpha uses every (taxon, sample) cell. Restrict to

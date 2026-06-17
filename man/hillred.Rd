@@ -4,7 +4,15 @@
 \alias{hillred}
 \title{Hill numbers redundancy}
 \usage{
-hillred(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL)
+hillred(
+  data,
+  q = c(0, 1, 2),
+  tree = NULL,
+  dist = NULL,
+  tau = NULL,
+  type = c("auto", "phylogenetic", "functional"),
+  out = c("tibble", "matrix")
+)
 }
 \arguments{
 \item{data}{A count table (taxa x samples); requires either \code{tree} or \code{dist}.}
@@ -18,9 +26,21 @@ taxa in \code{data}.}
 \item{dist}{A functional distance matrix (or \code{dist}) over the taxa.}
 
 \item{tau}{Optional functional distance threshold. Defaults to \code{max(dist)}.}
+
+\item{type}{Diversity type: \code{"auto"} (default) infers it from the inputs
+(counts only -> neutral, \code{+tree} -> phylogenetic, \code{+dist} -> functional);
+an explicit \code{"neutral"}, \code{"phylogenetic"} or \code{"functional"} asserts the
+type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
+\code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
+
+\item{out}{Output shape: \code{"tibble"} (default) returns a \code{data.frame} with one
+row per \code{q} and columns \code{q}, \code{redundancy}, \code{a}, \code{b}, \code{c}; \code{"matrix"}
+returns the legacy matrix (orders in rows).}
 }
 \value{
-A matrix with columns \code{redundancy}, \code{a}, \code{b}, \code{c}, one row per \code{q}.
+A \code{data.frame} of class \code{hill_redundancy} (default), or a matrix with
+columns \code{redundancy}, \code{a}, \code{b}, \code{c} (one row per \code{q}) when
+\code{out = "matrix"}.
 }
 \description{
 Estimate phylogenetic or functional redundancy by fitting the saturating

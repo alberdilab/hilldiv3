@@ -35,8 +35,9 @@ as_hill_input.phyloseq <- function(data, tree = NULL, dist = NULL) {
   rlang::check_installed("phyloseq")
   otu <- methods::as(phyloseq::otu_table(data), "matrix")
   if (!phyloseq::taxa_are_rows(data)) otu <- t(otu)
-  if (is.null(tree) && !is.null(phyloseq::phy_tree(data, errorIfNULL = FALSE))) {
-    tree <- phyloseq::phy_tree(data)
+  phy <- phyloseq::phy_tree(data, errorIfNULL = FALSE)
+  if (is.null(tree) && !is.null(phy)) {
+    tree <- phy
   }
   meta <- tryCatch(methods::as(phyloseq::sample_data(data), "data.frame"),
                    error = function(e) NULL)
@@ -44,7 +45,8 @@ as_hill_input.phyloseq <- function(data, tree = NULL, dist = NULL) {
 }
 
 #' @noRd
-as_hill_input.TreeSummarizedExperiment <- function(data, tree = NULL, dist = NULL) {
+as_hill_input.TreeSummarizedExperiment <- function(data, tree = NULL,
+                                                    dist = NULL) {
   rlang::check_installed("TreeSummarizedExperiment")
   counts <- as.matrix(SummarizedExperiment::assay(data))
   if (is.null(tree)) {
@@ -76,4 +78,33 @@ hill_type <- function(x) {
   if (has_tree) return("phylogenetic")
   if (has_dist) return("functional")
   "neutral"
+}
+
+# Resolve the requested diversity type against the supplied inputs. `"auto"`
+# (the default) falls back to input-based detection; an explicit type is
+# validated -- "phylogenetic"/"functional" require the matching input, and any
+# request drops the inputs that type does not use (so e.g. `type = "neutral"`
+# deliberately ignores a tree carried along on a phyloseq object). Returns the
+# possibly-trimmed `hill_input` and the resolved type.
+resolve_type <- function(x, type = "auto") {
+  type <- match.arg(type, c("auto", "neutral", "phylogenetic", "functional"))
+  detected <- hill_type(x)
+  if (type == "auto") {
+    return(list(x = x, type = detected))
+  }
+  if (type == "phylogenetic" && is.null(x$tree)) {
+    cli::cli_abort(c(
+      "{.code type = \"phylogenetic\"} needs a {.arg tree}.",
+      "i" = "Supply a {.cls phylo} tree, or use {.code type = \"auto\"}."
+    ))
+  }
+  if (type == "functional" && is.null(x$dist)) {
+    cli::cli_abort(c(
+      "{.code type = \"functional\"} needs a {.arg dist} matrix.",
+      "i" = "Supply a distance matrix, or use {.code type = \"auto\"}."
+    ))
+  }
+  if (type != "phylogenetic") x$tree <- NULL
+  if (type != "functional") x$dist <- NULL
+  list(x = x, type = type)
 }

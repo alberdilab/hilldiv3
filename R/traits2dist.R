@@ -19,7 +19,8 @@ traits2dist <- function(traits, method = c("gower", "euclidean", "manhattan")) {
   method <- match.arg(method)
   traits <- as.data.frame(traits)
   # Drop constant columns, which carry no distance information.
-  non_constant <- vapply(traits, function(col) length(unique(col)) > 1, logical(1))
+  non_constant <- vapply(traits, function(col) length(unique(col)) > 1,
+                         logical(1))
   traits <- traits[, non_constant, drop = FALSE]
   d <- cluster::daisy(traits, metric = method, warnType = FALSE)
   as.matrix(d)

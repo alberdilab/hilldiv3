@@ -17,13 +17,15 @@ test_that("phylogenetic partition on a unit-length star tree equals neutral", {
   star$tip.label <- rownames(counts)
   star$edge.length <- rep(1, nrow(star$edge))
 
-  phylo <- suppressMessages(hillpart(counts, q = q_set, tree = star))
-  neutral <- suppressMessages(hillpart(counts, q = q_set))
+  phylo <- suppressMessages(hillpart(counts, q = q_set, tree = star,
+                                     out = "matrix"))
+  neutral <- suppressMessages(hillpart(counts, q = q_set, out = "matrix"))
   expect_equal(phylo, neutral)
 })
 
 test_that("phylogenetic partition matches Chiu et al. (2014) structure", {
-  part <- suppressMessages(hillpart(counts, q = q_set, tree = tree))
+  part <- suppressMessages(hillpart(counts, q = q_set, tree = tree,
+                                    out = "matrix"))
   N <- ncol(counts)
 
   # beta lies in [1, N]; gamma >= alpha.
@@ -40,30 +42,35 @@ test_that("identical samples give no phylogenetic turnover (beta = 1)", {
   one <- counts[, 1, drop = FALSE]
   twin <- cbind(s1 = one[, 1], s2 = one[, 1])
   rownames(twin) <- rownames(counts)
-  part <- suppressMessages(hillpart(twin, q = q_set, tree = tree))
+  part <- suppressMessages(hillpart(twin, q = q_set, tree = tree,
+                                    out = "matrix"))
   expect_equal(unname(part[, "beta"]), rep(1, length(q_set)))
   expect_equal(unname(part[, "alpha"]), unname(part[, "gamma"]))
 })
 
 test_that("q = 1 phylogenetic partition is the limit of nearby q", {
-  lim <- suppressMessages(hillpart(counts, q = 1, tree = tree))
-  near <- suppressMessages(hillpart(counts, q = 1 + 1e-6, tree = tree))
+  lim <- suppressMessages(hillpart(counts, q = 1, tree = tree, out = "matrix"))
+  near <- suppressMessages(hillpart(counts, q = 1 + 1e-6, tree = tree,
+                                    out = "matrix"))
   expect_equal(unname(lim), unname(near), tolerance = 1e-4)
 })
 
 test_that("hilldiss/hillsim wire through the phylogenetic path", {
-  d <- suppressMessages(hilldiss(counts, q = q_set, tree = tree))
-  s <- suppressMessages(hillsim(counts, q = q_set, tree = tree))
+  d <- suppressMessages(hilldiss(counts, q = q_set, tree = tree,
+                                 out = "matrix"))
+  s <- suppressMessages(hillsim(counts, q = q_set, tree = tree,
+                                out = "matrix"))
   expect_equal(d + s, matrix(1, nrow(d), ncol(d), dimnames = dimnames(d)))
   expect_true(all(d >= -1e-9 & d <= 1 + 1e-9))
 
   # beta = 1 (identical samples) implies zero dissimilarity on every metric.
   twin <- cbind(counts[, 1], counts[, 1])
   rownames(twin) <- rownames(counts)
-  d0 <- suppressMessages(hilldiss(twin, q = q_set, tree = tree))
+  d0 <- suppressMessages(hilldiss(twin, q = q_set, tree = tree,
+                                  out = "matrix"))
   expect_equal(unname(d0), matrix(0, length(q_set), 4))
 })
 
 test_that("phylogenetic partitioning requires a tree", {
-  expect_error(hilldiv3:::hill_part_phylo(tss(counts), q = 0, tree = NULL))
+  expect_error(hilldiv3:::part_prep(counts, "phylogenetic", tree = NULL))
 })

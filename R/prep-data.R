@@ -8,11 +8,14 @@
 #'
 #' @param x A `hill_input` (see [as_hill_input()]).
 #' @param q Numeric vector of diversity orders.
+#' @param type Requested diversity type, one of `"auto"` (detect from inputs),
+#'   `"neutral"`, `"phylogenetic"` or `"functional"`. Resolved and validated by
+#'   [resolve_type()].
 #'
 #' @return The validated, aligned `hill_input`, with a `type` attribute.
 #' @keywords internal
 #' @noRd
-prep_data <- function(x, q) {
+prep_data <- function(x, q, type = "auto") {
   if (any(q < 0)) {
     cli::cli_abort("Diversity orders {.arg q} must be >= 0.")
   }
@@ -20,7 +23,9 @@ prep_data <- function(x, q) {
     cli::cli_abort("Count data must be numeric.")
   }
 
-  type <- hill_type(x)
+  resolved <- resolve_type(x, type)
+  x <- resolved$x
+  type <- resolved$type
   taxa <- rownames(x$counts)
 
   if (type == "phylogenetic") {

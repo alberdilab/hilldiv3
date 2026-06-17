@@ -16,7 +16,7 @@ test_that("pairwise dissimilarities match hilldiss on each pair", {
   pairs <- utils::combn(ncol(counts), 2, simplify = FALSE)
   for (idx in pairs) {
     ref <- suppressMessages(
-      hilldiss(counts[, idx], q = q_set, metric = c("C", "U")))
+      hilldiss(counts[, idx], q = q_set, metric = c("C", "U"), out = "matrix"))
     s <- colnames(counts)[idx]
     for (qi in seq_along(q_set)) {
       for (m in c("C", "U")) {
@@ -54,7 +54,8 @@ test_that("pairwise works for phylogenetic and functional types", {
   expect_s3_class(dfunc, "dist")
 
   ref <- suppressMessages(
-    hilldiss(counts[, c(1, 2)], q = 1, metric = c("C", "U"), tree = tree))
+    hilldiss(counts[, c(1, 2)], q = 1, metric = c("C", "U"), tree = tree,
+             out = "matrix"))
   expect_equal(as.matrix(dphylo)["s1", "s2"], unname(ref[1, "C"]))
 })
 

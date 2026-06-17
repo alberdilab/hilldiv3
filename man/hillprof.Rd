@@ -10,6 +10,7 @@ hillprof(
   tree = NULL,
   dist = NULL,
   tau = NULL,
+  type = c("auto", "neutral", "phylogenetic", "functional"),
   out = c("tibble", "matrix")
 )
 }
@@ -26,6 +27,12 @@ taxa in \code{data}.}
 \item{dist}{A functional distance matrix (or \code{dist}) over the taxa.}
 
 \item{tau}{Optional functional distance threshold. Defaults to \code{max(dist)}.}
+
+\item{type}{Diversity type: \code{"auto"} (default) infers it from the inputs
+(counts only -> neutral, \code{+tree} -> phylogenetic, \code{+dist} -> functional);
+an explicit \code{"neutral"}, \code{"phylogenetic"} or \code{"functional"} asserts the
+type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
+\code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
 
 \item{out}{Output type: \code{"tibble"} (default, long format ready for plotting)
 or \code{"matrix"}.}

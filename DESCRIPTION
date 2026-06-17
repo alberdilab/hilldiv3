@@ -26,6 +26,7 @@ Imports:
     cli,
     grDevices,
     graphics,
+    methods,
     rlang,
     stats,
     utils
@@ -38,6 +39,7 @@ Suggests:
     phyloseq,
     progressr,
     rmarkdown,
+    SummarizedExperiment,
     testthat (>= 3.0.0),
     TreeSummarizedExperiment,
     vegan

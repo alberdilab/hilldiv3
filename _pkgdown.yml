@@ -51,6 +51,12 @@ reference:
       - tss
       - traits2dist
       - match_data
+  - title: Datasets
+    desc: Bundled simulated gut-microbiome example data.
+    contents:
+      - gut_counts
+      - gut_tree
+      - gut_traits
   - title: Package
     contents:
       - hilldiv3-package

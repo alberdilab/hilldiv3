@@ -56,19 +56,22 @@ hillpart_functional_ref <- function(data, q = c(0, 1, 2), dist, tau) {
 
 test_that("functional partition matches hilldiv2 hillpart.functional", {
   ref <- hillpart_functional_ref(counts, q = q_set, dist = dist)
-  got <- suppressMessages(hillpart(counts, q = q_set, dist = dist))
+  got <- suppressMessages(hillpart(counts, q = q_set, dist = dist,
+                                   out = "matrix"))
   expect_equal(got, ref, tolerance = 1e-12)
 })
 
 test_that("functional partition matches hilldiv2 with a custom tau", {
   tau <- 0.5
   ref <- hillpart_functional_ref(counts, q = q_set, dist = dist, tau = tau)
-  got <- suppressMessages(hillpart(counts, q = q_set, dist = dist, tau = tau))
+  got <- suppressMessages(hillpart(counts, q = q_set, dist = dist, tau = tau,
+                                   out = "matrix"))
   expect_equal(got, ref, tolerance = 1e-12)
 })
 
 test_that("functional partition has the expected structure", {
-  part <- suppressMessages(hillpart(counts, q = q_set, dist = dist))
+  part <- suppressMessages(hillpart(counts, q = q_set, dist = dist,
+                                    out = "matrix"))
   N <- ncol(counts)
 
   # beta lies in [1, N]; gamma >= alpha.
@@ -81,30 +84,35 @@ test_that("identical samples give no functional turnover (beta = 1)", {
   one <- counts[, 1, drop = FALSE]
   twin <- cbind(s1 = one[, 1], s2 = one[, 1])
   rownames(twin) <- rownames(counts)
-  part <- suppressMessages(hillpart(twin, q = q_set, dist = dist))
+  part <- suppressMessages(hillpart(twin, q = q_set, dist = dist,
+                                    out = "matrix"))
   expect_equal(unname(part[, "beta"]), rep(1, length(q_set)))
   expect_equal(unname(part[, "alpha"]), unname(part[, "gamma"]))
 })
 
 test_that("q = 1 functional partition is the limit of nearby q", {
-  lim <- suppressMessages(hillpart(counts, q = 1, dist = dist))
-  near <- suppressMessages(hillpart(counts, q = 1 + 1e-6, dist = dist))
+  lim <- suppressMessages(hillpart(counts, q = 1, dist = dist, out = "matrix"))
+  near <- suppressMessages(hillpart(counts, q = 1 + 1e-6, dist = dist,
+                                    out = "matrix"))
   expect_equal(unname(lim), unname(near), tolerance = 1e-4)
 })
 
 test_that("hilldiss/hillsim wire through the functional path", {
-  d <- suppressMessages(hilldiss(counts, q = q_set, dist = dist))
-  s <- suppressMessages(hillsim(counts, q = q_set, dist = dist))
+  d <- suppressMessages(hilldiss(counts, q = q_set, dist = dist,
+                                 out = "matrix"))
+  s <- suppressMessages(hillsim(counts, q = q_set, dist = dist,
+                                out = "matrix"))
   expect_equal(d + s, matrix(1, nrow(d), ncol(d), dimnames = dimnames(d)))
   expect_true(all(d >= -1e-9 & d <= 1 + 1e-9))
 
   # beta = 1 (identical samples) implies zero dissimilarity on every metric.
   twin <- cbind(counts[, 1], counts[, 1])
   rownames(twin) <- rownames(counts)
-  d0 <- suppressMessages(hilldiss(twin, q = q_set, dist = dist))
+  d0 <- suppressMessages(hilldiss(twin, q = q_set, dist = dist,
+                                  out = "matrix"))
   expect_equal(unname(d0), matrix(0, length(q_set), 4))
 })
 
 test_that("functional partitioning requires a distance matrix", {
-  expect_error(hilldiv3:::hill_part_func(counts, q = 0, dist = NULL, tau = NULL))
+  expect_error(hilldiv3:::part_prep(counts, "functional", dist = NULL))
 })

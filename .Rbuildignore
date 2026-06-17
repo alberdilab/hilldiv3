@@ -8,3 +8,6 @@
 ^\.DS_Store$
 ^README\.Rmd$
 ^vignettes/articles$
+^data-raw$
+^\.lintr$
+^codecov\.yml$

@@ -2,6 +2,8 @@
 
 <!-- badges: start -->
 [![R-CMD-check](https://github.com/alberdilab/hilldiv3/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/alberdilab/hilldiv3/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/alberdilab/hilldiv3/graph/badge.svg)](https://app.codecov.io/gh/alberdilab/hilldiv3)
+[![lint](https://github.com/alberdilab/hilldiv3/actions/workflows/lint.yaml/badge.svg)](https://github.com/alberdilab/hilldiv3/actions/workflows/lint.yaml)
 <!-- badges: end -->
 
 `hilldiv3` is a redesign of [hilldiv2](https://github.com/anttonalberdi/hilldiv2)
@@ -20,8 +22,16 @@ based on Hill numbers. It provides a unified framework for **neutral**,
 * **Dual input support**: matrices, data frames, tibbles, `phyloseq` and
   `TreeSummarizedExperiment` objects via `as_hill_input()`.
 * Faster phylogenetic computation using an `ape` post-order traversal in place
-  of `geiger::tips()`.
-* New: `hillprof()` (diversity profiles) and `hilleven()` (evenness).
+  of `geiger::tips()`; `hillpair()` computes the shared structure once and
+  reuses it across all sample pairs.
+* **Tidy by default**: every `hill*` function returns a long-format
+  `data.frame` with `print()`/`plot()`/`autoplot()` methods; pass
+  `out = "matrix"` for the legacy shape.
+* An explicit `type = c("auto", "neutral", "phylogenetic", "functional")`
+  argument that asserts and validates the diversity type (auto-detected by
+  default).
+* New: `hillprof()` (diversity profiles) and `hilleven()` (evenness), plus
+  bundled example data (`gut_counts`, `gut_tree`, `gut_traits`).
 * The familiar `hilldiv()`, `hillpart()`, `hilldiss()`, `hillsim()`,
   `hillpair()`, `hillred()`, `tss()` and `traits2dist()` names are kept.
 
@@ -50,12 +60,16 @@ what changed.
 ```r
 library(hilldiv3)
 
-counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
-                 dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
+# Bundled simulated gut-microbiome MAG data.
+hilldiv(gut_counts)                    # neutral Hill numbers q = 0, 1, 2
+hilldiv(gut_counts, tree = gut_tree)   # phylogenetic
 
-hilldiv(counts)              # neutral Hill numbers q = 0, 1, 2
-hilldiv(counts, tree = tree) # phylogenetic
-hilldiv(counts, dist = dist) # functional
+dist <- traits2dist(gut_traits)
+hilldiv(gut_counts, dist = dist)       # functional
+
+# Results are tidy by default and plot directly.
+plot(hillprof(gut_counts))             # diversity profile
+hilldiv(gut_counts, out = "matrix")    # legacy matrix shape
 ```
 
 ## References

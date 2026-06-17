@@ -3,11 +3,15 @@
 #' Compute dissimilarity metrics for every pair of samples, returning distance
 #' objects suitable for ordination (e.g. NMDS, PCoA).
 #'
-#' Each pair is partitioned through the shared [hillpart()] engine (so the
-#' maths are identical to [hilldiss()] on two samples) and the resulting beta is
-#' turned into the requested overlap metrics. When `parallel = TRUE` and the
-#' `furrr` package is installed, pairs are computed in parallel via the active
-#' `future` plan.
+#' The type-specific structure (per-sample normalisation, the tree traversal or
+#' the functional similarity product) is computed **once** over all samples via
+#' the partitioning engine; each pair then only combines its two precomputed
+#' columns into beta, which is turned into the requested overlap metrics. The
+#' maths are therefore identical to [hilldiss()] on two samples, without
+#' re-running the full engine per pair. When `parallel = TRUE` and the `furrr`
+#' package is installed, pairs are computed in parallel via the active `future`
+#' plan. A `progressr` progress bar is reported when that package is installed
+#' and a handler is active.
 #'
 #' @inheritParams hilldiss
 #' @param out Output type: `"dist"` (default) returns a `dist` object per
@@ -29,10 +33,12 @@
 #' @export
 hillpair <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
                      tree = NULL, dist = NULL, tau = NULL,
+                     type = c("auto", "neutral", "phylogenetic", "functional"),
                      out = c("dist", "tibble"), parallel = FALSE) {
   out <- match.arg(out)
+  type <- match.arg(type)
   metric <- match.arg(metric, c("S", "C", "U", "V"), several.ok = TRUE)
-  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q)
+  x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q, type)
   type <- attr(x, "type")
   counts <- x$counts
   samples <- colnames(counts)
@@ -45,11 +51,13 @@ hillpair <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
   cli::cli_inform("Computing {type} pairwise dissimilarity for
                    {length(pairs)} sample pair{?s}.")
 
+  # Compute the type-specific structure once over all samples; each pair only
+  # combines its two columns below.
+  prep <- part_prep(counts, type, tree = x$tree, dist = x$dist, tau = tau)
+
   # beta -> dissimilarity for one pair; returns a (q x metric) matrix.
   pair_fun <- function(idx) {
-    part <- hill_partition(counts[, idx, drop = FALSE], q = q, type = type,
-                           tree = x$tree, dist = x$dist, tau = tau)
-    betas <- part[, "beta"]
+    betas <- part_eval(prep, idx, q)[, "beta"]
     d <- t(vapply(seq_along(q),
                   function(i) beta_to_dissim(betas[i], 2L, q[i]),
                   c(S = 0, C = 0, U = 0, V = 0)))
@@ -64,15 +72,25 @@ hillpair <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
   .pairs_to_dist(results, q, metric, samples)
 }
 
-# lapply over pairs, optionally parallelised with furrr/future.
+# lapply over pairs, optionally parallelised with furrr/future, reporting a
+# progressr bar when that package is available and a handler is active.
 .pair_lapply <- function(x, fun, parallel) {
+  if (rlang::is_installed("progressr")) {
+    p <- progressr::progressor(steps = length(x))
+    step_fun <- function(idx) {
+      on.exit(p())
+      fun(idx)
+    }
+  } else {
+    step_fun <- fun
+  }
   if (parallel) {
     if (rlang::is_installed("furrr")) {
-      return(furrr::future_map(x, fun))
+      return(furrr::future_map(x, step_fun))
     }
     cli::cli_warn("{.pkg furrr} is not installed; running sequentially.")
   }
-  lapply(x, fun)
+  lapply(x, step_fun)
 }
 
 # Assemble per-pair (q x metric) matrices into a long data.frame.
