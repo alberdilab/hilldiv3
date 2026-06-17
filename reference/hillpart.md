@@ -52,9 +52,12 @@ hillpart(
   `~ region / site`, requesting multi-scale (nested) partitioning
   instead of the default single-level partition. One beta is returned
   per hierarchical transition and the chain telescopes exactly:
-  `gamma = alpha_finest * prod(beta)`. Currently supported for neutral
-  Hill numbers only. Grouping variables are resolved against `metadata`
-  when supplied, otherwise against the calling environment.
+  `gamma = alpha_finest * prod(beta)`. Works for all three diversity
+  types (neutral, phylogenetic, functional); see the partitioning
+  vignette for the shared construction and its assumptions (equal
+  per-sample weighting; one shared tree depth / `tau` across scales).
+  Grouping variables are resolved against `metadata` when supplied,
+  otherwise against the calling environment.
 
 - metadata:
 

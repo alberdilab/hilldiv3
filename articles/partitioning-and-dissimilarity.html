@@ -136,6 +136,165 @@ independent of alpha, which is what makes it comparable across datasets
 with different richness.</p>
 </div>
 <div class="section level2">
+<h2 id="multi-scale-hierarchical-partitioning">Multi-scale (hierarchical) partitioning<a class="anchor" aria-label="anchor" href="#multi-scale-hierarchical-partitioning"></a>
+</h2>
+<p>Real sampling designs are usually <strong>nested</strong>: replicates
+within sites, sites within regions, regions within a study. A single
+alpha/beta split throws that structure away — it cannot tell you whether
+turnover happens <em>between nearby replicates</em> or <em>between
+distant regions</em>. <code><a href="../reference/hillpart.html">hillpart()</a></code> solves this with a
+<code>hierarchy</code> formula that decomposes gamma into one beta
+<strong>per hierarchical level</strong>, so you can see at which spatial
+(or temporal, or organisational) scale diversity actually turns
+over.</p>
+<p>Supply the nesting as a one-sided formula, coarsest to finest, plus a
+<code>metadata</code> table giving each sample’s group memberships:</p>
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/Poisson.html" class="external-link">rpois</a></span><span class="op">(</span><span class="fl">12</span> <span class="op">*</span> <span class="fl">8</span>, <span class="fl">5</span><span class="op">)</span>, nrow <span class="op">=</span> <span class="fl">12</span>,</span>
+<span>              dimnames <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"t"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"s"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">md</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  region <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"N"</span>, <span class="st">"S"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">4</span><span class="op">)</span>,</span>
+<span>  site   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"a"</span>, <span class="st">"b"</span>, <span class="st">"c"</span>, <span class="st">"d"</span><span class="op">)</span>, each <span class="op">=</span> <span class="fl">2</span><span class="op">)</span>,</span>
+<span>  row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"s"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">8</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">tab</span>, hierarchy <span class="op">=</span> <span class="op">~</span> <span class="va">region</span> <span class="op">/</span> <span class="va">site</span>, metadata <span class="op">=</span> <span class="va">md</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Partitioning neutral Hill numbers across scales <span style="color: #0000BB;">"sample &lt; site &lt; region &lt;</span></span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">total"</span>.</span></span>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
+<span><span class="co">#&gt; 12 rows x 5 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    q  scale n_units diversity     beta</span></span>
+<span><span class="co">#&gt; 1  0 sample       8  12.00000       NA</span></span>
+<span><span class="co">#&gt; 2  0   site       4  12.00000 1.000000</span></span>
+<span><span class="co">#&gt; 3  0 region       2  12.00000 1.000000</span></span>
+<span><span class="co">#&gt; 4  0  total       1  12.00000 1.000000</span></span>
+<span><span class="co">#&gt; 5  1 sample       8  11.11495       NA</span></span>
+<span><span class="co">#&gt; 6  1   site       4  11.60076 1.043708</span></span>
+<span><span class="co">#&gt; 7  1 region       2  11.77266 1.014817</span></span>
+<span><span class="co">#&gt; 8  1  total       1  11.95901 1.015829</span></span>
+<span><span class="co">#&gt; 9  2 sample       8  10.47242       NA</span></span>
+<span><span class="co">#&gt; 10 2   site       4  11.24852 1.074109</span></span>
+<span><span class="co">#&gt; 11 2 region       2  11.56260 1.027923</span></span>
+<span><span class="co">#&gt; 12 2  total       1  11.92231 1.031110</span></span></code></pre></div>
+<p>The result is one row per <code>(q, scale)</code>, finest
+(<code>sample</code>) to coarsest (<code>total</code>):</p>
+<ul>
+<li>
+<code>diversity</code> is the effective diversity at that scale
+(<code>A_k</code>): the per-sample alpha at <code>sample</code>, the
+pooled gamma at <code>total</code>, interpolating in between.</li>
+<li>
+<code>beta</code> is the turnover <strong>gained</strong> at that
+scale, <code>A_k / A_{k-1}</code> — e.g. the <code>site</code> beta is
+turnover among samples within a site, the <code>region</code> beta among
+sites within a region, the <code>total</code> beta among regions.</li>
+<li>
+<code>n_units</code> is how many units exist at that scale (8
+samples → 4 sites → 2 regions → 1 total).</li>
+</ul>
+<p>The betas multiply back to the overall beta exactly:</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msup><mrow></mrow><mi>q</mi></msup><msub><mi>D</mi><mi>γ</mi></msub><mspace width="0.278em"></mspace><mo>=</mo><mspace width="0.278em"></mspace><msup><mrow></mrow><mi>q</mi></msup><msub><mi>D</mi><mi>α</mi></msub><mspace width="0.167em"></mspace><mo>⋅</mo><mspace width="0.167em"></mspace><munder><mo>∏</mo><mi>k</mi></munder><msub><mi>β</mi><mi>k</mi></msub><mi>.</mi></mrow><annotation encoding="application/x-tex">
+{}^qD_\gamma \;=\; {}^qD_\alpha \,\cdot\, \prod_k \beta_k .
+</annotation></semantics></math></p>
+<p>This <strong>telescoping identity</strong> is guaranteed by
+construction (and checked in the package tests), so a hierarchical run
+is always consistent with the plain <code><a href="../reference/hillpart.html">hillpart()</a></code> alpha and
+gamma. Arbitrarily deep hierarchies work — just chain more terms,
+e.g. <code>~ study / region / site</code>. The
+<code>out = "matrix"</code> form returns the same information as
+<code>alpha</code>, one <code>beta_&lt;level&gt;</code> column per
+transition, and <code>gamma</code>.</p>
+<div class="section level3">
+<h3 id="how-it-works-and-what-it-assumes">How it works (and what it assumes)<a class="anchor" aria-label="anchor" href="#how-it-works-and-what-it-assumes"></a>
+</h3>
+<p>All three diversity types share one construction under <strong>global
+equal sample weighting</strong> (every sample weighted
+<code>1/n</code>). Each scale’s diversity is Jost’s (2007) weighted
+alpha,</p>
+<p><math display="block" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>A</mi><mi>k</mi></msub><mspace width="0.278em"></mspace><mo>=</mo><mspace width="0.278em"></mspace><mfrac><msup><mrow><mo stretchy="true" form="prefix">(</mo><munder><mo>∑</mo><mrow><mi>u</mi><mo>,</mo><mi>i</mi></mrow></munder><msub><mi>w</mi><mi>i</mi></msub><mspace width="0.167em"></mspace><mo stretchy="false" form="prefix">(</mo><msub><mi>m</mi><mrow><mi>u</mi><mo>,</mo><mi>i</mi></mrow></msub><mi>/</mi><mi>C</mi><msup><mo stretchy="false" form="postfix">)</mo><mi>q</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>q</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup><msup><mrow><mo stretchy="true" form="prefix">(</mo><munder><mo>∑</mo><mi>u</mi></munder><mo stretchy="false" form="prefix">(</mo><msub><mi>n</mi><mi>u</mi></msub><mi>/</mi><mi>n</mi><msup><mo stretchy="false" form="postfix">)</mo><mi>q</mi></msup><mo stretchy="true" form="postfix">)</mo></mrow><mrow><mn>1</mn><mi>/</mi><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><mi>q</mi><mo stretchy="false" form="postfix">)</mo></mrow></msup></mfrac><mo>,</mo></mrow><annotation encoding="application/x-tex">
+A_k \;=\;
+\frac{\left(\sum_{u,i} w_i\,(m_{u,i}/C)^q\right)^{1/(1-q)}}
+     {\left(\sum_{u} (n_u/n)^q\right)^{1/(1-q)}},
+</annotation></semantics></math></p>
+<p>where units
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>u</mi><annotation encoding="application/x-tex">u</annotation></semantics></math>
+pool
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>n</mi><mi>u</mi></msub><annotation encoding="application/x-tex">n_u</annotation></semantics></math>
+of the
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>n</mi><annotation encoding="application/x-tex">n</annotation></semantics></math>
+samples,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>m</mi><mrow><mi>u</mi><mo>,</mo><mi>i</mi></mrow></msub><mo>=</mo><msub><mo>∑</mo><mrow><mi>j</mi><mo>∈</mo><mi>u</mi></mrow></msub><msub><mi>c</mi><mrow><mi>i</mi><mi>j</mi></mrow></msub></mrow><annotation encoding="application/x-tex">m_{u,i}=\sum_{j\in u} c_{ij}</annotation></semantics></math>
+is the pooled contribution of feature
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>i</mi><annotation encoding="application/x-tex">i</annotation></semantics></math>,
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>w</mi><mi>i</mi></msub><annotation encoding="application/x-tex">w_i</annotation></semantics></math>
+is a per-feature <em>measure</em>, and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>C</mi><annotation encoding="application/x-tex">C</annotation></semantics></math>
+a grand-total normaliser. The three types differ only in those pieces:
+neutral uses taxa with measure
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mn>1</mn><annotation encoding="application/x-tex">1</annotation></semantics></math>
+and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">C=n</annotation></semantics></math>;
+<strong>phylogenetic</strong> uses branches with measure
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>L</mi><mi>i</mi></msub><annotation encoding="application/x-tex">L_i</annotation></semantics></math>
+(branch length) and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><msub><mi>T</mi><mo>+</mo></msub><mo>=</mo><msub><mo>∑</mo><mi>j</mi></msub><msub><mi>T</mi><mi>j</mi></msub></mrow><annotation encoding="application/x-tex">C=T_+=\sum_j T_j</annotation></semantics></math>
+(summed tree depth); <strong>functional</strong> uses taxa with measure
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>v</mi><mi>i</mi></msub><annotation encoding="application/x-tex">v_i</annotation></semantics></math>
+(attribute contribution at threshold <code>tau</code>) and
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><mi>C</mi><mo>=</mo><msub><mi>n</mi><mo>+</mo></msub></mrow><annotation encoding="application/x-tex">C=n_+</annotation></semantics></math>
+(total count). The denominator is the numbers-equivalent of the unit
+weights, which is exactly what keeps every
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>β</mi><mi>k</mi></msub><mo>≥</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">\beta_k \ge 1</annotation></semantics></math>
+and independent of
+<math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mi>A</mi><annotation encoding="application/x-tex">A</annotation></semantics></math>.</p>
+<p>Phylogenetic and functional hierarchical partitioning simply add a
+<code>tree</code> or <code>dist</code>, as everywhere else in
+<code>hilldiv3</code>:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">tab</span>, hierarchy <span class="op">=</span> <span class="op">~</span> <span class="va">region</span> <span class="op">/</span> <span class="va">site</span>, metadata <span class="op">=</span> <span class="va">md</span>, tree <span class="op">=</span> <span class="va">my_tree</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">tab</span>, hierarchy <span class="op">=</span> <span class="op">~</span> <span class="va">region</span> <span class="op">/</span> <span class="va">site</span>, metadata <span class="op">=</span> <span class="va">md</span>, dist <span class="op">=</span> <span class="va">my_dist</span><span class="op">)</span></span></code></pre></div>
+<p><strong>Limitations and assumptions</strong> — worth knowing before
+interpreting the betas:</p>
+<ul>
+<li>
+<strong>Equal per-sample weighting only.</strong> Units are weighted
+by their sample count (<code>n_u / n</code>), not by abundance or
+sampling effort. This is the choice that makes every beta independent of
+alpha for <em>all</em> <code>q</code> (Jost 2007); unequal weighting
+breaks that independence for <code>q ≠ 1</code> and is not offered.</li>
+<li>
+<strong>Phylogenetic: one shared tree depth across scales.</strong>
+Alpha and gamma are reported in effective-branch-length (PD) units and
+share a single mean depth <code>T_+</code> over <em>all</em> scales,
+which is what lets the betas telescope. For <strong>ultrametric</strong>
+trees the finest alpha equals the single-level phylogenetic
+<code><a href="../reference/hillpart.html">hillpart()</a></code> alpha exactly; for non-ultrametric trees the
+chain still telescopes, but the shared <code>T_+</code> makes the
+per-scale PD values depth-pooled rather than strictly per-sample —
+prefer ultrametric (time-calibrated) trees here.</li>
+<li>
+<strong>Functional: one shared <code>tau</code> and <code>v_i</code>
+across scales.</strong> The distance threshold is capped once over the
+whole table and the attribute contributions <code>v_i</code> are
+computed once from the fully pooled data, so they stay constant across
+scales (a prerequisite for telescoping). A per-subset <code>tau</code>
+is therefore not meaningful in a hierarchical run.</li>
+<li>
+<strong>Hierarchical output is not (yet) wired into
+<code><a href="../reference/hilldiss.html">hilldiss()</a></code>/<code><a href="../reference/hillsim.html">hillsim()</a></code> or
+<code><a href="../reference/hillpair.html">hillpair()</a></code>.</strong> Those convert a single beta to bounded
+(dis)similarity; the per-level rescaling of a nested beta chain is left
+for future work.</li>
+</ul>
+<p>This nested multiplicative decomposition across neutral, phylogenetic
+and functional Hill numbers in one engine is, to our knowledge, not
+available in other packages; it generalises the single-level partition
+above rather than replacing it.</p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="from-beta-to-dissimilarity">From beta to (dis)similarity<a class="anchor" aria-label="anchor" href="#from-beta-to-dissimilarity"></a>
 </h2>
 <p>Beta lives on <code>[1, N]</code>, which is awkward to compare across
@@ -176,7 +335,7 @@ overlap measures of Chiu et al. (2014):</p>
 </tr>
 </tbody>
 </table>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiss.html">hilldiss</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>            <span class="co"># dissimilarities, one column per metric</span></span>
 <span><span class="co">#&gt; dissimilarity from neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>,</span></span>
 <span><span class="co">#&gt; and <span style="color: #0000BB;">"q2"</span>.</span></span>
@@ -216,7 +375,7 @@ overlap measures of Chiu et al. (2014):</p>
 <span><span class="co">#&gt; 11 1      V 0.8837244</span></span>
 <span><span class="co">#&gt; 12 2      V 0.8544983</span></span></code></pre></div>
 <p>Request a single metric and order to get a plain matrix slice:</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiss.html">hilldiss</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; dissimilarity from neutral Hill numbers of <span style="color: #0000BB;">"q1"</span>.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
@@ -235,7 +394,7 @@ while <code>q = 2</code> reflects shifts among dominant taxa.</p>
 compare samples two-by-two — the input ordination methods expect — use
 <code><a href="../reference/hillpair.html">hillpair()</a></code>, which returns a <code>dist</code> object (or a
 long tibble):</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillpair.html">hillpair</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing neutral pairwise dissimilarity for 6 sample pairs.</span></span>
 <span><span class="va">d</span></span>
@@ -245,7 +404,7 @@ long tibble):</p>
 <span><span class="co">#&gt; s4 0.09902103 0.29281463 0.33948330</span></span></code></pre></div>
 <p>That <code>dist</code> drops straight into ordination and
 clustering:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">pcoa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cmdscale.html" class="external-link">cmdscale</a></span><span class="op">(</span><span class="va">d</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">pcoa</span>, type <span class="op">=</span> <span class="st">"n"</span>, xlab <span class="op">=</span> <span class="st">"PCoA 1"</span>, ylab <span class="op">=</span> <span class="st">"PCoA 2"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/text.html" class="external-link">text</a></span><span class="op">(</span><span class="va">pcoa</span>, labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pcoa</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
@@ -253,14 +412,14 @@ clustering:</p>
 <p>Ask for several orders/metrics at once and you get a <strong>named
 list</strong> of <code>dist</code> objects (e.g. <code>q0S</code>,
 <code>q1C</code>):</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ds</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillpair.html">hillpair</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">2</span><span class="op">)</span>, metric <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"C"</span>, <span class="st">"U"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing neutral pairwise dissimilarity for 6 sample pairs.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">ds</span><span class="op">)</span></span>
 <span><span class="co">#&gt; [1] "q0C" "q2C" "q0U" "q2U"</span></span></code></pre></div>
 <p>Or a tidy long table, convenient for <code>ggplot2</code> or
 <code>dplyr</code>:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="../reference/hillpair.html">hillpair</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span>, out <span class="op">=</span> <span class="st">"tibble"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing neutral pairwise dissimilarity for 6 sample pairs.</span></span>
 <span><span class="co">#&gt;   first second q metric      value</span></span>
@@ -278,7 +437,7 @@ partitioning engine, so cost grows with the number of pairs. For many
 samples, run pairs in parallel by setting <code>parallel = TRUE</code>
 with a <code>future</code> plan and the <code>furrr</code> package
 installed:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/hillpair.html">hillpair</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>

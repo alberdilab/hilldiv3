@@ -61,6 +61,147 @@ Beta is the multiplicative decomposition of Jost (2007): it is
 independent of alpha, which is what makes it comparable across datasets
 with different richness.
 
+## Multi-scale (hierarchical) partitioning
+
+Real sampling designs are usually **nested**: replicates within sites,
+sites within regions, regions within a study. A single alpha/beta split
+throws that structure away — it cannot tell you whether turnover happens
+*between nearby replicates* or *between distant regions*.
+[`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
+solves this with a `hierarchy` formula that decomposes gamma into one
+beta **per hierarchical level**, so you can see at which spatial (or
+temporal, or organisational) scale diversity actually turns over.
+
+Supply the nesting as a one-sided formula, coarsest to finest, plus a
+`metadata` table giving each sample’s group memberships:
+
+``` r
+
+set.seed(1)
+tab <- matrix(rpois(12 * 8, 5), nrow = 12,
+              dimnames = list(paste0("t", 1:12), paste0("s", 1:8)))
+md <- data.frame(
+  region = rep(c("N", "S"), each = 4),
+  site   = rep(c("a", "b", "c", "d"), each = 2),
+  row.names = paste0("s", 1:8)
+)
+
+hillpart(tab, hierarchy = ~ region / site, metadata = md)
+#> Partitioning neutral Hill numbers across scales "sample < site < region <
+#> total".
+#> <hilldiv3 result: neutral>
+#> 12 rows x 5 cols
+#> 
+#>    q  scale n_units diversity     beta
+#> 1  0 sample       8  12.00000       NA
+#> 2  0   site       4  12.00000 1.000000
+#> 3  0 region       2  12.00000 1.000000
+#> 4  0  total       1  12.00000 1.000000
+#> 5  1 sample       8  11.11495       NA
+#> 6  1   site       4  11.60076 1.043708
+#> 7  1 region       2  11.77266 1.014817
+#> 8  1  total       1  11.95901 1.015829
+#> 9  2 sample       8  10.47242       NA
+#> 10 2   site       4  11.24852 1.074109
+#> 11 2 region       2  11.56260 1.027923
+#> 12 2  total       1  11.92231 1.031110
+```
+
+The result is one row per `(q, scale)`, finest (`sample`) to coarsest
+(`total`):
+
+- `diversity` is the effective diversity at that scale (`A_k`): the
+  per-sample alpha at `sample`, the pooled gamma at `total`,
+  interpolating in between.
+- `beta` is the turnover **gained** at that scale, `A_k / A_{k-1}` —
+  e.g. the `site` beta is turnover among samples within a site, the
+  `region` beta among sites within a region, the `total` beta among
+  regions.
+- `n_units` is how many units exist at that scale (8 samples → 4 sites →
+  2 regions → 1 total).
+
+The betas multiply back to the overall beta exactly:
+
+``` math
+{}^qD_\gamma \;=\; {}^qD_\alpha \,\cdot\, \prod_k \beta_k .
+```
+
+This **telescoping identity** is guaranteed by construction (and checked
+in the package tests), so a hierarchical run is always consistent with
+the plain
+[`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
+alpha and gamma. Arbitrarily deep hierarchies work — just chain more
+terms, e.g. `~ study / region / site`. The `out = "matrix"` form returns
+the same information as `alpha`, one `beta_<level>` column per
+transition, and `gamma`.
+
+### How it works (and what it assumes)
+
+All three diversity types share one construction under **global equal
+sample weighting** (every sample weighted `1/n`). Each scale’s diversity
+is Jost’s (2007) weighted alpha,
+
+``` math
+A_k \;=\;
+\frac{\left(\sum_{u,i} w_i\,(m_{u,i}/C)^q\right)^{1/(1-q)}}
+     {\left(\sum_{u} (n_u/n)^q\right)^{1/(1-q)}},
+```
+
+where units $`u`$ pool $`n_u`$ of the $`n`$ samples,
+$`m_{u,i}=\sum_{j\in u} c_{ij}`$ is the pooled contribution of feature
+$`i`$, $`w_i`$ is a per-feature *measure*, and $`C`$ a grand-total
+normaliser. The three types differ only in those pieces: neutral uses
+taxa with measure $`1`$ and $`C=n`$; **phylogenetic** uses branches with
+measure $`L_i`$ (branch length) and $`C=T_+=\sum_j T_j`$ (summed tree
+depth); **functional** uses taxa with measure $`v_i`$ (attribute
+contribution at threshold `tau`) and $`C=n_+`$ (total count). The
+denominator is the numbers-equivalent of the unit weights, which is
+exactly what keeps every $`\beta_k \ge 1`$ and independent of $`A`$.
+
+Phylogenetic and functional hierarchical partitioning simply add a
+`tree` or `dist`, as everywhere else in `hilldiv3`:
+
+``` r
+
+hillpart(tab, hierarchy = ~ region / site, metadata = md, tree = my_tree)
+hillpart(tab, hierarchy = ~ region / site, metadata = md, dist = my_dist)
+```
+
+**Limitations and assumptions** — worth knowing before interpreting the
+betas:
+
+- **Equal per-sample weighting only.** Units are weighted by their
+  sample count (`n_u / n`), not by abundance or sampling effort. This is
+  the choice that makes every beta independent of alpha for *all* `q`
+  (Jost 2007); unequal weighting breaks that independence for `q ≠ 1`
+  and is not offered.
+- **Phylogenetic: one shared tree depth across scales.** Alpha and gamma
+  are reported in effective-branch-length (PD) units and share a single
+  mean depth `T_+` over *all* scales, which is what lets the betas
+  telescope. For **ultrametric** trees the finest alpha equals the
+  single-level phylogenetic
+  [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
+  alpha exactly; for non-ultrametric trees the chain still telescopes,
+  but the shared `T_+` makes the per-scale PD values depth-pooled rather
+  than strictly per-sample — prefer ultrametric (time-calibrated) trees
+  here.
+- **Functional: one shared `tau` and `v_i` across scales.** The distance
+  threshold is capped once over the whole table and the attribute
+  contributions `v_i` are computed once from the fully pooled data, so
+  they stay constant across scales (a prerequisite for telescoping). A
+  per-subset `tau` is therefore not meaningful in a hierarchical run.
+- **Hierarchical output is not (yet) wired into
+  [`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md)/[`hillsim()`](https://alberdilab.github.io/hilldiv3/reference/hillsim.md)
+  or
+  [`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md).**
+  Those convert a single beta to bounded (dis)similarity; the per-level
+  rescaling of a nested beta chain is left for future work.
+
+This nested multiplicative decomposition across neutral, phylogenetic
+and functional Hill numbers in one engine is, to our knowledge, not
+available in other packages; it generalises the single-level partition
+above rather than replacing it.
+
 ## From beta to (dis)similarity
 
 Beta lives on `[1, N]`, which is awkward to compare across studies with
