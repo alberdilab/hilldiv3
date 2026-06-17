@@ -1,0 +1,159 @@
+---
+title: "Diversity types: neutral, phylogenetic and functional"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4
+)
+```
+
+```{r setup}
+library(hilldiv3)
+```
+
+`hilldiv3` measures three flavours of diversity from the same count table. You
+never switch functions — you switch *inputs*, and the diversity type is inferred:
+
+| You pass | Diversity type |
+|---|---|
+| counts only | **neutral** |
+| counts + `tree` | **phylogenetic** |
+| counts + `dist` | **functional** |
+
+This article walks through all three with `hilldiv()`, the alpha-diversity
+workhorse. The same `tree` / `dist` logic applies to every other `hill*`
+function.
+
+```{r data}
+counts <- matrix(
+  c(10, 0, 5,
+     2, 8, 1,
+     3, 4, 0,
+     6, 2, 7),
+  nrow = 3,
+  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2", "s3", "s4"))
+)
+counts
+```
+
+## The diversity order `q`
+
+Hill numbers are a one-parameter family. The order `q` sets how much weight
+rare taxa carry:
+
+* `q = 0` — **richness**: every taxon counts equally, abundance ignored.
+* `q = 1` — **Shannon diversity**: taxa weighted by their frequency (the
+  exponential of Shannon entropy).
+* `q = 2` — **Simpson diversity**: dominated by common taxa (inverse Simpson
+  concentration).
+
+```{r q-orders}
+hilldiv(counts, q = c(0, 1, 2))
+```
+
+All Hill numbers are in **effective number of taxa** ("how many equally-abundant
+taxa would give this diversity"), so values across `q` are directly comparable.
+A diversity *profile* sweeps `q` continuously — see the profiles article.
+
+## Neutral diversity
+
+With counts alone you get neutral diversity, which treats every taxon as equally
+distinct:
+
+```{r neutral}
+hilldiv(counts)
+```
+
+## Phylogenetic diversity
+
+Supply a phylogenetic `tree` (class `phylo`, e.g. from `ape::read.tree()`) whose
+tip labels match the taxa. Diversity is then measured in units of branch length,
+crediting samples that span deeper, more divergent lineages (Chao et al. 2010).
+
+```{r phylo}
+tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
+hilldiv(counts, tree = tree)
+```
+
+The tip labels must cover the same taxa as the count table. `hilldiv3`
+**reorders** the counts to match the tree internally — a frequent source of
+silent error in older tools — and raises an informative error if the name sets
+disagree. To intentionally drop taxa that are missing from one side, align them
+first with `match_data()` (see the data-preparation article).
+
+At `q = 0`, phylogenetic Hill numbers relate directly to Faith's PD.
+
+## Functional diversity
+
+Supply a `dist` matrix of pairwise functional distances between taxa. Diversity
+then accounts for how trait-different the taxa are: a sample of three very
+similar taxa is less functionally diverse than three contrasting ones (Chiu &
+Chao 2014).
+
+```{r func}
+# A toy functional distance matrix over the three taxa.
+fdist <- as.matrix(dist(
+  data.frame(body = c(1, 0.2, 0.9), diet = c(0, 1, 1),
+             row.names = c("t1", "t2", "t3"))
+))
+hilldiv(counts, dist = fdist)
+```
+
+### Building distances from traits
+
+Usually you start from a **trait table** (taxa in rows, traits in columns) and
+convert it with `traits2dist()`, which uses Gower distance by default so that
+mixed continuous/categorical traits are handled sensibly:
+
+```{r traits2dist}
+traits <- data.frame(
+  body_mass = c(1.0, 0.2, 0.9),
+  diet      = factor(c("herb", "carn", "carn")),
+  row.names = c("t1", "t2", "t3")
+)
+fdist <- traits2dist(traits)
+round(fdist, 3)
+```
+
+### The distance threshold `tau`
+
+Functional Hill numbers depend on a threshold `tau`: taxa farther apart than
+`tau` are treated as fully distinct. By default `tau = max(dist)`, which makes
+the measure use the full range of distances. Lowering `tau` makes more taxa
+"functionally equivalent" and reduces functional diversity:
+
+```{r tau}
+hilldiv(counts, dist = fdist, tau = max(fdist))   # default
+hilldiv(counts, dist = fdist, tau = max(fdist) / 2)
+```
+
+## One taxon, many flavours
+
+Because all three share the Hill-number scale, you can compare what each lens
+sees in the *same* samples:
+
+```{r compare}
+list(
+  neutral       = hilldiv(counts),
+  phylogenetic  = hilldiv(counts, tree = tree),
+  functional    = hilldiv(counts, dist = fdist)
+)
+```
+
+A sample can be neutrally diverse yet phylogenetically or functionally
+redundant — quantifying exactly that gap is what `hillred()` does (see the
+profiles/evenness/redundancy article).
+
+## References
+
+* Chao, A., Chiu, C.-H. & Jost, L. (2010). Phylogenetic diversity measures based
+  on Hill numbers. *Phil. Trans. R. Soc. B*, 365, 3599–3609.
+* Chiu, C.-H. & Chao, A. (2014). Distance-based functional diversity measures
+  and their decomposition. *PLoS ONE*, 9, e100014.
+* Alberdi, A. & Gilbert, M.T.P. (2019). A guide to the application of Hill
+  numbers to DNA-based diversity analyses. *Mol. Ecol. Resour.*, 19, 804–817.
+</content>

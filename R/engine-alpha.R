@@ -45,6 +45,8 @@ hill_alpha <- function(p, q = c(0, 1, 2), type = "neutral",
 hill_alpha_neutral <- function(p, q) {
   res <- vapply(q, function(qv) apply(p, 2, .hill_from_props, qvalue = qv),
                 numeric(ncol(p)))
+  # vapply drops to a vector with a single sample; force samples x q.
+  res <- matrix(res, nrow = ncol(p), ncol = length(q))
   .shape_alpha(t(res), q, colnames(p))
 }
 

@@ -8,40 +8,110 @@ vignette: >
 ---
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4
+)
 ```
 
 ```{r setup}
 library(hilldiv3)
 ```
 
-# Overview
+## What hilldiv3 does
 
-`hilldiv3` computes neutral, phylogenetic and functional Hill numbers from a
-count table, and derives diversity partitioning, (dis)similarity, profiles,
-evenness and redundancy from them.
+`hilldiv3` measures and compares the diversity of biological communities
+(OTU/ASV/MAG tables) using **Hill numbers**, a single family of metrics that
+unifies richness, Shannon and Simpson diversity through one parameter, the
+*diversity order* `q`. From the same framework it derives diversity
+**partitioning**, **(dis)similarity**, **profiles**, **evenness** and
+**redundancy**, for three flavours of diversity:
 
-The diversity *type* is inferred from the inputs:
+| Flavour | What it accounts for | How you ask for it |
+|---|---|---|
+| **Neutral** | abundances only | counts |
+| **Phylogenetic** | evolutionary relatedness | counts + `tree` |
+| **Functional** | trait dissimilarity | counts + `dist` |
 
-* counts only &rarr; **neutral**
-* counts + `tree` &rarr; **phylogenetic**
-* counts + `dist` &rarr; **functional**
+The diversity *type* is inferred from the inputs you pass — you call the same
+functions either way.
 
-# Alpha diversity
+## The data
+
+Every function takes a **count table** with taxa (OTUs/ASVs/MAGs) in rows and
+samples in columns. A matrix is the simplest form:
 
 ```{r}
-counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
-                 dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
-hilldiv(counts, q = c(0, 1, 2))
+counts <- matrix(
+  c(10, 0, 5,
+     2, 8, 1,
+     3, 4, 0,
+     6, 2, 7),
+  nrow = 3, byrow = FALSE,
+  dimnames = list(c("t1", "t2", "t3"),
+                  c("s1", "s2", "s3", "s4"))
+)
+counts
 ```
 
-# Partitioning and dissimilarity
+Data frames, tibbles, `phyloseq` objects and `TreeSummarizedExperiment`
+objects work too — see `vignette("preparing-data")` *(article on the website)*.
+
+## Alpha diversity
+
+`hilldiv()` returns Hill numbers per sample. By default it computes orders
+`q = 0` (richness), `q = 1` (Shannon diversity) and `q = 2` (Simpson
+diversity):
+
+```{r}
+hilldiv(counts)
+```
+
+Higher `q` down-weights rare taxa, so `qD` decreases as `q` grows unless the
+sample is perfectly even. Add a tree or a distance matrix to switch flavour:
+
+```{r}
+tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
+hilldiv(counts, tree = tree)              # phylogenetic
+```
+
+## Partitioning and dissimilarity
+
+`hillpart()` splits diversity across samples into **alpha** (within-sample),
+**gamma** (pooled) and **beta** (`gamma / alpha`, the number of effectively
+distinct communities):
 
 ```{r}
 hillpart(counts)
-hilldiss(counts)
 ```
 
-<!-- TODO: expand with phylogenetic/functional examples, profiles (hillprof),
-     evenness (hilleven), pairwise dissimilarity and ordination once the
-     corresponding engine paths are implemented. -->
+`hilldiss()` and `hillsim()` turn beta into bounded dissimilarity / similarity
+metrics (Sorensen-, Jaccard-, and Unifrac-type), and `hillpair()` returns a
+`dist` object of pairwise dissimilarities ready for ordination:
+
+```{r}
+hilldiss(counts, q = 1)
+```
+
+## Where to next
+
+The website carries in-depth articles:
+
+* **Diversity types** — neutral, phylogenetic and functional measurement.
+* **Partitioning and (dis)similarity** — alpha/beta/gamma, the S/C/U/V
+  metrics, and pairwise dissimilarity for ordination.
+* **Profiles, evenness and redundancy** — `hillprof()`, `hilleven()`,
+  `hillred()`.
+* **Preparing your data** — input formats, `phyloseq`/`TreeSummarizedExperiment`,
+  `tss()`, `traits2dist()` and `match_data()`.
+
+## References
+
+* Hill, M.O. (1973). Diversity and evenness. *Ecology*, 54, 427–432.
+* Jost, L. (2007). Partitioning diversity into independent alpha and beta
+  components. *Ecology*, 88, 2427–2439.
+* Alberdi, A. & Gilbert, M.T.P. (2019). A guide to the application of Hill
+  numbers to DNA-based diversity analyses. *Mol. Ecol. Resour.*, 19, 804–817.
+</content>

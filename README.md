@@ -32,14 +32,18 @@ based on Hill numbers. It provides a unified framework for **neutral**,
 devtools::install_github("alberdilab/hilldiv3")
 ```
 
-## Status
+## Documentation
 
-This package is under active (re)development. Functions are scaffolded with a
-shared engine; some compute paths (phylogenetic/functional partitioning,
-pairwise dissimilarity, profiles, evenness) are stubbed and raise an informative
-"not implemented yet" error while the engine is being filled in. See
-[`NEWS.md`](NEWS.md) and the `TODO(engine)` / `TODO(feature)` markers in the
-source.
+Full documentation lives on the package website:
+**<https://alberdilab.github.io/hilldiv3/>**
+
+* **Get started** — `vignette("hilldiv3")`.
+* **Articles** — in-depth guides to diversity types, partitioning &
+  (dis)similarity, profiles/evenness/redundancy, and preparing your data.
+* **Reference** — every exported function, grouped by task.
+
+This package is a complete redesign of hilldiv2; see [`NEWS.md`](NEWS.md) for
+what changed.
 
 ## Quick start
 

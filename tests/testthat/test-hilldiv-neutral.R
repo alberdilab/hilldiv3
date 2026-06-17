@@ -31,3 +31,18 @@ test_that("Hill numbers are non-increasing in q", {
   expect_true(all(out["q0", ] >= out["q1", ]))
   expect_true(all(out["q1", ] >= out["q2", ]))
 })
+
+test_that("a single sample (named vector) is handled", {
+  out <- suppressMessages(hilldiv(c(t1 = 10, t2 = 2, t3 = 3), q = c(0, 1, 2)))
+  expect_equal(dim(out), c(3L, 1L))
+  expect_equal(rownames(out), c("q0", "q1", "q2"))
+  expect_equal(unname(out["q0", ]), 3)
+})
+
+test_that("a single sample matches the same data as a one-column matrix", {
+  vec <- c(t1 = 10, t2 = 2, t3 = 3)
+  mat <- matrix(vec, ncol = 1, dimnames = list(names(vec), "s1"))
+  out_vec <- suppressMessages(hilldiv(vec))
+  out_mat <- suppressMessages(hilldiv(mat))
+  expect_equal(unname(out_vec), unname(out_mat))
+})

@@ -2,24 +2,60 @@ url: https://alberdilab.github.io/hilldiv3/
 
 template:
   bootstrap: 5
+  bslib:
+    primary: "#1c7c54"
+
+navbar:
+  structure:
+    left: [intro, articles, reference, news]
+    right: [search, github]
+  components:
+    articles:
+      text: Articles
+      menu:
+        - text: Diversity types (neutral, phylogenetic, functional)
+          href: articles/diversity-types.html
+        - text: Partitioning and (dis)similarity
+          href: articles/partitioning-and-dissimilarity.html
+        - text: Profiles, evenness and redundancy
+          href: articles/profiles-evenness-redundancy.html
+        - text: Preparing your data
+          href: articles/preparing-data.html
 
 reference:
   - title: Diversity measurement
+    desc: >
+      Compute neutral, phylogenetic or functional Hill numbers and their
+      derived diagnostics.
     contents:
       - hilldiv
       - hillprof
+      - plot.hill_profile
       - hilleven
   - title: Partitioning and (dis)similarity
+    desc: >
+      Decompose diversity across samples and turn beta into bounded
+      (dis)similarity metrics.
     contents:
       - hillpart
       - hilldiss
       - hillsim
       - hillpair
   - title: Redundancy
+    desc: How much phylogenetic/functional structure is duplicated across taxa.
     contents:
       - hillred
   - title: Data preparation
+    desc: Normalise, build functional distances, and align inputs.
     contents:
       - tss
       - traits2dist
       - match_data
+  - title: Package
+    contents:
+      - hilldiv3-package
+
+news:
+  releases:
+    - text: "Changelog"
+      href: news/index.html

@@ -1,0 +1,136 @@
+---
+title: "Partitioning and (dis)similarity"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4
+)
+```
+
+```{r setup}
+library(hilldiv3)
+```
+
+Measuring *how different* samples are from one another is a separate question
+from how diverse each one is. `hilldiv3` answers it by **partitioning** the
+total (gamma) diversity of a set of samples into a within-sample (alpha) and a
+between-sample (beta) component, then converting beta into bounded
+(dis)similarity metrics. All of this works for neutral, phylogenetic and
+functional diversity — just add a `tree` or `dist` as in the
+[diversity-types article](diversity-types.html).
+
+```{r data}
+counts <- matrix(
+  c(10, 0, 5,
+     2, 8, 1,
+     3, 4, 0,
+     6, 2, 7),
+  nrow = 3,
+  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2", "s3", "s4"))
+)
+```
+
+## Alpha, gamma and beta
+
+`hillpart()` returns the three components per diversity order:
+
+```{r hillpart}
+hillpart(counts)
+```
+
+* **alpha** — the effective diversity of a typical single sample.
+* **gamma** — the effective diversity of all samples pooled.
+* **beta** — `gamma / alpha`, the effective number of *distinct* communities.
+  It ranges from `1` (all samples identical) to `N` (all samples completely
+  distinct), where `N` is the number of samples.
+
+Beta is the multiplicative decomposition of Jost (2007): it is independent of
+alpha, which is what makes it comparable across datasets with different
+richness.
+
+## From beta to (dis)similarity
+
+Beta lives on `[1, N]`, which is awkward to compare across studies with
+different sample counts. `hilldiss()` and `hillsim()` rescale it to `[0, 1]`
+using the four overlap measures of Chiu et al. (2014):
+
+| Code | Measure | Type |
+|---|---|---|
+| `S` | Sorensen-type | local overlap, occurrence-flavoured |
+| `C` | Jaccard-type (Morisita-Horn at `q = 2`) | local overlap, abundance-flavoured |
+| `U` | one-minus regional overlap | regional |
+| `V` | homogeneity / Sorensen complement | regional |
+
+```{r hilldiss}
+hilldiss(counts)            # dissimilarities, one column per metric
+hillsim(counts)             # similarities = 1 - dissimilarity
+```
+
+Request a single metric and order to get a plain matrix slice:
+
+```{r single-metric}
+hilldiss(counts, q = 1, metric = "C")
+```
+
+The choice of `q` matters as much as the metric: `q = 0` weights presence/
+absence (turnover of rare taxa), while `q = 2` reflects shifts among dominant
+taxa.
+
+## Pairwise dissimilarity for ordination
+
+`hilldiss()` summarises *all* samples at once. To compare samples two-by-two —
+the input ordination methods expect — use `hillpair()`, which returns a `dist`
+object (or a long tibble):
+
+```{r hillpair-dist}
+d <- hillpair(counts, q = 1, metric = "C")
+d
+```
+
+That `dist` drops straight into ordination and clustering:
+
+```{r ordination, fig.alt = "PCoA of pairwise Hill-number dissimilarities"}
+pcoa <- cmdscale(d, k = 2)
+plot(pcoa, type = "n", xlab = "PCoA 1", ylab = "PCoA 2")
+text(pcoa, labels = rownames(pcoa))
+```
+
+Ask for several orders/metrics at once and you get a **named list** of `dist`
+objects (e.g. `q0S`, `q1C`):
+
+```{r hillpair-list}
+ds <- hillpair(counts, q = c(0, 2), metric = c("C", "U"))
+names(ds)
+```
+
+Or a tidy long table, convenient for `ggplot2` or `dplyr`:
+
+```{r hillpair-tibble}
+head(hillpair(counts, q = 1, metric = "C", out = "tibble"))
+```
+
+### Larger datasets
+
+`hillpair()` computes every pair through the same partitioning engine, so cost
+grows with the number of pairs. For many samples, run pairs in parallel by
+setting `parallel = TRUE` with a `future` plan and the `furrr` package
+installed:
+
+```{r parallel, eval = FALSE}
+library(future)
+plan(multisession)
+hillpair(counts, q = 1, metric = "C", parallel = TRUE)
+```
+
+## References
+
+* Jost, L. (2007). Partitioning diversity into independent alpha and beta
+  components. *Ecology*, 88, 2427–2439.
+* Chiu, C.-H., Jost, L. & Chao, A. (2014). Phylogenetic beta diversity,
+  similarity, and differentiation measures based on Hill numbers. *Ecological
+  Monographs*, 84, 21–44.
+</content>

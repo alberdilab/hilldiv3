@@ -1,0 +1,166 @@
+---
+title: "Preparing your data"
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>",
+  fig.width = 6,
+  fig.height = 4
+)
+```
+
+```{r setup}
+library(hilldiv3)
+```
+
+Every `hilldiv3` function accepts the same kinds of input and shares one
+validation/alignment layer, so the data-wrangling you do once carries through
+the whole workflow. This article covers the accepted input formats, how counts
+are matched to a tree or distance matrix, and the helpers `tss()`,
+`traits2dist()` and `match_data()`.
+
+## The count table
+
+The core input is a **count table** with taxa (OTUs/ASVs/MAGs) in rows and
+samples in columns. Row names are taxa, column names are samples.
+
+```{r counts}
+counts <- matrix(
+  c(10, 0, 5,
+     2, 8, 1,
+     3, 4, 0,
+     6, 2, 7),
+  nrow = 3,
+  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2", "s3", "s4"))
+)
+counts
+```
+
+## Accepted input objects
+
+You can pass any of the following — they are all coerced internally to the same
+representation, so you call the functions the same way:
+
+* a **numeric matrix** (taxa × samples);
+* a **data frame** or **tibble** of counts with taxa as row names;
+* a **numeric vector** for a single sample (names are the taxa);
+* a [`phyloseq`](https://joey711.github.io/phyloseq/) object — its OTU table is
+  read, transposed if needed, and an embedded phylogeny is picked up
+  automatically;
+* a
+  [`TreeSummarizedExperiment`](https://bioconductor.org/packages/TreeSummarizedExperiment/)
+  — its assay is used as counts and its `rowTree` as the phylogeny.
+
+```{r vector}
+# A single sample as a named vector.
+hilldiv(c(t1 = 10, t2 = 2, t3 = 3))
+```
+
+When you pass a `phyloseq` or `TreeSummarizedExperiment` that already carries a
+tree, phylogenetic diversity works without supplying `tree` yourself:
+
+```{r phyloseq, eval = requireNamespace("phyloseq", quietly = TRUE)}
+library(phyloseq)
+ps <- phyloseq(
+  otu_table(counts, taxa_are_rows = TRUE),
+  phy_tree(ape::read.tree(text = "((t1:1,t2:1):1,t3:2);"))
+)
+hilldiv(ps)        # phylogenetic, tree taken from the object
+```
+
+## Normalisation with `tss()`
+
+Hill numbers are computed from relative abundances, and the `hill*` functions
+normalise internally — you do **not** need to pre-normalise for them. `tss()`
+(total-sum scaling) is exposed for when you want normalised values yourself, or
+to inspect compositions:
+
+```{r tss}
+tss(counts)             # each column sums to 1
+```
+
+It accepts a vector or a matrix and safely maps all-zero columns to zero rather
+than `NaN`.
+
+## Functional distances with `traits2dist()`
+
+Functional diversity needs a pairwise **distance matrix** over taxa. Build one
+from a trait table with `traits2dist()`, which defaults to Gower distance so
+mixed continuous and categorical traits are handled correctly. Constant traits
+(which carry no information) are dropped automatically.
+
+```{r traits2dist}
+traits <- data.frame(
+  body_mass = c(1.0, 0.2, 0.9),
+  diet      = factor(c("herb", "carn", "carn")),
+  row.names = c("t1", "t2", "t3")
+)
+fdist <- traits2dist(traits)
+round(fdist, 3)
+
+hilldiv(counts, dist = fdist)
+```
+
+## Matching counts to a tree or distances
+
+Phylogenetic and functional analyses require the taxa in the count table to
+line up with the tree tips or distance-matrix names. `hilldiv3` enforces this
+in one place:
+
+* it checks the two name sets with `setequal()` (order does not matter);
+* it **reorders** the counts to match the reference — eliminating the silent
+  misalignment that plagued earlier tools;
+* if the sets disagree, it stops with a message listing the offending taxa.
+
+```{r mismatch, error = TRUE}
+bad_tree <- ape::read.tree(text = "((t1:1,t2:1):1,t9:2);")
+hilldiv(counts, tree = bad_tree)
+```
+
+### Intentionally dropping taxa with `match_data()`
+
+Real datasets rarely match perfectly — a reference tree may include taxa you
+never observed, or your table may carry taxa absent from the tree. `match_data()`
+restricts and reorders the count table to the shared taxa, reporting what it
+dropped, so you can curate alignment *before* analysis:
+
+```{r match_data}
+tree <- ape::read.tree(text = "((t1:1,t2:1):1,t4:2);")   # has t4, lacks t3
+matched <- match_data(counts, tree = tree)
+matched
+```
+
+Feed the aligned table back in — now the name sets agree and the analysis runs:
+
+```{r match_data_use}
+tree3 <- ape::read.tree(text = "(t1:1,t2:1);")
+hilldiv(match_data(counts, tree = tree3), tree = tree3)
+```
+
+`match_data()` works the same way with a `dist` argument for functional data.
+
+## A typical workflow
+
+Putting it together:
+
+```{r workflow}
+# 1. Counts + traits in hand.
+traits <- data.frame(
+  body_mass = c(1.0, 0.2, 0.9),
+  diet      = factor(c("herb", "carn", "carn")),
+  row.names = c("t1", "t2", "t3")
+)
+
+# 2. Derive a functional distance matrix.
+fdist <- traits2dist(traits)
+
+# 3. Align counts to it (here they already match).
+counts2 <- match_data(counts, dist = fdist)
+
+# 4. Measure and compare.
+hilldiv(counts2, dist = fdist)
+hilldiss(counts2, dist = fdist, q = 1)
+```
+</content>
