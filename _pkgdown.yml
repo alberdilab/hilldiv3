@@ -1,0 +1,25 @@
+url: https://alberdilab.github.io/hilldiv3/
+
+template:
+  bootstrap: 5
+
+reference:
+  - title: Diversity measurement
+    contents:
+      - hilldiv
+      - hillprof
+      - hilleven
+  - title: Partitioning and (dis)similarity
+    contents:
+      - hillpart
+      - hilldiss
+      - hillsim
+      - hillpair
+  - title: Redundancy
+    contents:
+      - hillred
+  - title: Data preparation
+    contents:
+      - tss
+      - traits2dist
+      - match_data

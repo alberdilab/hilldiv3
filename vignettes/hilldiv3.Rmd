@@ -1,0 +1,47 @@
+---
+title: "Getting started with hilldiv3"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Getting started with hilldiv3}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(collapse = TRUE, comment = "#>")
+```
+
+```{r setup}
+library(hilldiv3)
+```
+
+# Overview
+
+`hilldiv3` computes neutral, phylogenetic and functional Hill numbers from a
+count table, and derives diversity partitioning, (dis)similarity, profiles,
+evenness and redundancy from them.
+
+The diversity *type* is inferred from the inputs:
+
+* counts only &rarr; **neutral**
+* counts + `tree` &rarr; **phylogenetic**
+* counts + `dist` &rarr; **functional**
+
+# Alpha diversity
+
+```{r}
+counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
+                 dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
+hilldiv(counts, q = c(0, 1, 2))
+```
+
+# Partitioning and dissimilarity
+
+```{r}
+hillpart(counts)
+hilldiss(counts)
+```
+
+<!-- TODO: expand with phylogenetic/functional examples, profiles (hillprof),
+     evenness (hilleven), pairwise dissimilarity and ordination once the
+     corresponding engine paths are implemented. -->
