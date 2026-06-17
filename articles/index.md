@@ -8,6 +8,8 @@
   hilldiv3](https://alberdilab.github.io/hilldiv3/articles/hilldiv3.md):
 - [Partitioning and
   (dis)similarity](https://alberdilab.github.io/hilldiv3/articles/partitioning-and-dissimilarity.md):
+- [Performance
+  benchmarks](https://alberdilab.github.io/hilldiv3/articles/performance.md):
 - [Preparing your
   data](https://alberdilab.github.io/hilldiv3/articles/preparing-data.md):
 - [Profiles, evenness and
