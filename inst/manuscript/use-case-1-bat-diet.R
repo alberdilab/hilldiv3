@@ -4,9 +4,8 @@
 # the package root with:  Rscript inst/manuscript/use-case-1-bat-diet.R
 #
 # Showcased capabilities: neutral and phylogenetic alpha diversity (hilldiv),
-# diversity profiles (hillprof), evenness (hilleven), multi-scale nested
-# partitioning (hillpart with a hierarchy formula) and pairwise dissimilarity
-# for ordination (hillpair).
+# diversity profiles (hillprof), evenness (hilleven) and multi-scale nested
+# partitioning (hillpart with a hierarchy formula).
 
 suppressPackageStartupMessages({
   library(hilldiv3)
@@ -89,22 +88,6 @@ p_beta <- ggplot(betas, aes(scale, beta, fill = factor(q))) +
   labs(x = NULL, y = expression("Turnover gained at scale (" * beta[k] * ")"))
 ggsave(file.path(figdir, "uc1-partition.png"), p_beta, width = 7.5, height = 3.6, dpi = 200)
 
-# --- 5. Ordination of pairwise dietary dissimilarity ------------------------
-d   <- hillpair(bat_counts, q = 1, metric = "C")          # Morisita-Horn-type
-pco <- cmdscale(d, k = 2, eig = TRUE)
-ord <- data.frame(pco$points, bat = rownames(pco$points))
-names(ord)[1:2] <- c("PCoA1", "PCoA2")
-ord$habitat <- hab(ord$bat)
-ev <- round(100 * pco$eig[1:2] / sum(pco$eig[pco$eig > 0]), 1)
-
-p_ord <- ggplot(ord, aes(PCoA1, PCoA2, colour = habitat)) +
-  geom_point(size = 2.4) +
-  stat_ellipse(level = 0.68) +
-  scale_colour_manual(values = pal, name = NULL) +
-  labs(x = sprintf("PCoA 1 (%.1f%%)", ev[1]),
-       y = sprintf("PCoA 2 (%.1f%%)", ev[2]))
-ggsave(file.path(figdir, "uc1-ordination.png"), p_ord, width = 5, height = 4, dpi = 200)
-
 # --- Numbers cited in the prose ---------------------------------------------
 cat("\n--- Use case 1 summary ---\n")
 cat("ASVs x samples:", paste(dim(bat_counts), collapse = " x "), "\n")
@@ -115,6 +98,4 @@ cat("\nMean q2 evenness by habitat:\n")
 print(aggregate(value ~ habitat, even, function(x) round(mean(x), 3)))
 cat("\nNeutral multi-scale partition:\n");      print(hier_n)
 cat("\nPhylogenetic multi-scale partition:\n"); print(hier_p)
-cat("\nPCoA1 habitat centroids:\n")
-print(aggregate(PCoA1 ~ habitat, ord, function(x) round(mean(x), 3)))
 cat("\nFigures written to", figdir, "\n")

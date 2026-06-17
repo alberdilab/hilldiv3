@@ -7,8 +7,8 @@ are produced by the companion `.R` scripts, which are fully reproducible.
 
 | Use case | System | Diversity flavours | Capabilities exercised |
 |---|---|---|---|
-| **1** | Insectivorous **bat diet** — insect prey ASVs (COI metabarcoding) | neutral, **phylogenetic** | `hilldiv`, `hillprof`, `hilleven`, multi-scale `hillpart` (nested `hierarchy`), `hillpair` + ordination |
-| **2** | Gut **bacterial MAGs** under an intervention | neutral, phylogenetic, **functional** | `hilldiv` (3 flavours from one call), `traits2dist`, `hillprof`, `hillpart` (between-group), `hillpair` + ordination, `hillred` |
+| **1** | Insectivorous **bat diet** — insect prey ASVs (COI metabarcoding) | neutral, **phylogenetic** | `hilldiv`, `hillprof`, `hilleven`, multi-scale `hillpart` (nested `hierarchy`) |
+| **2** | Gut **bacterial MAGs** under an intervention | neutral, phylogenetic, **functional** | `hilldiv` (3 flavours from one call), `traits2dist`, `hillpart` (between-group, per flavour), `hillpair` + ordination (3 spaces), `hillred` |
 
 Together they touch every exported `hill*` function and all three diversity
 types.

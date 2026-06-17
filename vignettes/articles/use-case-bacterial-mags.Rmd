@@ -31,21 +31,27 @@ Genome-resolved metagenomics summarises a microbial community as a table of
 metagenome-assembled genome (MAG) abundances. Each MAG carries two extra layers
 of information that a raw count ignores: its **position on the bacterial
 phylogeny** and its **functional attributes** (genome size, GC content, oxygen
-tolerance, encoded capabilities). A treatment that reshapes a community may
-leave taxon richness untouched while collapsing its evenness, eroding its
-phylogenetic breadth, or hollowing out its functional repertoire. `hilldiv3`
-measures all three from the same count table and the same calls, so the layers
-can be compared on a common, interpretable scale (effective numbers of
-lineages).
+tolerance, encoded capabilities). These layers can move independently: an
+intervention may reshuffle *which* organisms — and *which lineages* — dominate a
+community while leaving *what the community does* untouched, if the incoming
+genomes are functionally equivalent to the ones they replace. `hilldiv3`
+measures all three flavours from the same count table and the same calls, so
+taxonomic, phylogenetic and functional change can be compared on a common,
+interpretable scale (effective numbers of lineages) — and, crucially, told
+apart.
 
 ## The data
 
 We use the bundled simulated data set: **24 MAGs across 12 host gut samples**,
-split into a `control` and a `treatment` group of six. A block of MAGs is
-enriched under treatment, so the intervention changes *which* genomes dominate
-without removing taxa. `gut_tree` is the genome phylogeny and `gut_traits` a
-trait table mixing continuous (`genome_size`, `gc_content`), categorical
-(`oxygen`) and binary (`motility`) attributes.
+split into a `control` and a `treatment` group of six. The MAGs fall into two
+deep bacterial clades, and the intervention **swaps which clade dominates**:
+control guts are dominated by clade A, treatment guts by clade B, with taxon
+richness left untouched. The two clades are *functional mirrors* of one another
+— for every genome in one there is a genome in the other with the same trait
+profile — so a swap that is dramatic phylogenetically is invisible functionally.
+`gut_tree` is the genome phylogeny and `gut_traits` a trait table mixing
+continuous (`genome_size`, `gc_content`), categorical (`oxygen`) and binary
+(`motility`) attributes.
 
 ```{r data}
 group <- rep(c("control", "treatment"), each = 6)
@@ -53,6 +59,8 @@ names(group) <- colnames(gut_counts)
 metadata <- data.frame(group = group, row.names = colnames(gut_counts))
 grp <- function(s) group[s]
 
+dim(gut_counts)                 # 24 MAGs x 12 samples
+range(colSums(gut_counts > 0))  # per-sample richness (near-constant)
 head(gut_traits)
 ```
 
@@ -92,36 +100,15 @@ ggplot(alpha, aes(factor(q), value, fill = group)) +
   labs(x = "Diversity order (q)", y = "Effective number of lineages")
 ```
 
-The result is a layered story that no single metric could tell. **Richness
-(`q = 0`) is identical between groups** — counting MAGs would conclude the
-treatment did nothing. Yet as soon as abundance is weighted (`q = 1, 2`) the
-treatment community is markedly less diverse: effective Shannon diversity falls
-from ~9.4 to ~6.3 and Simpson from ~5.6 to ~3.2, because the enriched block now
-dominates. The same depression appears in the phylogenetic and functional
-numbers (and, for function, already at `q = 0`), showing the dominant genomes
-are also phylogenetically and functionally redundant with one another. Reading
-diversity across `q` *and* across flavours is exactly what separates "nothing
-changed" from "the community was hollowed out".
+At the **alpha** (within-sample) level the two groups look almost identical in
+every flavour: a single host carries about the same number of effective MAGs,
+spread over about the same amount of the phylogeny and the same functional
+space, whether or not it received the treatment. Read at the alpha level alone,
+the intervention looks like it did nothing. The effect is not in *how much*
+diversity each gut holds, but in *which* lineages hold it — a compositional
+change that only between-sample analysis can see.
 
-## Profiles confirm a loss of evenness, not richness
-
-```{r profile, fig.width = 5, fig.height = 3.6, fig.alt = "Neutral diversity profiles, one curve per sample, coloured by group"}
-prof <- as_df(hillprof(gut_counts, q = seq(0, 3, by = 0.1)))
-prof$group <- grp(prof$sample)
-prof_mean  <- aggregate(value ~ q + group, prof, mean)
-
-ggplot(prof, aes(q, value, group = sample, colour = group)) +
-  geom_line(alpha = 0.3, linewidth = 0.3) +
-  geom_line(data = prof_mean, aes(group = group), linewidth = 1.3) +
-  scale_colour_manual(values = pal, name = NULL) +
-  labs(x = "Diversity order (q)", y = "Neutral diversity (qD)")
-```
-
-Control and treatment profiles start together at `q = 0` and fan apart as `q`
-rises — the visual fingerprint of an intervention that redistributes abundance
-rather than removing taxa.
-
-## Where does the community differ — taxonomically or functionally?
+## Where does the community turn over — and where doesn't it?
 
 `hillpart()` partitions diversity between the two groups and reports beta, the
 effective number of distinct communities. Running it for each flavour shows
@@ -148,21 +135,22 @@ ggplot(beta, aes(factor(q), beta, fill = flavour)) +
        y = expression("Between-group turnover (" * beta * ")"))
 ```
 
-Between-group beta grows with `q` for the neutral and **functional**
-decompositions, but stays essentially flat for the phylogenetic one (β ≈ 1).
-The enriched genomes are scattered across the phylogeny — so the community's
-phylogenetic composition barely moves — yet they are functionally similar to
-each other, so the *functional* makeup of the dominant community shifts the
-most. Distinguishing taxonomic, phylogenetic and functional turnover on one
-common beta scale is a core strength of the Hill-number framework as
-implemented here.
+Between-group beta grows strongly with `q` for the **neutral and phylogenetic**
+decompositions but stays essentially flat (β ≈ 1) for the **functional** one.
+The clade swap replaces the dominant genomes with phylogenetically distant ones,
+so taxonomic *and* evolutionary composition turn over almost in lock-step — yet
+because the two clades are functional mirrors, the *functional* make-up of the
+community barely moves. Distinguishing taxonomic, phylogenetic and functional
+turnover on one common beta scale is a core strength of the Hill-number
+framework as implemented here, and here it isolates a change that is
+phylogenetic but not functional.
 
-## Ordination on two different distances
+## Ordination in three spaces
 
-`hillpair()` accepts the same `tree =` / `dist =` switch, so a single workflow
-produces ordinations in *neutral* and *functional* space:
+`hillpair()` accepts the same `tree =` / `dist =` switch, so one workflow
+produces ordinations in *neutral*, *phylogenetic* and *functional* space:
 
-```{r ordination, fig.width = 7, fig.height = 3.8, fig.alt = "PCoA in neutral and functional space, coloured by group"}
+```{r ordination, fig.width = 8.5, fig.height = 3.4, fig.alt = "PCoA in neutral, phylogenetic and functional space, coloured by group"}
 ord_one <- function(d, lab) {
   pc <- cmdscale(d, k = 2)
   o  <- data.frame(pc, mag = rownames(pc))
@@ -171,9 +159,12 @@ ord_one <- function(d, lab) {
   o
 }
 ord <- rbind(
-  ord_one(hillpair(gut_counts, q = 1, metric = "C"),               "Neutral (q = 1)"),
-  ord_one(hillpair(gut_counts, q = 1, metric = "C", dist = fdist), "Functional (q = 1)")
+  ord_one(hillpair(gut_counts, q = 1, metric = "C"),                 "Neutral (q = 1)"),
+  ord_one(hillpair(gut_counts, q = 1, metric = "C", tree = gut_tree), "Phylogenetic (q = 1)"),
+  ord_one(hillpair(gut_counts, q = 1, metric = "C", dist = fdist),   "Functional (q = 1)")
 )
+ord$space <- factor(ord$space,
+                    c("Neutral (q = 1)", "Phylogenetic (q = 1)", "Functional (q = 1)"))
 
 ggplot(ord, aes(PCoA1, PCoA2, colour = group)) +
   geom_point(size = 2.4) +
@@ -183,18 +174,20 @@ ggplot(ord, aes(PCoA1, PCoA2, colour = group)) +
   labs(x = "PCoA 1", y = "PCoA 2")
 ```
 
-Both ordinations separate control from treatment, and comparing them shows
-whether group structure is driven by *which taxa* or *which functions* differ —
-two questions one distance alone cannot disentangle.
+The same samples separate cleanly into control and treatment in neutral space
+and in phylogenetic space, but collapse onto a single overlapping cloud in
+functional space. The picture the three panels paint together — *who* and
+*which lineage* differ, *what they do* does not — is one no single distance
+could give.
 
 ## Functional redundancy
 
-Finally, `hillred()` quantifies **functional redundancy**: it fits the
-saturating relationship between neutral diversity (number of genomes) and
-functional diversity (number of distinct trait profiles) across samples. A
-curve that plateaus well below the spread of neutral diversity means many
-genomes share functions — a redundant, and therefore functionally resilient,
-community.
+`hillred()` quantifies the **functional redundancy** that underlies this
+pattern: it fits the saturating relationship between neutral diversity (number
+of genomes) and functional diversity (number of distinct trait profiles) across
+samples. A curve that plateaus well below the spread of neutral diversity means
+many genomes share functions — so the community can replace genomes without
+losing function.
 
 ```{r redundancy, fig.width = 5, fig.height = 4, fig.alt = "Per-sample neutral versus functional diversity with fitted saturating curves"}
 red <- hillred(gut_counts, q = c(1, 2), dist = fdist)
@@ -202,22 +195,25 @@ as_df(red)[, c("q", "redundancy")]
 plot(red)
 ```
 
-The fitted redundancy is high (well above 0.5), so adding genomes contributes
-far less than proportional new function: the gut community carries substantial
-functional insurance, even where (as the alpha analysis showed) the treatment
-has thinned its effective diversity.
+The fitted redundancy is high (around 0.6–0.7): functional diversity saturates
+well below the spread of neutral diversity, so adding genomes contributes far
+less than proportional new function. This is exactly *why* the treatment could
+overturn the community's taxonomic and
+phylogenetic composition without touching its function — every functional role
+lost with clade A is recovered from its mirror in clade B. The redundancy that
+`hillred()` measures is the mechanism the beta and ordination analyses revealed.
 
 ## Summary
 
 From one MAG table plus a genome tree and a trait table, `hilldiv3` produced a
 complete three-flavour analysis through one interface: trait-to-distance
 conversion (`traits2dist()`); neutral, phylogenetic and functional alpha
-diversity (`hilldiv()`); diversity profiles (`hillprof()`); between-group
-partitioning for each flavour (`hillpart()`); ordinations on neutral and
-functional distances (`hillpair()`); and functional redundancy (`hillred()`).
-The unified, type-switching interface is what lets a single study report
-taxonomic, phylogenetic and functional diversity side by side, on comparable
-scales.
+diversity (`hilldiv()`); between-group partitioning for each flavour
+(`hillpart()`); ordinations in neutral, phylogenetic and functional space
+(`hillpair()`); and functional redundancy (`hillred()`). The unified,
+type-switching interface is what lets a single study separate a change that is
+taxonomic and phylogenetic from one that is functional — here revealing a
+community reorganised in identity but conserved in function.
 
 ## References
 
@@ -228,3 +224,4 @@ scales.
   Monographs*, 84, 21–44.
 * Alberdi, A. & Gilbert, M.T.P. (2019). A guide to the application of Hill
   numbers to DNA-based diversity analyses. *Mol. Ecol. Resour.*, 19, 804–817.
+```

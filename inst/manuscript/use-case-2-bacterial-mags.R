@@ -5,11 +5,13 @@
 #
 # Uses the bundled simulated data: gut_counts (24 MAGs x 12 host gut samples,
 # control vs. treatment), gut_tree (genome phylogeny) and gut_traits (mixed
-# genomic/physiological traits). Showcased capabilities: neutral, phylogenetic
-# AND functional alpha diversity from one call (hilldiv); trait-to-distance
-# conversion (traits2dist); diversity profiles (hillprof); single-level
-# partitioning by group (hillpart); pairwise dissimilarity + ordination
-# (hillpair); and functional redundancy (hillred).
+# genomic/physiological traits). The intervention swaps which of two deep clades
+# dominates; the clades are functional mirrors, so the community turns over
+# neutrally and PHYLOGENETICALLY while its FUNCTIONAL make-up is conserved.
+# Showcased capabilities: neutral, phylogenetic AND functional diversity from one
+# call (hilldiv); trait-to-distance conversion (traits2dist); between-group
+# partitioning per flavour (hillpart); pairwise dissimilarity + ordination in all
+# three spaces (hillpair); and functional redundancy (hillred).
 
 suppressPackageStartupMessages({
   library(hilldiv3)
@@ -58,19 +60,7 @@ p_alpha <- ggplot(alpha, aes(factor(q), value, fill = group)) +
   labs(x = "Diversity order (q)", y = "Effective number of lineages")
 ggsave(file.path(figdir, "uc2-alpha.png"), p_alpha, width = 8, height = 3.4, dpi = 200)
 
-# --- 2. Diversity profiles, control vs. treatment ---------------------------
-prof <- as_df(hillprof(gut_counts, q = seq(0, 3, by = 0.1)))
-prof$group <- grp(prof$sample)
-prof_mean  <- aggregate(value ~ q + group, prof, mean)
-
-p_prof <- ggplot(prof, aes(q, value, group = sample, colour = group)) +
-  geom_line(alpha = 0.3, linewidth = 0.3) +
-  geom_line(data = prof_mean, aes(group = group), linewidth = 1.3) +
-  scale_colour_manual(values = pal, name = NULL) +
-  labs(x = "Diversity order (q)", y = "Neutral diversity (qD)")
-ggsave(file.path(figdir, "uc2-profile.png"), p_prof, width = 5, height = 3.6, dpi = 200)
-
-# --- 3. Partitioning between groups, three flavours -------------------------
+# --- 2. Partitioning between groups, three flavours -------------------------
 part <- function(type, ...) {
   m <- hillpart(gut_counts, q = c(0, 1, 2), hierarchy = ~ group,
                 metadata = metadata, ...)
@@ -91,9 +81,7 @@ p_beta <- ggplot(beta, aes(factor(q), beta, fill = flavour)) +
        y = expression("Between-group turnover (" * beta * ")"))
 ggsave(file.path(figdir, "uc2-partition.png"), p_beta, width = 5.5, height = 3.6, dpi = 200)
 
-# --- 4. Ordination from pairwise dissimilarity ------------------------------
-dn <- hillpair(gut_counts, q = 1, metric = "C")               # neutral
-df <- hillpair(gut_counts, q = 1, metric = "C", dist = fdist) # functional
+# --- 3. Ordination in neutral, phylogenetic and functional space ------------
 ord_one <- function(d, lab) {
   pc <- cmdscale(d, k = 2, eig = TRUE)
   o  <- data.frame(pc$points, mag = rownames(pc$points))
@@ -102,9 +90,11 @@ ord_one <- function(d, lab) {
   attr(o, "ev") <- round(100 * pc$eig[1:2] / sum(pc$eig[pc$eig > 0]), 1)
   o
 }
-on <- ord_one(dn, "Neutral (q=1)")
-of <- ord_one(df, "Functional (q=1)")
-ord <- rbind(on, of)
+on <- ord_one(hillpair(gut_counts, q = 1, metric = "C"),               "Neutral (q=1)")
+op <- ord_one(hillpair(gut_counts, q = 1, metric = "C", tree = gut_tree), "Phylogenetic (q=1)")
+of <- ord_one(hillpair(gut_counts, q = 1, metric = "C", dist = fdist),  "Functional (q=1)")
+ord <- rbind(on, op, of)
+ord$space <- factor(ord$space, c("Neutral (q=1)", "Phylogenetic (q=1)", "Functional (q=1)"))
 
 p_ord <- ggplot(ord, aes(PCoA1, PCoA2, colour = group)) +
   geom_point(size = 2.4) +
@@ -112,9 +102,9 @@ p_ord <- ggplot(ord, aes(PCoA1, PCoA2, colour = group)) +
   facet_wrap(~ space, scales = "free") +
   scale_colour_manual(values = pal, name = NULL) +
   labs(x = "PCoA 1", y = "PCoA 2")
-ggsave(file.path(figdir, "uc2-ordination.png"), p_ord, width = 7, height = 3.8, dpi = 200)
+ggsave(file.path(figdir, "uc2-ordination.png"), p_ord, width = 8.5, height = 3.4, dpi = 200)
 
-# --- 5. Functional redundancy -----------------------------------------------
+# --- 4. Functional redundancy -----------------------------------------------
 red <- hillred(gut_counts, q = c(1, 2), dist = fdist)
 png(file.path(figdir, "uc2-redundancy.png"), width = 5, height = 4,
     units = "in", res = 200)
@@ -130,6 +120,8 @@ print(aggregate(value ~ flavour + q + group, alpha, function(x) round(mean(x), 2
 cat("\nBetween-group beta (total scale):\n")
 print(transform(beta, beta = round(beta, 3)))
 cat("\nFunctional redundancy:\n");   print(as_df(red)[, c("q", "redundancy")])
-cat("\nNeutral PCoA1 group centroids:\n")
+cat("\nPCoA1 group centroids (neutral / phylogenetic / functional):\n")
 print(aggregate(PCoA1 ~ group, on, function(x) round(mean(x), 3)))
+print(aggregate(PCoA1 ~ group, op, function(x) round(mean(x), 3)))
+print(aggregate(PCoA1 ~ group, of, function(x) round(mean(x), 3)))
 cat("\nFigures written to", figdir, "\n")

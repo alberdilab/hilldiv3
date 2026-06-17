@@ -126,28 +126,14 @@ drawn from genuinely different parts of the insect tree. This neutral-vs-
 phylogenetic, scale-resolved contrast — available across all three diversity
 types from one engine — is unique to `hilldiv3`.
 
-## Ordinating dietary dissimilarity
-
-To visualise how individual diets relate, `hillpair()` returns a `dist` of
-pairwise dissimilarities (here the abundance-sensitive, Morisita-Horn-type
-metric `C` at `q = 1`) that drops straight into ordination.
-
-```r
-d   <- hillpair(bat_counts, q = 1, metric = "C")
-pco <- cmdscale(d, k = 2)
-```
-
-![PCoA of pairwise dietary dissimilarity](figures/uc1-ordination.png)
-
-The first axis cleanly separates forest from farmland individuals (habitat
-centroids at PCoA1 = −0.38 and +0.38), recovering the habitat-level dietary
-structure that the hierarchical partition quantified.
-
 ## What this use case shows
 
 From a single ASV table and a prey tree, `hilldiv3` delivered: per-sample
 neutral and phylogenetic Hill numbers (`hilldiv`), full diversity profiles
-(`hillprof`) and evenness (`hilleven`), a scale-resolved nested partition of
-turnover under both flavours (`hillpart` with a `hierarchy` formula), and a
-distance object for ordination (`hillpair`) — a complete dietary-diversity
-analysis through one consistent interface.
+(`hillprof`) and evenness (`hilleven`), and a scale-resolved nested partition of
+turnover under both flavours (`hillpart` with a `hierarchy` formula) — a
+complete dietary-diversity analysis through one consistent interface. The
+neutral-versus-phylogenetic contrast, resolved across the whole diversity
+profile *and* across every level of the nested design, is what lets a single
+study say not just *how much* diets differ but *in what currency* and *at which
+scale*.
