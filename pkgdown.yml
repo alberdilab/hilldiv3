@@ -1,0 +1,13 @@
+pandoc: 3.8.3
+pkgdown: 2.2.0
+pkgdown_sha: ~
+articles:
+  articles/diversity-types: diversity-types.html
+  hilldiv3: hilldiv3.html
+  articles/partitioning-and-dissimilarity: partitioning-and-dissimilarity.html
+  articles/preparing-data: preparing-data.html
+  articles/profiles-evenness-redundancy: profiles-evenness-redundancy.html
+last_built: 2026-06-17T03:08Z
+urls:
+  reference: https://alberdilab.github.io/hilldiv3/reference
+  article: https://alberdilab.github.io/hilldiv3/articles
