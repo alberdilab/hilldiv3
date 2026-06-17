@@ -174,8 +174,8 @@ if (has_results) {
 ```
 
 Each benchmark is shown with three panels: **time** per iteration (left,
-boxplots over the benchmark iterations), **peak memory** (centre, resident set
-size of the forked worker) and **comparability** (right). Within every
+boxplots over the benchmark iterations), **memory** (centre, bytes allocated
+per evaluation) and **comparability** (right). Within every
 benchmark the facets are ordered neutral (top), phylogenetic (middle) and
 functional (bottom), and the packages are named on the y axis. Numbers in the
 comparability column are footnotes, explained below each figure.
@@ -256,7 +256,7 @@ if (has_results && has_ggplot && has_patchwork) {
       ggplot2::facet_grid(facet ~ ., scales = "free_y", space = "free_y") +
       ggplot2::scale_x_continuous(labels = function(x) format_bytes(x), n.breaks = 3) +
       ggplot2::scale_fill_manual(values = package_palette, drop = FALSE) +
-      ggplot2::labs(title = "Peak memory", x = "RSS", y = NULL) +
+      ggplot2::labs(title = "Memory", x = "allocated", y = NULL) +
       base_theme +
       ggplot2::theme(axis.text.y = ggplot2::element_blank(),
                      strip.text.y = ggplot2::element_blank())
@@ -322,12 +322,14 @@ if (has_results) {
 
 ## Full results
 
-Peak memory is the maximum resident set size (RSS) of the forked worker process
-during the run, so it includes the base R session and loaded packages, not only
-the operation's own allocations. The complete per-operation and per-iteration
-tables are written next to the benchmark script:
+Memory is the number of bytes allocated during one evaluation, measured by
+`bench`'s allocation profiler. Unlike the resident set size of the worker
+process, it reflects the operation's own allocations rather than the size of the
+loaded R session, so it is comparable across packages and independent of how
+long the call runs. The complete per-operation and per-iteration tables are
+written next to the benchmark script:
 
-- [`performance-summary.csv`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance-summary.csv) — aggregated median time, peak memory, result size and speed relative to `hilldiv3` for each package-operation.
+- [`performance-summary.csv`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance-summary.csv) — aggregated median time, allocated memory, result size and speed relative to `hilldiv3` for each package-operation.
 - [`performance.csv`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance.csv) — per-iteration timings used for the boxplots.
 - [`session-info.txt`](https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/session-info.txt) — R version, platform and package versions.
 

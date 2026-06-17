@@ -38,7 +38,7 @@ n_samples <- as.integer(Sys.getenv("BENCH_N_SAMPLES", "50"))
 seed <- as.integer(Sys.getenv("BENCH_SEED", "20260617"))
 q_all <- c(0, 1, 2)
 q_one <- 1
-bench_memory <- tolower(Sys.getenv("BENCH_MEMORY", "false")) %in%
+bench_memory <- tolower(Sys.getenv("BENCH_MEMORY", "true")) %in%
   c("1", "true", "yes")
 mem_limit_gb <- as.numeric(Sys.getenv("BENCH_MEMORY_LIMIT_GB", "10"))
 mem_limit_bytes <- if (is.finite(mem_limit_gb) && mem_limit_gb > 0) {
@@ -508,22 +508,27 @@ proc_rss_bytes <- function(pid) {
   as.numeric(out[[1]]) * 1024 # ps reports RSS in KiB
 }
 
-# Run fun() in a forked child, tracking its peak resident memory (RSS) and
-# killing it if RSS exceeds limit_bytes. The fork inherits the loaded namespaces
-# and `dat`, so adapter closures work unchanged. Returns
-# list(result, peak_rss_bytes) on success and signals an error of class
-# "benchmark_oom" when the cap is hit. Falls back to a plain in-process call
-# (peak unknown) where forking is unavailable.
+# Run fun() in a forked child, tracking its resident memory (RSS) and killing it
+# if RSS exceeds limit_bytes. The fork inherits the loaded namespaces and `dat`,
+# so adapter closures work unchanged. Returns
+# list(result, peak_rss_delta_bytes) on success, where peak_rss_delta_bytes is
+# the peak RSS *minus the first observed (baseline) RSS* -- i.e. the memory the
+# task itself adds on top of the already-loaded session image, not the absolute
+# resident size of that image. Signals an error of class "benchmark_oom" when the
+# cap is hit. Falls back to a plain in-process call (delta unknown) where forking
+# is unavailable.
 run_with_memory_cap <- function(fun, limit_bytes, poll_seconds = 0.1) {
   if (.Platform$OS.type != "unix" || !pkg_installed("parallel")) {
-    return(list(result = fun(), peak_rss_bytes = NA_real_))
+    return(list(result = fun(), peak_rss_delta_bytes = NA_real_))
   }
   job <- parallel::mcparallel(fun())
   pid <- job$pid
   peak_rss <- NA_real_
+  baseline_rss <- NA_real_
   repeat {
     rss <- proc_rss_bytes(pid)
     if (is.finite(rss)) {
+      if (!is.finite(baseline_rss)) baseline_rss <- rss
       peak_rss <- if (is.finite(peak_rss)) max(peak_rss, rss) else rss
     }
     if (is.finite(limit_bytes) && is.finite(rss) && rss > limit_bytes) {
@@ -547,7 +552,12 @@ run_with_memory_cap <- function(fun, limit_bytes, poll_seconds = 0.1) {
         cond <- attr(value, "condition")
         stop(if (is.null(cond)) simpleError(as.character(value)) else cond)
       }
-      return(list(result = value, peak_rss_bytes = peak_rss))
+      peak_delta <- if (is.finite(peak_rss) && is.finite(baseline_rss)) {
+        max(peak_rss - baseline_rss, 0)
+      } else {
+        NA_real_
+      }
+      return(list(result = value, peak_rss_delta_bytes = peak_delta))
     }
   }
 }
@@ -617,24 +627,26 @@ record_one <- function(package, task, adapter) {
   }
 
   measured <- capped$result
-  # Prefer the forked child's measured peak RSS; fall back to bench's allocation
-  # figure (only populated when BENCH_MEMORY is enabled) when RSS is unavailable.
-  peak_memory_bytes <- if (is.finite(capped$peak_rss_bytes)) {
-    capped$peak_rss_bytes
-  } else {
+  # Prefer bench's deterministic allocation figure (bytes allocated during one
+  # evaluation, via R's memory profiler), which is comparable across packages and
+  # independent of sampling timing. Fall back to the forked child's baseline-
+  # subtracted peak RSS delta only when allocation profiling is unavailable.
+  memory_bytes <- if (is.finite(measured$memory_bytes)) {
     measured$memory_bytes
+  } else {
+    capped$peak_rss_delta_bytes
   }
   base$median_seconds <- measured$median_seconds
   base$min_seconds <- measured$min_seconds
   base$max_seconds <- measured$max_seconds
-  base$memory_bytes <- peak_memory_bytes
+  base$memory_bytes <- memory_bytes
   base$result_bytes <- measured$result_bytes
   base$backend <- measured$backend
   iterations_data <- iteration_rows(base, measured$elapsed_seconds)
   log_progress(
     "Finished ", label,
     " median_seconds=", signif(measured$median_seconds, 4),
-    " peak_memory_bytes=", format_log_number(peak_memory_bytes),
+    " memory_bytes=", format_log_number(memory_bytes),
     " iterations=", length(measured$elapsed_seconds)
   )
   list(summary = base, iterations = iterations_data)

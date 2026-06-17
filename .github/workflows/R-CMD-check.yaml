@@ -23,6 +23,11 @@ jobs:
     env:
       GITHUB_PAT: ${{ secrets.GITHUB_TOKEN }}
       R_KEEP_PKG_SOURCE: yes
+      # Force HTTP/1.1 for pak/pkgcache downloads. The Bioconductor binary CDN
+      # intermittently fails under HTTP/2 multiplexing from the Windows/macOS
+      # runners, which surfaces as "Failed to download" then a file(con, "rb")
+      # error in the pak subprocess.
+      PKGCACHE_HTTP_VERSION: "1.1"
     steps:
       - uses: actions/checkout@v5
       - uses: r-lib/actions/setup-pandoc@v2
