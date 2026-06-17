@@ -99,1264 +99,230 @@
 <td align="left">bench</td>
 </tr></tbody>
 </table>
+<p>Each benchmark is shown with three panels: <strong>time</strong> per
+iteration (left, boxplots over the benchmark iterations), <strong>peak
+memory</strong> (centre, resident set size of the forked worker) and
+<strong>comparability</strong> (right). Within every benchmark the
+facets are ordered neutral (top), phylogenetic (middle) and functional
+(bottom), and the packages are named on the y axis. Numbers in the
+comparability column are footnotes, explained below each figure.</p>
 </div>
 <div class="section level2">
 <h2 id="b1-alpha-diversity">B1: Alpha diversity<a class="anchor" aria-label="anchor" href="#b1-alpha-diversity"></a>
 </h2>
-<p><img src="performance_files/figure-html/benchmark-section-boxplots-1.png" class="r-plt" alt="" width="864"></p>
+<p><img src="performance_files/figure-html/benchmark-section-figures-1.png" class="r-plt" alt="" width="864"></p>
+<p>[1] Phylogenetic alpha requires an ultrametric tree and returns
+entropart’s normalized phylodiversity.<br>
+[2] Similarity-based alpha uses Z, not hilldiv3’s distance-threshold
+functional definition.<br>
+[3] BAT::alpha() computes Faith-style PD richness, not q = 0, 1, 2
+phylogenetic Hill numbers.<br>
+[4] BAT::alpha() computes tree-based functional richness, not q = 0, 1,
+2 functional Hill numbers.</p>
 </div>
 <div class="section level2">
 <h2 id="b2-diversity-partitioning-without-hierarchy">B2: Diversity partitioning without hierarchy<a class="anchor" aria-label="anchor" href="#b2-diversity-partitioning-without-hierarchy"></a>
 </h2>
-<p><img src="performance_files/figure-html/benchmark-section-boxplots-2.png" class="r-plt" alt="" width="864"></p>
+<p><img src="performance_files/figure-html/benchmark-section-figures-2.png" class="r-plt" alt="" width="864"></p>
+<p>[1] Phylogenetic partitioning requires an ultrametric tree and uses
+entropart’s normalization.<br>
+[2] Similarity-based partitioning uses Z, not hilldiv3’s
+distance-threshold functional definition.</p>
 </div>
 <div class="section level2">
 <h2 id="b3-nested-diversity-partitioning">B3: Nested diversity partitioning<a class="anchor" aria-label="anchor" href="#b3-nested-diversity-partitioning"></a>
 </h2>
-<p><img src="performance_files/figure-html/benchmark-section-boxplots-3.png" class="r-plt" alt="" width="864"></p>
+<p><img src="performance_files/figure-html/benchmark-section-figures-3.png" class="r-plt" alt="" width="864"></p>
+<p>[1] MergeMC supports hierarchical metacommunities, but not the same
+formula API/output.</p>
 </div>
 <div class="section level2">
 <h2 id="b4-pairwise-beta-diversity-matrix">B4: Pairwise beta diversity matrix<a class="anchor" aria-label="anchor" href="#b4-pairwise-beta-diversity-matrix"></a>
 </h2>
-<p><img src="performance_files/figure-html/benchmark-section-boxplots-4.png" class="r-plt" alt="" width="864"></p>
+<p><img src="performance_files/figure-html/benchmark-section-figures-4.png" class="r-plt" alt="" width="864"></p>
+<p>[1] Pairwise Bray-Curtis distance; related, but not Hill-number
+dissimilarity.<br>
+[2] Pairwise Jaccard/Sorensen beta components, not Hill-number
+dissimilarity.<br>
+[3] Pairwise PD beta components, not Hill-number dissimilarity.<br>
+[4] Pairwise FD beta components, not Hill-number dissimilarity.</p>
 </div>
 <div class="section level2">
-<h2 id="support-and-detail">Support and Detail<a class="anchor" aria-label="anchor" href="#support-and-detail"></a>
+<h2 id="what-each-tool-can-do">What each tool can do<a class="anchor" aria-label="anchor" href="#what-each-tool-can-do"></a>
 </h2>
-<p>The goal is not to force every package into the same table when the
-operation is not equivalent. Each package-operation row is labelled
-as:</p>
-<table class="table">
+<p><code>hilldiv3</code> is the reference implementation. The
+contingency table below shows, for every benchmark, whether each package
+offers a directly comparable operation (<strong>Yes</strong>), a related
+but not identical operation (<strong>Partial</strong>), or no equivalent
+(<strong>No</strong>). <code>n/a</code> means the package was not
+installed when the benchmark ran. The caveats behind each
+<em>Partial</em> are listed as footnotes under the corresponding figure
+above.</p>
+<table style="width:100%;" class="table">
 <colgroup>
-<col width="50%">
-<col width="50%">
-</colgroup>
-<thead><tr class="header">
-<th>Status</th>
-<th>Meaning</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td><code>yes</code></td>
-<td>The package has a directly comparable operation.</td>
-</tr>
-<tr class="even">
-<td><code>partial</code></td>
-<td>The package has a related operation, but the output or statistical
-definition differs.</td>
-</tr>
-<tr class="odd">
-<td><code>no</code></td>
-<td>The package does not expose that operation.</td>
-</tr>
-<tr class="even">
-<td><code>unavailable</code></td>
-<td>The package was not installed when the benchmark was run.</td>
-</tr>
-<tr class="odd">
-<td><code>failed</code></td>
-<td>The package was installed, but the benchmark call errored.</td>
-</tr>
-<tr class="even">
-<td><code>out_of_memory</code></td>
-<td>The benchmark call exceeded the memory limit and was stopped.</td>
-</tr>
-</tbody>
-</table>
-<div class="section level3">
-<h3 id="support-matrix">Support matrix<a class="anchor" aria-label="anchor" href="#support-matrix"></a>
-</h3>
-<table class="table">
-<colgroup>
-<col width="5%">
-<col width="24%">
+<col width="17%">
+<col width="39%">
+<col width="7%">
 <col width="7%">
 <col width="5%">
-<col width="4%">
-<col width="53%">
-</colgroup>
-<thead><tr class="header">
-<th align="left">Benchmark</th>
-<th align="left">Operation</th>
-<th align="left">Facet</th>
-<th align="left">Package</th>
-<th align="left">Support</th>
-<th align="left">Note</th>
-</tr></thead>
-<tbody>
-<tr class="odd">
-<td align="left">B1.1</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B1.1</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv2 call.</td>
-</tr>
-<tr class="odd">
-<td align="left">B1.1</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">Taxonomic Hill numbers via hill_taxa().</td>
-</tr>
-<tr class="even">
-<td align="left">B1.1</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">entropart</td>
-<td align="left">yes</td>
-<td align="left">Neutral alpha diversity via AlphaDiversity().</td>
-</tr>
-<tr class="odd">
-<td align="left">B1.1</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">vegan</td>
-<td align="left">yes</td>
-<td align="left">Neutral Hill numbers via renyi(…, hill = TRUE).</td>
-</tr>
-<tr class="even">
-<td align="left">B1.1</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">BAT</td>
-<td align="left">yes</td>
-<td align="left">Neutral Hill numbers via hill().</td>
-</tr>
-<tr class="odd">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv2 call.</td>
-</tr>
-<tr class="odd">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">Phylogenetic Hill numbers via hill_phylo().</td>
-</tr>
-<tr class="even">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">Phylogenetic alpha requires an ultrametric tree and
-returns entropart’s normalized phylodiversity.</td>
-</tr>
-<tr class="odd">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">vegan does not compute phylogenetic Hill numbers.</td>
-</tr>
-<tr class="even">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">BAT::alpha() computes Faith-style PD richness, not q =
-0, 1, 2 phylogenetic Hill numbers.</td>
-</tr>
-<tr class="odd">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv2 call.</td>
-</tr>
-<tr class="odd">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">Functional Hill numbers via hill_func().</td>
-</tr>
-<tr class="even">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">Similarity-based alpha uses Z, not hilldiv3’s
-distance-threshold functional definition.</td>
-</tr>
-<tr class="odd">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">vegan does not compute functional Hill numbers.</td>
-</tr>
-<tr class="even">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">BAT::alpha() computes tree-based functional richness,
-not q = 0, 1, 2 functional Hill numbers.</td>
-</tr>
-<tr class="odd">
-<td align="left">B2.1</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B2.1</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv2 call.</td>
-</tr>
-<tr class="odd">
-<td align="left">B2.1</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">Partitioning via hill_taxa_parti().</td>
-</tr>
-<tr class="even">
-<td align="left">B2.1</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">entropart</td>
-<td align="left">yes</td>
-<td align="left">Metacommunity partitioning via DivPart().</td>
-</tr>
-<tr class="odd">
-<td align="left">B2.1</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">No Hill alpha/gamma/beta partitioning API.</td>
-</tr>
-<tr class="even">
-<td align="left">B2.1</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">BAT</td>
-<td align="left">no</td>
-<td align="left">No Hill alpha/gamma/beta partitioning API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv2 call.</td>
-</tr>
-<tr class="odd">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">Partitioning via hill_phylo_parti().</td>
-</tr>
-<tr class="even">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">Phylogenetic partitioning requires an ultrametric tree
-and uses entropart’s normalization.</td>
-</tr>
-<tr class="odd">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">No phylogenetic Hill partitioning API.</td>
-</tr>
-<tr class="even">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">BAT</td>
-<td align="left">no</td>
-<td align="left">No phylogenetic Hill alpha/gamma/beta partitioning
-API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv2 call.</td>
-</tr>
-<tr class="odd">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">Partitioning via hill_func_parti().</td>
-</tr>
-<tr class="even">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">Similarity-based partitioning uses Z, not hilldiv3’s
-distance-threshold functional definition.</td>
-</tr>
-<tr class="odd">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">No functional Hill partitioning API.</td>
-</tr>
-<tr class="even">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">BAT</td>
-<td align="left">no</td>
-<td align="left">No functional Hill alpha/gamma/beta partitioning
-API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B3.1</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B3.1</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv2</td>
-<td align="left">no</td>
-<td align="left">No nested hierarchy argument in hilldiv2.</td>
-</tr>
-<tr class="odd">
-<td align="left">B3.1</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hillR</td>
-<td align="left">no</td>
-<td align="left">No nested hierarchy argument in hillR.</td>
-</tr>
-<tr class="even">
-<td align="left">B3.1</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">MergeMC supports hierarchical metacommunities, but not
-the same formula API/output.</td>
-</tr>
-<tr class="odd">
-<td align="left">B3.1</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">No nested Hill partitioning API.</td>
-</tr>
-<tr class="even">
-<td align="left">B3.1</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">BAT</td>
-<td align="left">no</td>
-<td align="left">No nested Hill partitioning API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B3.2</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B3.2</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv2</td>
-<td align="left">no</td>
-<td align="left">No nested hierarchy argument in hilldiv2.</td>
-</tr>
-<tr class="odd">
-<td align="left">B3.2</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hillR</td>
-<td align="left">no</td>
-<td align="left">No nested hierarchy argument in hillR.</td>
-</tr>
-<tr class="even">
-<td align="left">B3.2</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">entropart</td>
-<td align="left">no</td>
-<td align="left">No matching nested phylogenetic hierarchy API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B3.2</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">No nested phylogenetic Hill partitioning API.</td>
-</tr>
-<tr class="even">
-<td align="left">B3.2</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">BAT</td>
-<td align="left">no</td>
-<td align="left">No nested phylogenetic Hill partitioning API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B3.3</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B3.3</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv2</td>
-<td align="left">no</td>
-<td align="left">No nested hierarchy argument in hilldiv2.</td>
-</tr>
-<tr class="odd">
-<td align="left">B3.3</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hillR</td>
-<td align="left">no</td>
-<td align="left">No nested hierarchy argument in hillR.</td>
-</tr>
-<tr class="even">
-<td align="left">B3.3</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">entropart</td>
-<td align="left">no</td>
-<td align="left">No matching nested functional hierarchy API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B3.3</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">No nested functional Hill partitioning API.</td>
-</tr>
-<tr class="even">
-<td align="left">B3.3</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">BAT</td>
-<td align="left">no</td>
-<td align="left">No nested functional Hill partitioning API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B4.1</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B4.1</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv2 call.</td>
-</tr>
-<tr class="odd">
-<td align="left">B4.1</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">Pairwise partitioning via
-hill_taxa_parti_pairwise().</td>
-</tr>
-<tr class="even">
-<td align="left">B4.1</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">entropart</td>
-<td align="left">no</td>
-<td align="left">No direct all-pairs Hill dissimilarity API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B4.1</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">vegan</td>
-<td align="left">partial</td>
-<td align="left">Pairwise Bray-Curtis distance; related, but not
-Hill-number dissimilarity.</td>
-</tr>
-<tr class="even">
-<td align="left">B4.1</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">Pairwise Jaccard/Sorensen beta components, not
-Hill-number dissimilarity.</td>
-</tr>
-<tr class="odd">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv2 call.</td>
-</tr>
-<tr class="odd">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">Pairwise partitioning via
-hill_phylo_parti_pairwise().</td>
-</tr>
-<tr class="even">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">entropart</td>
-<td align="left">no</td>
-<td align="left">No direct all-pairs Hill dissimilarity API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">No phylogenetic Hill pairwise dissimilarity API.</td>
-</tr>
-<tr class="even">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">Pairwise PD beta components, not Hill-number
-dissimilarity.</td>
-</tr>
-<tr class="odd">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv3 call.</td>
-</tr>
-<tr class="even">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">Direct hilldiv2 call.</td>
-</tr>
-<tr class="odd">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">Pairwise partitioning via
-hill_func_parti_pairwise().</td>
-</tr>
-<tr class="even">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">entropart</td>
-<td align="left">no</td>
-<td align="left">No direct all-pairs Hill dissimilarity API.</td>
-</tr>
-<tr class="odd">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">vegan</td>
-<td align="left">no</td>
-<td align="left">No functional Hill pairwise dissimilarity API.</td>
-</tr>
-<tr class="even">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">Pairwise FD beta components, not Hill-number
-dissimilarity.</td>
-</tr>
-</tbody>
-</table>
-</div>
-<div class="section level3">
-<h3 id="timing-and-memory">Timing and memory<a class="anchor" aria-label="anchor" href="#timing-and-memory"></a>
-</h3>
-<p>Rows marked <code>partial</code> are timed because they are useful
-context, but they should not be interpreted as exact replacements for
-the corresponding <code>hilldiv3</code> operation. Peak memory is the
-maximum resident set size (RSS) of the forked worker process during the
-run, so it includes the base R session and loaded packages, not only the
-operation’s own allocations.</p>
-<table class="table">
-<colgroup>
-<col width="6%">
-<col width="28%">
 <col width="8%">
 <col width="6%">
-<col width="5%">
-<col width="9%">
-<col width="13%">
-<col width="11%">
-<col width="7%">
-<col width="3%">
+<col width="6%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Benchmark</th>
 <th align="left">Operation</th>
-<th align="left">Facet</th>
-<th align="left">Package</th>
-<th align="left">Support</th>
-<th align="left">Median seconds</th>
-<th align="left">Relative to hilldiv3</th>
-<th align="left">Peak memory (RSS)</th>
-<th align="left">Result size</th>
-<th align="left">Error</th>
+<th align="left">hilldiv3</th>
+<th align="left">hilldiv2</th>
+<th align="left">hillR</th>
+<th align="left">entropart</th>
+<th align="left">vegan</th>
+<th align="left">BAT</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td align="left">B1.1</td>
+<td align="left">B1.1 (neutral)</td>
 <td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0062</td>
-<td align="left">1x</td>
-<td align="left">354 MB</td>
-<td align="left">5.4 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
 </tr>
 <tr class="even">
-<td align="left">B1.1</td>
+<td align="left">B1.2 (phylogenetic)</td>
 <td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">0.0014</td>
-<td align="left">0.23x</td>
-<td align="left">3 MB</td>
-<td align="left">5.4 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Partial</td>
+<td align="left">No</td>
+<td align="left">Partial</td>
 </tr>
 <tr class="odd">
-<td align="left">B1.1</td>
+<td align="left">B1.3 (functional)</td>
 <td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">0.0025</td>
-<td align="left">0.4x</td>
-<td align="left">6.1 MB</td>
-<td align="left">12.2 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Partial</td>
+<td align="left">No</td>
+<td align="left">Partial</td>
 </tr>
 <tr class="even">
-<td align="left">B1.1</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">entropart</td>
-<td align="left">yes</td>
-<td align="left">2.4423</td>
-<td align="left">395.08x</td>
-<td align="left">551 MB</td>
-<td align="left">30.1 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B1.1</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">vegan</td>
-<td align="left">yes</td>
-<td align="left">0.0003</td>
-<td align="left">0.05x</td>
-<td align="left">2.8 MB</td>
-<td align="left">5.7 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B1.1</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">BAT</td>
-<td align="left">yes</td>
-<td align="left">0.0013</td>
-<td align="left">0.21x</td>
-<td align="left">335 MB</td>
-<td align="left">13.4 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0074</td>
-<td align="left">1x</td>
-<td align="left">349.5 MB</td>
-<td align="left">5.4 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">0.2831</td>
-<td align="left">38.32x</td>
-<td align="left">541.2 MB</td>
-<td align="left">5.4 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">0.0278</td>
-<td align="left">3.76x</td>
-<td align="left">426.1 MB</td>
-<td align="left">12.4 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">46.7978</td>
-<td align="left">6335.12x</td>
-<td align="left">577.4 MB</td>
-<td align="left">30.7 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B1.2</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">0.0203</td>
-<td align="left">2.74x</td>
-<td align="left">439.3 MB</td>
-<td align="left">4.5 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0076</td>
-<td align="left">1x</td>
-<td align="left">348.8 MB</td>
-<td align="left">5.4 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">0.0057</td>
-<td align="left">0.74x</td>
-<td align="left">381.8 MB</td>
-<td align="left">5.4 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">0.1291</td>
-<td align="left">16.97x</td>
-<td align="left">593.9 MB</td>
-<td align="left">18.9 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">2.4548</td>
-<td align="left">322.74x</td>
-<td align="left">632.4 MB</td>
-<td align="left">30.7 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B1.3</td>
-<td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">0.7368</td>
-<td align="left">96.87x</td>
-<td align="left">503.5 MB</td>
-<td align="left">4.5 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B2.1</td>
+<td align="left">B2.1 (neutral)</td>
 <td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0053</td>
-<td align="left">1x</td>
-<td align="left">343.9 MB</td>
-<td align="left">1016 B</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B2.1</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">0.0018</td>
-<td align="left">0.34x</td>
-<td align="left">3.2 MB</td>
-<td align="left">1016 B</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+<td align="left">No</td>
 </tr>
 <tr class="odd">
-<td align="left">B2.1</td>
+<td align="left">B2.2 (phylogenetic)</td>
 <td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">0.0040</td>
-<td align="left">0.75x</td>
-<td align="left">197.7 MB</td>
-<td align="left">4.7 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Partial</td>
+<td align="left">No</td>
+<td align="left">No</td>
 </tr>
 <tr class="even">
-<td align="left">B2.1</td>
+<td align="left">B2.3 (functional)</td>
 <td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">entropart</td>
-<td align="left">yes</td>
-<td align="left">2.4650</td>
-<td align="left">466.91x</td>
-<td align="left">544.7 MB</td>
-<td align="left">35.1 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Partial</td>
+<td align="left">No</td>
+<td align="left">No</td>
 </tr>
 <tr class="odd">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0073</td>
-<td align="left">1x</td>
-<td align="left">341.5 MB</td>
-<td align="left">1016 B</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">0.2313</td>
-<td align="left">31.89x</td>
-<td align="left">557.5 MB</td>
-<td align="left">1016 B</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">0.0231</td>
-<td align="left">3.18x</td>
-<td align="left">434.6 MB</td>
-<td align="left">4.3 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B2.2</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">50.6067</td>
-<td align="left">6975x</td>
-<td align="left">597.1 MB</td>
-<td align="left">89.3 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0070</td>
-<td align="left">1x</td>
-<td align="left">342.2 MB</td>
-<td align="left">1016 B</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">0.0072</td>
-<td align="left">1.03x</td>
-<td align="left">390.8 MB</td>
-<td align="left">1016 B</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">4.7919</td>
-<td align="left">680.65x</td>
-<td align="left">2.81 GB</td>
-<td align="left">4.7 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B2.3</td>
-<td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">2.5322</td>
-<td align="left">359.68x</td>
-<td align="left">494 MB</td>
-<td align="left">35.6 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B3.1</td>
+<td align="left">B3.1 (neutral)</td>
 <td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0087</td>
-<td align="left">1x</td>
-<td align="left">349.2 MB</td>
-<td align="left">1.1 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">Partial</td>
+<td align="left">No</td>
+<td align="left">No</td>
 </tr>
 <tr class="even">
-<td align="left">B3.1</td>
+<td align="left">B3.2 (phylogenetic)</td>
 <td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">neutral</td>
-<td align="left">entropart</td>
-<td align="left">partial</td>
-<td align="left">0.0988</td>
-<td align="left">11.34x</td>
-<td align="left">398.8 MB</td>
-<td align="left">4.1 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
 </tr>
 <tr class="odd">
-<td align="left">B3.2</td>
+<td align="left">B3.3 (functional)</td>
 <td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0107</td>
-<td align="left">1x</td>
-<td align="left">431.2 MB</td>
-<td align="left">1.1 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">No</td>
 </tr>
 <tr class="even">
-<td align="left">B3.3</td>
-<td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">functional</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0105</td>
-<td align="left">1x</td>
-<td align="left">414.1 MB</td>
-<td align="left">1.1 KB</td>
-<td align="left"></td>
+<td align="left">B4.1 (neutral)</td>
+<td align="left">Pairwise beta diversity matrix at q = 1</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+<td align="left">Partial</td>
+<td align="left">Partial</td>
 </tr>
 <tr class="odd">
-<td align="left">B4.1</td>
+<td align="left">B4.2 (phylogenetic)</td>
 <td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0472</td>
-<td align="left">1x</td>
-<td align="left">461.2 MB</td>
-<td align="left">14 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">Partial</td>
 </tr>
 <tr class="even">
-<td align="left">B4.1</td>
+<td align="left">B4.3 (functional)</td>
 <td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">2.2128</td>
-<td align="left">46.84x</td>
-<td align="left">478 MB</td>
-<td align="left">14 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B4.1</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">0.7855</td>
-<td align="left">16.63x</td>
-<td align="left">499.4 MB</td>
-<td align="left">84.4 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B4.1</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">vegan</td>
-<td align="left">partial</td>
-<td align="left">0.0003</td>
-<td align="left">0.01x</td>
-<td align="left">2.9 MB</td>
-<td align="left">15.5 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B4.1</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">neutral</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">0.4095</td>
-<td align="left">8.67x</td>
-<td align="left">518 MB</td>
-<td align="left">74.9 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0581</td>
-<td align="left">1x</td>
-<td align="left">527.3 MB</td>
-<td align="left">14 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">16.8906</td>
-<td align="left">290.9x</td>
-<td align="left">573.7 MB</td>
-<td align="left">14 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">5.2637</td>
-<td align="left">90.65x</td>
-<td align="left">631.9 MB</td>
-<td align="left">84.4 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B4.2</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">phylogenetic</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">0.4389</td>
-<td align="left">7.56x</td>
-<td align="left">561.4 MB</td>
-<td align="left">74.9 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">hilldiv3</td>
-<td align="left">yes</td>
-<td align="left">0.0583</td>
-<td align="left">1x</td>
-<td align="left">536.1 MB</td>
-<td align="left">14 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">hilldiv2</td>
-<td align="left">yes</td>
-<td align="left">2.3603</td>
-<td align="left">40.5x</td>
-<td align="left">644.8 MB</td>
-<td align="left">14 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="even">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">hillR</td>
-<td align="left">yes</td>
-<td align="left">11.3817</td>
-<td align="left">195.31x</td>
-<td align="left">712.5 MB</td>
-<td align="left">84.4 KB</td>
-<td align="left"></td>
-</tr>
-<tr class="odd">
-<td align="left">B4.3</td>
-<td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">functional</td>
-<td align="left">BAT</td>
-<td align="left">partial</td>
-<td align="left">1.2050</td>
-<td align="left">20.68x</td>
-<td align="left">536 MB</td>
-<td align="left">74.9 KB</td>
-<td align="left"></td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">Yes</td>
+<td align="left">No</td>
+<td align="left">No</td>
+<td align="left">Partial</td>
 </tr>
 </tbody>
 </table>
 </div>
+<div class="section level2">
+<h2 id="full-results">Full results<a class="anchor" aria-label="anchor" href="#full-results"></a>
+</h2>
+<p>Peak memory is the maximum resident set size (RSS) of the forked
+worker process during the run, so it includes the base R session and
+loaded packages, not only the operation’s own allocations. The complete
+per-operation and per-iteration tables are written next to the benchmark
+script:</p>
+<ul>
+<li>
+<a href="https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance-summary.csv" class="external-link"><code>performance-summary.csv</code></a>
+— aggregated median time, peak memory, result size and speed relative to
+<code>hilldiv3</code> for each package-operation.</li>
+<li>
+<a href="https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/performance.csv" class="external-link"><code>performance.csv</code></a>
+— per-iteration timings used for the boxplots.</li>
+<li>
+<a href="https://github.com/alberdilab/hilldiv3/blob/main/inst/benchmarks/results/session-info.txt" class="external-link"><code>session-info.txt</code></a>
+— R version, platform and package versions.</li>
+</ul>
 </div>
 <div class="section level2">
 <h2 id="reproducing-the-benchmark">Reproducing the benchmark<a class="anchor" aria-label="anchor" href="#reproducing-the-benchmark"></a>
