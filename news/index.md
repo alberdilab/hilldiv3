@@ -41,8 +41,9 @@ engine.
   now return long-format `data.frame`s with
   [`print()`](https://rdrr.io/r/base/print.html),
   [`plot()`](https://rdrr.io/r/graphics/plot.default.html) and (when
-  `ggplot2` is installed) `autoplot()` methods. Pass `out = "matrix"`
-  for the legacy shape.
+  `ggplot2` is installed)
+  [`autoplot()`](https://ggplot2.tidyverse.org/reference/autoplot.html)
+  methods. Pass `out = "matrix"` for the legacy shape.
 - **Explicit `type` argument** —
   `type = c("auto", "neutral", "phylogenetic", "functional")` on every
   entry point; `"auto"` keeps input-based detection, an explicit value
