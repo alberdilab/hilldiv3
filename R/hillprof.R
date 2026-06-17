@@ -24,15 +24,18 @@
 hillprof <- function(data, q = seq(0, 3, by = 0.1), tree = NULL, dist = NULL,
                      tau = NULL,
                      type = c("auto", "neutral", "phylogenetic", "functional"),
+                     reference = c("pool", "sample"),
                      out = c("tibble", "matrix")) {
   out <- match.arg(out)
   type <- match.arg(type)
+  reference <- match.arg(reference)
   x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q, type)
   type <- attr(x, "type")
   cli::cli_inform("Computing {type} diversity profile over
                    {length(q)} order{?s}.")
   mat <- hill_alpha(x$counts, q = q, type = type,
-                    tree = x$tree, dist = x$dist, tau = tau)
+                    tree = x$tree, dist = x$dist, tau = tau,
+                    reference = reference)
   if (out == "matrix") return(mat)
   new_hill_result(.hill_longify(mat, q, "sample"), "hill_profile", type)
 }
@@ -62,14 +65,15 @@ plot.hill_profile <- function(x, ...) {
 #'   `data.frame` with columns `q`, `sample`, `value`; `"matrix"` returns the
 #'   legacy matrix (orders in rows, samples in columns).
 #'
-#' @return A long-format `data.frame` of class `hill_evenness` (default), or a
-#'   matrix of evenness values (orders in rows, samples in columns) when
-#'   `out = "matrix"`.
+#' @return A long-format `data.frame` of class `hill_evenness` (default) with a
+#'   `plot()` method, or a matrix of evenness values (orders in rows, samples in
+#'   columns) when `out = "matrix"`.
 #' @seealso [hilldiv()]
 #' @examples
 #' counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
 #'                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 #' hilleven(counts)
+#' plot(hilleven(counts, q = c(1, 1.5, 2)))
 #' @export
 hilleven <- function(data, q = c(1, 2), tree = NULL, dist = NULL, tau = NULL,
                      type = c("auto", "neutral", "phylogenetic", "functional"),

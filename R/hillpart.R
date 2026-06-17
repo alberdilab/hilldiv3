@@ -27,16 +27,18 @@
 #'   `hierarchy`, `"tibble"` returns one row per `(q, scale)` and `"matrix"`
 #'   returns `alpha`, one `beta_<level>` per nesting level, and `gamma`.
 #'
-#' @return A long-format `data.frame` of class `hill_partition` (default), or a
-#'   matrix with columns `alpha`, `gamma`, `beta` and diversity orders in rows
-#'   when `out = "matrix"`. With `hierarchy`, a `hill_hierarchy` long-format
-#'   `data.frame` (or the corresponding wide matrix).
+#' @return A long-format `data.frame` of class `hill_partition` (default) with a
+#'   `plot()` method, or a matrix with columns `alpha`, `gamma`, `beta` and
+#'   diversity orders in rows when `out = "matrix"`. With `hierarchy`, a
+#'   `hill_hierarchy` long-format `data.frame` (with its own `plot()` method) or
+#'   the corresponding wide matrix.
 #'
 #' @seealso [hilldiv()], [hilldiss()], [hillsim()]
 #' @examples
 #' counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
 #'                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 #' hillpart(counts)
+#' plot(hillpart(counts))
 #'
 #' # Multi-scale partitioning across a nested design.
 #' set.seed(1)

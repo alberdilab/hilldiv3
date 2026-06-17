@@ -11,6 +11,7 @@ hillprof(
   dist = NULL,
   tau = NULL,
   type = c("auto", "neutral", "phylogenetic", "functional"),
+  reference = c("pool", "sample"),
   out = c("tibble", "matrix")
 )
 }
@@ -33,6 +34,16 @@ taxa in \code{data}.}
 an explicit \code{"neutral"}, \code{"phylogenetic"} or \code{"functional"} asserts the
 type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
 \code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
+
+\item{reference}{Reference tree depth for \emph{phylogenetic} Hill numbers
+(ignored for neutral and functional types). \code{"pool"} (default) reads every
+sample at one common depth \code{T = mean(T_j)}, so values share a comparable
+axis (matching hilldiv2's \code{multi} behaviour); \code{"sample"} reads each sample
+at its own depth \code{T_j} (effective lineages at that sample's depth). The two
+coincide on ultrametric trees. This reference depth is intentionally \emph{not}
+offered by \code{\link[=hillpart]{hillpart()}}: in a partition \code{T} is fixed at the mean per-sample
+depth of Chiu et al. (2014), the unique value for which \code{gamma / alpha} is a
+valid decomposition with \code{beta} in \verb{[1, N]}.}
 
 \item{out}{Output type: \code{"tibble"} (default, long format ready for plotting)
 or \code{"matrix"}.}

@@ -58,10 +58,11 @@ legacy matrix (orders in rows, \code{alpha}/\code{gamma}/\code{beta} in columns)
 returns \code{alpha}, one \verb{beta_<level>} per nesting level, and \code{gamma}.}
 }
 \value{
-A long-format \code{data.frame} of class \code{hill_partition} (default), or a
-matrix with columns \code{alpha}, \code{gamma}, \code{beta} and diversity orders in rows
-when \code{out = "matrix"}. With \code{hierarchy}, a \code{hill_hierarchy} long-format
-\code{data.frame} (or the corresponding wide matrix).
+A long-format \code{data.frame} of class \code{hill_partition} (default) with a
+\code{plot()} method, or a matrix with columns \code{alpha}, \code{gamma}, \code{beta} and
+diversity orders in rows when \code{out = "matrix"}. With \code{hierarchy}, a
+\code{hill_hierarchy} long-format \code{data.frame} (with its own \code{plot()} method) or
+the corresponding wide matrix.
 }
 \description{
 Partition neutral, phylogenetic or functional Hill-number diversity into
@@ -73,6 +74,7 @@ one beta per hierarchical level.
 counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 hillpart(counts)
+plot(hillpart(counts))
 
 # Multi-scale partitioning across a nested design.
 set.seed(1)

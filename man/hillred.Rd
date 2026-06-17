@@ -11,6 +11,7 @@ hillred(
   dist = NULL,
   tau = NULL,
   type = c("auto", "phylogenetic", "functional"),
+  reference = c("pool", "sample"),
   out = c("tibble", "matrix")
 )
 }
@@ -33,14 +34,26 @@ an explicit \code{"neutral"}, \code{"phylogenetic"} or \code{"functional"} asser
 type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
 \code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
 
+\item{reference}{Reference tree depth for \emph{phylogenetic} Hill numbers
+(ignored for neutral and functional types). \code{"pool"} (default) reads every
+sample at one common depth \code{T = mean(T_j)}, so values share a comparable
+axis (matching hilldiv2's \code{multi} behaviour); \code{"sample"} reads each sample
+at its own depth \code{T_j} (effective lineages at that sample's depth). The two
+coincide on ultrametric trees. This reference depth is intentionally \emph{not}
+offered by \code{\link[=hillpart]{hillpart()}}: in a partition \code{T} is fixed at the mean per-sample
+depth of Chiu et al. (2014), the unique value for which \code{gamma / alpha} is a
+valid decomposition with \code{beta} in \verb{[1, N]}.}
+
 \item{out}{Output shape: \code{"tibble"} (default) returns a \code{data.frame} with one
 row per \code{q} and columns \code{q}, \code{redundancy}, \code{a}, \code{b}, \code{c}; \code{"matrix"}
 returns the legacy matrix (orders in rows).}
 }
 \value{
-A \code{data.frame} of class \code{hill_redundancy} (default), or a matrix with
-columns \code{redundancy}, \code{a}, \code{b}, \code{c} (one row per \code{q}) when
-\code{out = "matrix"}.
+A \code{data.frame} of class \code{hill_redundancy} (default) with a
+\link[=plot.hill_redundancy]{plot()} method, or a matrix with columns
+\code{redundancy}, \code{a}, \code{b}, \code{c} (one row per \code{q}) when \code{out = "matrix"}. The
+tibble carries the per-sample neutral and phylogenetic/functional diversity
+used for the fit as a \code{"hill_fit"} attribute, which the plot method draws.
 }
 \description{
 Estimate phylogenetic or functional redundancy by fitting the saturating
@@ -48,6 +61,12 @@ relationship between neutral diversity and phylogenetic/functional diversity
 across samples: \code{y = -a * 2^(-x / b) + c}. Redundancy is summarised as
 \code{1 - b / max(x)}.
 }
+\examples{
+d <- traits2dist(gut_traits)
+red <- hillred(gut_counts, dist = d)
+red
+plot(red)
+}
 \seealso{
-\code{\link[=hilldiv]{hilldiv()}}
+\code{\link[=hilldiv]{hilldiv()}}, \code{\link[=plot.hill_redundancy]{plot.hill_redundancy()}}
 }

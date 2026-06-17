@@ -101,10 +101,20 @@ therefore needs a `tree` or `dist`, and several samples to fit the curve:
 hillred(counts, tree = tree)
 ```
 
-The returned matrix has the `redundancy` summary plus the fitted `a`, `b`, `c`
+The returned table has the `redundancy` summary plus the fitted `a`, `b`, `c`
 coefficients per order. Values near `1` mean the assemblage is highly
 redundant (taxa are phylogenetically/functionally interchangeable); values near
 `0` mean each taxon contributes largely unique diversity.
+
+Like the profile, the result has a ready-made `plot()` method. It draws the
+fit behind the redundancy number: each sample's neutral diversity against its
+phylogenetic/functional diversity, with the fitted saturating curve per order.
+A curve that bends early and plateaus signals high redundancy.
+
+```{r hillred-plot, fig.alt = "Per-sample neutral versus phylogenetic diversity with fitted saturating curves, one per order"}
+red <- hillred(counts, tree = tree)
+plot(red)
+```
 
 > **Note.** Redundancy is a curve fit across samples and can fail to converge
 > for some orders on small or degenerate datasets, in which case that row is

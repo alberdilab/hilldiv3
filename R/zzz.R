@@ -4,7 +4,7 @@
 .onLoad <- function(libname, pkgname) {
   for (cls in c("hill_diversity", "hill_profile", "hill_evenness",
                 "hill_partition", "hill_hierarchy", "hill_dissimilarity",
-                "hill_similarity")) {
+                "hill_similarity", "hill_redundancy")) {
     s3_register("ggplot2::autoplot", cls)
   }
 }

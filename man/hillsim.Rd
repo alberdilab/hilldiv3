@@ -44,8 +44,9 @@ legacy matrix (orders in rows, metrics in columns, dropped to a vector for
 a single metric).}
 }
 \value{
-A long-format \code{data.frame} of class \code{hill_similarity} (default), or a
-matrix/vector of similarities when \code{out = "matrix"}.
+A long-format \code{data.frame} of class \code{hill_similarity} (default, with
+a \code{plot()} method), or a matrix/vector of similarities when
+\code{out = "matrix"}.
 }
 \description{
 Compute overall similarity metrics from the Hill-number beta diversity
@@ -55,6 +56,7 @@ Compute overall similarity metrics from the Hill-number beta diversity
 counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 hillsim(counts)
+plot(hillsim(counts))
 }
 \seealso{
 \code{\link[=hilldiss]{hilldiss()}}

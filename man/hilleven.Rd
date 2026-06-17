@@ -39,9 +39,9 @@ type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
 legacy matrix (orders in rows, samples in columns).}
 }
 \value{
-A long-format \code{data.frame} of class \code{hill_evenness} (default), or a
-matrix of evenness values (orders in rows, samples in columns) when
-\code{out = "matrix"}.
+A long-format \code{data.frame} of class \code{hill_evenness} (default) with a
+\code{plot()} method, or a matrix of evenness values (orders in rows, samples in
+columns) when \code{out = "matrix"}.
 }
 \description{
 Evenness expressed through Hill numbers as the ratio of diversity of order
@@ -51,6 +51,7 @@ Evenness expressed through Hill numbers as the ratio of diversity of order
 counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 hilleven(counts)
+plot(hilleven(counts, q = c(1, 1.5, 2)))
 }
 \seealso{
 \code{\link[=hilldiv]{hilldiv()}}

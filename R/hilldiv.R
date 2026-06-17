@@ -18,6 +18,15 @@
 #'   an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts the
 #'   type and is validated against the inputs (e.g. `"phylogenetic"` requires a
 #'   `tree`; `"neutral"` ignores any tree/dist carried by the object).
+#' @param reference Reference tree depth for *phylogenetic* Hill numbers
+#'   (ignored for neutral and functional types). `"pool"` (default) reads every
+#'   sample at one common depth `T = mean(T_j)`, so values share a comparable
+#'   axis (matching hilldiv2's `multi` behaviour); `"sample"` reads each sample
+#'   at its own depth `T_j` (effective lineages at that sample's depth). The two
+#'   coincide on ultrametric trees. This reference depth is intentionally *not*
+#'   offered by [hillpart()]: in a partition `T` is fixed at the mean per-sample
+#'   depth of Chiu et al. (2014), the unique value for which `gamma / alpha` is a
+#'   valid decomposition with `beta` in `[1, N]`.
 #' @param out Output shape: `"tibble"` (default) returns a long-format
 #'   `data.frame` with columns `q`, `sample`, `value` and `print()`/`plot()`
 #'   methods; `"matrix"` returns the legacy matrix (orders in rows, samples in
@@ -39,17 +48,21 @@
 #'                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 #' hilldiv(counts)
 #' hilldiv(counts, q = c(0, 1, 2))
+#' plot(hilldiv(counts, q = c(0, 1, 2)))
 #' @export
 hilldiv <- function(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL,
                     type = c("auto", "neutral", "phylogenetic", "functional"),
+                    reference = c("pool", "sample"),
                     out = c("tibble", "matrix")) {
   out <- match.arg(out)
   type <- match.arg(type)
+  reference <- match.arg(reference)
   x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q, type)
   type <- attr(x, "type")
   cli::cli_inform("Computing {type} Hill numbers of {.val {paste0('q', q)}}.")
   mat <- hill_alpha(x$counts, q = q, type = type,
-                    tree = x$tree, dist = x$dist, tau = tau)
+                    tree = x$tree, dist = x$dist, tau = tau,
+                    reference = reference)
   if (out == "matrix") return(mat)
   new_hill_result(.hill_longify(mat, q, "sample"), "hill_diversity", type)
 }

@@ -45,6 +45,7 @@ reference:
     desc: How much phylogenetic/functional structure is duplicated across taxa.
     contents:
       - hillred
+      - plot.hill_redundancy
   - title: Data preparation
     desc: Normalise, build functional distances, and align inputs.
     contents:

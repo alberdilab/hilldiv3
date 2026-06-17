@@ -15,16 +15,23 @@
 #' @param tree A `phylo` tree (required when `type = "phylogenetic"`).
 #' @param dist A distance matrix (required when `type = "functional"`).
 #' @param tau Functional threshold; defaults to `max(dist)`.
+#' @param reference Reference tree depth `T` for phylogenetic Hill numbers
+#'   (ignored for neutral/functional types). `"pool"` (default) reads every
+#'   sample at one common depth `T = mean(T_j)` -- the even-pool axis -- so the
+#'   values are mutually comparable; `"sample"` reads each sample at its own
+#'   depth `T_j`. The two coincide on ultrametric trees.
 #'
 #' @return Numeric matrix of diversity values (q in rows, samples in columns).
 #' @keywords internal
 #' @noRd
 hill_alpha <- function(p, q = c(0, 1, 2), type = "neutral",
-                       tree = NULL, dist = NULL, tau = NULL) {
+                       tree = NULL, dist = NULL, tau = NULL,
+                       reference = c("pool", "sample")) {
+  reference <- match.arg(reference)
   p <- tss(as.matrix(p))
   switch(type,
     neutral = hill_alpha_neutral(p, q),
-    phylogenetic = hill_alpha_phylo(p, q, tree),
+    phylogenetic = hill_alpha_phylo(p, q, tree, reference),
     functional = hill_alpha_func(p, q, dist, tau),
     cli::cli_abort("Unknown diversity type {.val {type}}.")
   )
@@ -50,11 +57,21 @@ hill_alpha_neutral <- function(p, q) {
   .shape_alpha(t(res), q, colnames(p))
 }
 
-hill_alpha_phylo <- function(p, q, tree) {
+hill_alpha_phylo <- function(p, q, tree, reference = "pool") {
   ba <- branch_abundance(tree, p)
   Li <- ba$Li
   ai <- ba$ai                       # edges x samples
-  Tbar <- colSums(Li * ai)          # per-sample tree depth T
+  Tj <- colSums(Li * ai)            # per-sample tree depth T_j
+  # Reference depth at which each sample is *read*: a single common depth (the
+  # mean per-sample depth, i.e. the even-pool axis) or each sample's own depth.
+  # The Hill transform itself always uses the sample's own T_j (so the branch
+  # weights sum to 1 and the q -> 1 limit is continuous); the reference depth
+  # enters only as the final rescaling D = PD / T_ref. For sample reference
+  # T_ref == T_j and this is the identity; the two coincide on ultrametric trees.
+  Tref <- switch(reference,
+    pool   = rep(mean(Tj), ncol(p)),
+    sample = Tj
+  )
   present <- colSums(p != 0)
 
   res <- matrix(0, nrow = length(q), ncol = ncol(p))
@@ -64,9 +81,18 @@ hill_alpha_phylo <- function(p, q, tree) {
       if (present[j] == 0) return(0)
       if (present[j] == 1) return(1)
       a <- ai[, j]
-      Tj <- Tbar[j]
-      props <- (Li * a / Tj)
-      .hill_from_props(props, qv) / Tj
+      keep <- a != 0
+      # Mean phylogenetic Hill number (Chao et al. 2010) at the sample's own
+      # depth: branch length L_i is a linear weight L_i / T_j, not part of the
+      # abundance raised to q.
+      w <- Li[keep] / Tj[j]
+      av <- a[keep]
+      d_own <- if (qv == 1) {
+        exp(-sum(w * av * log(av)))
+      } else {
+        sum(w * av^qv)^(1 / (1 - qv))
+      }
+      d_own * (Tj[j] / Tref[j])     # read at the reference depth
     }, numeric(1))
   }
   .shape_alpha(res, q, colnames(p))

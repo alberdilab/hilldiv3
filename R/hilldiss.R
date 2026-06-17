@@ -12,14 +12,16 @@
 #'   legacy matrix (orders in rows, metrics in columns, dropped to a vector for
 #'   a single metric).
 #'
-#' @return A long-format `data.frame` of class `hill_dissimilarity` (default),
-#'   or a matrix/vector of dissimilarities when `out = "matrix"`.
+#' @return A long-format `data.frame` of class `hill_dissimilarity` (default,
+#'   with a `plot()` method), or a matrix/vector of dissimilarities when
+#'   `out = "matrix"`.
 #'
 #' @seealso [hillsim()], [hillpair()], [hillpart()]
 #' @examples
 #' counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
 #'                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 #' hilldiss(counts)
+#' plot(hilldiss(counts))
 #' @export
 hilldiss <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
                      tree = NULL, dist = NULL, tau = NULL,
@@ -35,13 +37,15 @@ hilldiss <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
 #' (Chiu et al. 2014). These are `1 -` the dissimilarities from [hilldiss()].
 #'
 #' @inheritParams hilldiss
-#' @return A long-format `data.frame` of class `hill_similarity` (default), or a
-#'   matrix/vector of similarities when `out = "matrix"`.
+#' @return A long-format `data.frame` of class `hill_similarity` (default, with
+#'   a `plot()` method), or a matrix/vector of similarities when
+#'   `out = "matrix"`.
 #' @seealso [hilldiss()]
 #' @examples
 #' counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
 #'                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 #' hillsim(counts)
+#' plot(hillsim(counts))
 #' @export
 hillsim <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
                     tree = NULL, dist = NULL, tau = NULL,

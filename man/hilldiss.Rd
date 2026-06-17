@@ -44,8 +44,9 @@ legacy matrix (orders in rows, metrics in columns, dropped to a vector for
 a single metric).}
 }
 \value{
-A long-format \code{data.frame} of class \code{hill_dissimilarity} (default),
-or a matrix/vector of dissimilarities when \code{out = "matrix"}.
+A long-format \code{data.frame} of class \code{hill_dissimilarity} (default,
+with a \code{plot()} method), or a matrix/vector of dissimilarities when
+\code{out = "matrix"}.
 }
 \description{
 Compute overall (multi-sample) dissimilarity metrics from the Hill-number
@@ -56,6 +57,7 @@ similarities returned by \code{\link[=hillsim]{hillsim()}}.
 counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 hilldiss(counts)
+plot(hilldiss(counts))
 }
 \seealso{
 \code{\link[=hillsim]{hillsim()}}, \code{\link[=hillpair]{hillpair()}}, \code{\link[=hillpart]{hillpart()}}

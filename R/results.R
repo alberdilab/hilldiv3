@@ -101,14 +101,6 @@ plot.hill_similarity <- function(x, ...) {
   .hill_lineplot(x, "metric", "Similarity", ...)
 }
 
-#' @exportS3Method graphics::plot hill_redundancy
-plot.hill_redundancy <- function(x, ...) {
-  x <- x[order(x$q), ]
-  plot(x$q, x$redundancy, type = "b", pch = 16, lwd = 2,
-       xlab = "Diversity order (q)", ylab = "Redundancy", ...)
-  invisible(x)
-}
-
 # ggplot2 autoplot worker: a single grouped profile geom. Registered for each
 # result subclass in .onLoad() so ggplot2 stays a Suggests-only dependency.
 .hill_autoplot <- function(object, group_col, ylab, ...) {
@@ -153,4 +145,29 @@ autoplot.hill_dissimilarity <- function(object, ...) {
 }
 autoplot.hill_similarity <- function(object, ...) {
   .hill_autoplot(object, "metric", "Similarity", ...)
+}
+autoplot.hill_redundancy <- function(object, ...) {
+  rlang::check_installed("ggplot2", "for `autoplot()` methods.")
+  fit <- attr(object, "hill_fit")
+  if (is.null(fit)) {
+    cli::cli_abort("This {.cls hill_redundancy} object carries no fit data.")
+  }
+  # One fitted saturating curve per order, evaluated over each order's x-range.
+  curve <- do.call(rbind, lapply(split(object, object$q), function(r) {
+    pts <- fit[fit$q == r$q, ]
+    if (nrow(pts) == 0 || !all(is.finite(c(r$a, r$b, r$c)))) return(NULL)
+    xx <- seq(min(pts$neutral), max(pts$neutral), length.out = 100)
+    data.frame(q = r$q, neutral = xx, diversity = -r$a * 2^(-xx / r$b) + r$c)
+  }))
+  fit$q <- factor(fit$q)
+  curve$q <- factor(curve$q)
+  ggplot2::ggplot(
+    mapping = ggplot2::aes(x = .data$neutral, y = .data$diversity,
+                           colour = .data$q)
+  ) +
+    ggplot2::geom_point(data = fit) +
+    ggplot2::geom_line(data = curve, linewidth = 1) +
+    ggplot2::labs(x = "Neutral diversity (qD)",
+                  y = .hill_red_ylab(attr(object, "hill_type")),
+                  colour = "Order (q)")
 }
