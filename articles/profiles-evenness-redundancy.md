@@ -133,24 +133,19 @@ quantifies this by fitting the saturating relationship between neutral
 diversity (x) and phylogenetic/functional diversity (y) across samples,
 `y = -a · 2^(-x / b) + c`, and summarising redundancy as
 `1 - b / max(x)`. It therefore needs a `tree` or `dist`, and several
-samples to fit the curve:
+samples spanning a range of neutral diversity to fit the curve. The
+three-taxon toy matrix above is too small, so here we use the bundled
+`gut_*` data (24 taxa across 12 gut microbiome samples):
 
 ``` r
 
-hillred(counts, tree = tree)
-#> Warning: Redundancy for "q0" could not be estimated: singular gradient matrix at initial
-#> parameter estimates
-#> Warning: Redundancy for "q1" could not be estimated: step factor 0.000488281 reduced
-#> below 'minFactor' of 0.000976562
-#> Warning: Redundancy for "q2" could not be estimated: step factor 0.000488281 reduced
-#> below 'minFactor' of 0.000976562
+hillred(gut_counts, q = c(1, 2), tree = gut_tree)
 #> <hilldiv3 result: phylogenetic>
-#> 3 rows x 5 cols
+#> 2 rows x 5 cols
 #> 
-#>   q redundancy  a  b  c
-#> 1 0         NA NA NA NA
-#> 2 1         NA NA NA NA
-#> 3 2         NA NA NA NA
+#>   q redundancy         a        b        c
+#> 1 1  0.9022283 21.932974 1.533208 2.187965
+#> 2 2  0.9098232  4.175493 1.166743 1.665108
 ```
 
 The returned table has the `redundancy` summary plus the fitted `a`,
@@ -168,13 +163,7 @@ signals high redundancy.
 
 ``` r
 
-red <- hillred(counts, tree = tree)
-#> Warning: Redundancy for "q0" could not be estimated: singular gradient matrix at initial
-#> parameter estimates
-#> Warning: Redundancy for "q1" could not be estimated: step factor 0.000488281 reduced
-#> below 'minFactor' of 0.000976562
-#> Warning: Redundancy for "q2" could not be estimated: step factor 0.000488281 reduced
-#> below 'minFactor' of 0.000976562
+red <- hillred(gut_counts, q = c(1, 2), tree = gut_tree)
 plot(red)
 ```
 
@@ -182,10 +171,14 @@ plot(red)
 saturating curves, one per
 order](profiles-evenness-redundancy_files/figure-html/hillred-plot-1.png)
 
-> **Note.** Redundancy is a curve fit across samples and can fail to
-> converge for some orders on small or degenerate datasets, in which
-> case that row is `NA` and a warning explains why. Fit it on real
-> datasets with enough samples spanning a range of neutral diversity.
+> **Note.** Redundancy is a curve fit across samples, so it needs
+> several samples spanning a range of neutral diversity. Orders where
+> that spread is missing return `NA` with a warning rather than a
+> number. In particular, richness (`q = 0`) often cannot be fit on
+> well-sampled data: when nearly every sample contains nearly every
+> taxon, richness barely varies across samples and the curve’s rate is
+> unidentifiable — which is why the example above uses `q = 1` and
+> `q = 2`.
 
 ## References
 

@@ -350,6 +350,84 @@ plan(multisession)
 hillpair(counts, q = 1, metric = "C", parallel = TRUE)
 ```
 
+## Contrasts with other packages
+
+`hillR` and `hilldiv2` also split Hill numbers into alpha, gamma and
+beta. For **neutral** and **phylogenetic** diversity their partitions
+match `hilldiv3` to numerical precision: `hilldiv2::hillpart()`,
+`hillR::hill_taxa_parti()` and `hillR::hill_phylo_parti()` return the
+same alpha, gamma and beta as
+[`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md).
+The **functional** partition is where they part ways — and, as in the
+[diversity types
+article](https://alberdilab.github.io/hilldiv3/articles/diversity-types.md),
+these are convention differences, not bugs.
+
+### `hillR::hill_func_parti`
+
+Three choices stack up, which is why the numbers look unrelated (≈1.5 vs
+several thousand) rather than merely rescaled:
+
+- **What is reported.** `hilldiv3` returns the functional Hill number
+  `qD` — an *effective number of functionally distinct species*, bounded
+  in `[1, S]` and in the same currency as its neutral and phylogenetic
+  output. `hill_func_parti()` returns the **functional attribute
+  diversity** `FD = qD^2 * Q` (where `Q` is Rao’s quadratic entropy); at
+  `q = 0` this is `sum(d_ij)`, the total pairwise distance (Walker’s
+  FAD). The squaring and the `Q` factor account for most of the apparent
+  gap.
+- **The distance threshold `tau`.** `hilldiv3` uses `tau = max(d_ij)` by
+  default; `hill_func_parti()` fixes `tau = Q` (≈ the abundance-weighted
+  mean distance). A smaller `tau` makes species look more distinct and
+  inflates `qD`, so the threshold alone shifts the effective count
+  several-fold. `hilldiv3` exposes `tau` as an argument, so you can
+  match either convention — or, as Chiu, Jost & Chao (2014) recommend,
+  profile diversity across a range of `tau`.
+- **The scale of beta.** Because `FD` squares the Hill number, `hillR`’s
+  functional beta `FD_gamma / FD_alpha` equals `(qD_gamma / qD_alpha)^2`
+  and lives in `[1, N^2]`. `hilldiv3`’s functional beta is the Hill
+  ratio `qD_gamma / qD_alpha` in `[1, N]`, directly comparable to its
+  own neutral and phylogenetic betas. A `hillR` functional beta of `1.6`
+  is therefore *not* on the same scale as a taxonomic beta of `1.6`.
+
+`hilldiv2::hillpart()` shares `hilldiv3`’s conventions exactly — the
+same `tau = max(d_ij)` threshold and the same functional Hill number
+`qD` — so its functional partition matches `hilldiv3` to machine
+precision.
+
+``` r
+
+traits <- data.frame(body_size = c(1, 5, 9), row.names = rownames(counts))
+d <- dist(traits)
+
+# hilldiv3 reports the functional Hill number qD (effective number of species).
+hillpart(counts, q = c(0, 1, 2), dist = d)
+
+# hillR reports FD = qD^2 * Q (a different scale); it fixes tau = Rao's Q.
+hillR::hill_func_parti(t(counts), traits, q = 1)
+```
+
+### Nested hierarchies
+
+The [multi-scale partitioning](#multi-scale-hierarchical-partitioning)
+above has no equivalent in either package: neither `hillR` nor
+`hilldiv2` accepts a nested `hierarchy`, so telescoping
+`gamma = alpha * prod(beta)` across region/site levels is specific to
+`hilldiv3`.
+
+| Want to match | Use in `hilldiv3` |
+|----|----|
+| `hillR::hill_taxa_parti()` (neutral) | [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md) (exact) |
+| `hillR::hill_phylo_parti()` (phylogenetic) | `hillpart(tree = ...)` (exact) |
+| `hillR::hill_func_parti()` (functional) | no exact match — it reports `FD`, not `qD`; set `tau = Q` to align the threshold |
+| `hilldiv2::hillpart()` (any type) | [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md) (exact) |
+
+In short: when functional partitions diverge, check (1) whether the
+other package reports an effective number (`qD`) or attribute diversity
+(`FD`), and (2) which `tau` it uses. `hilldiv3` keeps functional
+diversity in the same effective-number currency as its neutral and
+phylogenetic facets, and makes `tau` explicit.
+
 ## References
 
 - Jost, L. (2007). Partitioning diversity into independent alpha and

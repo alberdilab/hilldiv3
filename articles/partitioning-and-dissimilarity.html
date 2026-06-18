@@ -452,6 +452,126 @@ installed:</p>
 </div>
 </div>
 <div class="section level2">
+<h2 id="contrasts-with-other-packages">Contrasts with other packages<a class="anchor" aria-label="anchor" href="#contrasts-with-other-packages"></a>
+</h2>
+<p><code>hillR</code> and <code>hilldiv2</code> also split Hill numbers
+into alpha, gamma and beta. For <strong>neutral</strong> and
+<strong>phylogenetic</strong> diversity their partitions match
+<code>hilldiv3</code> to numerical precision:
+<code>hilldiv2::hillpart()</code>, <code>hillR::hill_taxa_parti()</code>
+and <code>hillR::hill_phylo_parti()</code> return the same alpha, gamma
+and beta as <code><a href="../reference/hillpart.html">hillpart()</a></code>. The <strong>functional</strong>
+partition is where they part ways — and, as in the <a href="diversity-types.html">diversity types article</a>, these are
+convention differences, not bugs.</p>
+<div class="section level3">
+<h3 id="hillrhill_func_parti">
+<code>hillR::hill_func_parti</code><a class="anchor" aria-label="anchor" href="#hillrhill_func_parti"></a>
+</h3>
+<p>Three choices stack up, which is why the numbers look unrelated (≈1.5
+vs several thousand) rather than merely rescaled:</p>
+<ul>
+<li>
+<strong>What is reported.</strong> <code>hilldiv3</code> returns the
+functional Hill number <code>qD</code> — an <em>effective number of
+functionally distinct species</em>, bounded in <code>[1, S]</code> and
+in the same currency as its neutral and phylogenetic output.
+<code>hill_func_parti()</code> returns the <strong>functional attribute
+diversity</strong> <code>FD = qD^2 * Q</code> (where <code>Q</code> is
+Rao’s quadratic entropy); at <code>q = 0</code> this is
+<code>sum(d_ij)</code>, the total pairwise distance (Walker’s FAD). The
+squaring and the <code>Q</code> factor account for most of the apparent
+gap.</li>
+<li>
+<strong>The distance threshold <code>tau</code>.</strong>
+<code>hilldiv3</code> uses <code>tau = max(d_ij)</code> by default;
+<code>hill_func_parti()</code> fixes <code>tau = Q</code> (≈ the
+abundance-weighted mean distance). A smaller <code>tau</code> makes
+species look more distinct and inflates <code>qD</code>, so the
+threshold alone shifts the effective count several-fold.
+<code>hilldiv3</code> exposes <code>tau</code> as an argument, so you
+can match either convention — or, as Chiu, Jost &amp; Chao (2014)
+recommend, profile diversity across a range of <code>tau</code>.</li>
+<li>
+<strong>The scale of beta.</strong> Because <code>FD</code> squares
+the Hill number, <code>hillR</code>’s functional beta
+<code>FD_gamma / FD_alpha</code> equals
+<code>(qD_gamma / qD_alpha)^2</code> and lives in <code>[1, N^2]</code>.
+<code>hilldiv3</code>’s functional beta is the Hill ratio
+<code>qD_gamma / qD_alpha</code> in <code>[1, N]</code>, directly
+comparable to its own neutral and phylogenetic betas. A
+<code>hillR</code> functional beta of <code>1.6</code> is therefore
+<em>not</em> on the same scale as a taxonomic beta of
+<code>1.6</code>.</li>
+</ul>
+<p><code>hilldiv2::hillpart()</code> shares <code>hilldiv3</code>’s
+conventions exactly — the same <code>tau = max(d_ij)</code> threshold
+and the same functional Hill number <code>qD</code> — so its functional
+partition matches <code>hilldiv3</code> to machine precision.</p>
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">traits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>body_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">9</span><span class="op">)</span>, row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">traits</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># hilldiv3 reports the functional Hill number qD (effective number of species).</span></span>
+<span><span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, dist <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span>
+<span></span>
+<span><span class="co"># hillR reports FD = qD^2 * Q (a different scale); it fixes tau = Rao's Q.</span></span>
+<span><span class="fu">hillR</span><span class="fu">::</span><span class="fu">hill_func_parti</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>, <span class="va">traits</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+</div>
+<div class="section level3">
+<h3 id="nested-hierarchies">Nested hierarchies<a class="anchor" aria-label="anchor" href="#nested-hierarchies"></a>
+</h3>
+<p>The <a href="#multi-scale-hierarchical-partitioning">multi-scale
+partitioning</a> above has no equivalent in either package: neither
+<code>hillR</code> nor <code>hilldiv2</code> accepts a nested
+<code>hierarchy</code>, so telescoping
+<code>gamma = alpha * prod(beta)</code> across region/site levels is
+specific to <code>hilldiv3</code>.</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Want to match</th>
+<th>Use in <code>hilldiv3</code>
+</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td>
+<code>hillR::hill_taxa_parti()</code> (neutral)</td>
+<td>
+<code><a href="../reference/hillpart.html">hillpart()</a></code> (exact)</td>
+</tr>
+<tr class="even">
+<td>
+<code>hillR::hill_phylo_parti()</code> (phylogenetic)</td>
+<td>
+<code>hillpart(tree = ...)</code> (exact)</td>
+</tr>
+<tr class="odd">
+<td>
+<code>hillR::hill_func_parti()</code> (functional)</td>
+<td>no exact match — it reports <code>FD</code>, not <code>qD</code>;
+set <code>tau = Q</code> to align the threshold</td>
+</tr>
+<tr class="even">
+<td>
+<code>hilldiv2::hillpart()</code> (any type)</td>
+<td>
+<code><a href="../reference/hillpart.html">hillpart()</a></code> (exact)</td>
+</tr>
+</tbody>
+</table>
+<p>In short: when functional partitions diverge, check (1) whether the
+other package reports an effective number (<code>qD</code>) or attribute
+diversity (<code>FD</code>), and (2) which <code>tau</code> it uses.
+<code>hilldiv3</code> keeps functional diversity in the same
+effective-number currency as its neutral and phylogenetic facets, and
+makes <code>tau</code> explicit.</p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <ul>

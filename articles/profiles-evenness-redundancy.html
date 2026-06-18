@@ -198,23 +198,18 @@ phylogenetic/functional diversity.</p>
 relationship between neutral diversity (x) and phylogenetic/functional
 diversity (y) across samples, <code>y = -a · 2^(-x / b) + c</code>, and
 summarising redundancy as <code>1 - b / max(x)</code>. It therefore
-needs a <code>tree</code> or <code>dist</code>, and several samples to
-fit the curve:</p>
+needs a <code>tree</code> or <code>dist</code>, and several samples
+spanning a range of neutral diversity to fit the curve. The three-taxon
+toy matrix above is too small, so here we use the bundled
+<code>gut_*</code> data (24 taxa across 12 gut microbiome samples):</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/hillred.html">hillred</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q0"</span> could not be estimated: singular gradient matrix at initial</span></span>
-<span><span class="co">#&gt; parameter estimates</span></span>
-<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q1"</span> could not be estimated: step factor 0.000488281 reduced</span></span>
-<span><span class="co">#&gt; below 'minFactor' of 0.000976562</span></span>
-<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q2"</span> could not be estimated: step factor 0.000488281 reduced</span></span>
-<span><span class="co">#&gt; below 'minFactor' of 0.000976562</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/hillred.html">hillred</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, tree <span class="op">=</span> <span class="va">gut_tree</span><span class="op">)</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
-<span><span class="co">#&gt; 3 rows x 5 cols</span></span>
+<span><span class="co">#&gt; 2 rows x 5 cols</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;   q redundancy  a  b  c</span></span>
-<span><span class="co">#&gt; 1 0         NA NA NA NA</span></span>
-<span><span class="co">#&gt; 2 1         NA NA NA NA</span></span>
-<span><span class="co">#&gt; 3 2         NA NA NA NA</span></span></code></pre></div>
+<span><span class="co">#&gt;   q redundancy         a        b        c</span></span>
+<span><span class="co">#&gt; 1 1  0.9022283 21.932974 1.533208 2.187965</span></span>
+<span><span class="co">#&gt; 2 2  0.9098232  4.175493 1.166743 1.665108</span></span></code></pre></div>
 <p>The returned table has the <code>redundancy</code> summary plus the
 fitted <code>a</code>, <code>b</code>, <code>c</code> coefficients per
 order. Values near <code>1</code> mean the assemblage is highly
@@ -227,21 +222,18 @@ neutral diversity against its phylogenetic/functional diversity, with
 the fitted saturating curve per order. A curve that bends early and
 plateaus signals high redundancy.</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="va">red</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillred.html">hillred</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q0"</span> could not be estimated: singular gradient matrix at initial</span></span>
-<span><span class="co">#&gt; parameter estimates</span></span>
-<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q1"</span> could not be estimated: step factor 0.000488281 reduced</span></span>
-<span><span class="co">#&gt; below 'minFactor' of 0.000976562</span></span>
-<span><span class="co">#&gt; Warning: Redundancy for <span style="color: #0000BB;">"q2"</span> could not be estimated: step factor 0.000488281 reduced</span></span>
-<span><span class="co">#&gt; below 'minFactor' of 0.000976562</span></span>
+<code class="sourceCode R"><span><span class="va">red</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillred.html">hillred</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, tree <span class="op">=</span> <span class="va">gut_tree</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">red</span><span class="op">)</span></span></code></pre></div>
 <p><img src="profiles-evenness-redundancy_files/figure-html/hillred-plot-1.png" class="r-plt" alt="Per-sample neutral versus phylogenetic diversity with fitted saturating curves, one per order" width="576"></p>
 <blockquote>
-<p><strong>Note.</strong> Redundancy is a curve fit across samples and
-can fail to converge for some orders on small or degenerate datasets, in
-which case that row is <code>NA</code> and a warning explains why. Fit
-it on real datasets with enough samples spanning a range of neutral
-diversity.</p>
+<p><strong>Note.</strong> Redundancy is a curve fit across samples, so
+it needs several samples spanning a range of neutral diversity. Orders
+where that spread is missing return <code>NA</code> with a warning
+rather than a number. In particular, richness (<code>q = 0</code>) often
+cannot be fit on well-sampled data: when nearly every sample contains
+nearly every taxon, richness barely varies across samples and the
+curve’s rate is unidentifiable — which is why the example above uses
+<code>q = 1</code> and <code>q = 2</code>.</p>
 </blockquote>
 </div>
 <div class="section level2">
