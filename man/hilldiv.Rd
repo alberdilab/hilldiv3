@@ -47,13 +47,13 @@ is a valid decomposition with \code{beta} in \verb{[1, N]}.}
 
 \item{out}{Output shape: \code{"tibble"} (default) returns a long-format
 \code{data.frame} with columns \code{q}, \code{sample}, \code{value} and \code{print()}/\code{plot()}
-methods; \code{"matrix"} returns the legacy matrix (orders in rows, samples in
-columns).}
+methods; \code{"matrix"} returns a matrix with samples in rows and diversity
+orders (\code{q0}, \code{q1}, ...) in columns.}
 }
 \value{
 A long-format \code{data.frame} of class \code{hill_diversity} (default), or a
-matrix of Hill numbers with diversity orders in rows (\code{q0}, \code{q1}, ...) and
-samples in columns when \code{out = "matrix"}.
+matrix of Hill numbers with samples in rows and diversity orders (\code{q0},
+\code{q1}, ...) in columns when \code{out = "matrix"}.
 }
 \description{
 Compute neutral, phylogenetic or functional Hill numbers (alpha diversity)

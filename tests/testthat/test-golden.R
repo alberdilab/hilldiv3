@@ -10,25 +10,25 @@ test_that("neutral Hill numbers match vegan", {
   comm <- counts
   got <- suppressMessages(hilldiv(t(comm), q = c(0, 1, 2), out = "matrix"))
 
-  expect_equal(unname(got["q0", ]), unname(vegan::specnumber(comm)))
-  expect_equal(unname(got["q1", ]),
+  expect_equal(unname(got[, "q0"]), unname(vegan::specnumber(comm)))
+  expect_equal(unname(got[, "q1"]),
                unname(exp(vegan::diversity(comm, "shannon"))))
-  expect_equal(unname(got["q2", ]),
+  expect_equal(unname(got[, "q2"]),
                unname(vegan::diversity(comm, "invsimpson")))
 })
 
 test_that("a single taxon has diversity 1 at every order", {
   one <- matrix(c(5, 9), nrow = 1, dimnames = list("t1", c("s1", "s2")))
   got <- suppressMessages(hilldiv(one, q = c(0, 1, 2), out = "matrix"))
-  expect_equal(unname(got), matrix(1, 3, 2))
+  expect_equal(unname(got), matrix(1, 2, 3))
 })
 
 test_that("an all-zero sample yields zero diversity", {
   counts <- matrix(c(0, 0, 0, 4, 2, 6), nrow = 3,
                    dimnames = list(c("t1", "t2", "t3"), c("empty", "s2")))
   got <- suppressMessages(hilldiv(counts, q = c(0, 1, 2), out = "matrix"))
-  expect_equal(unname(got[, "empty"]), c(0, 0, 0))
-  expect_true(all(got[, "s2"] > 0))
+  expect_equal(unname(got["empty", ]), c(0, 0, 0))
+  expect_true(all(got["s2", ] > 0))
 })
 
 test_that("phylogenetic q0 gamma equals Faith's PD of the pooled tree", {

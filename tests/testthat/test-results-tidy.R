@@ -18,7 +18,7 @@ test_that("hilldiv returns a tidy hill_diversity by default", {
   # tidy and matrix agree cell by cell.
   mat <- suppressMessages(hilldiv(counts, q = c(0, 1, 2), out = "matrix"))
   v <- out$value[out$q == 1 & out$sample == "s2"]
-  expect_equal(v, unname(mat["q1", "s2"]))
+  expect_equal(v, unname(mat["s2", "q1"]))
 })
 
 test_that("hillpart tidy output uses a component column", {

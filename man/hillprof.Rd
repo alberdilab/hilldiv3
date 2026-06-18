@@ -51,7 +51,7 @@ or \code{"matrix"}.}
 \value{
 A long-format \code{data.frame} of class \code{hill_profile} (columns \code{q},
 \code{sample}, \code{value}) with a \link[=plot.hill_profile]{plot()} method, or a matrix
-(orders in rows, samples in columns) when \code{out = "matrix"}.
+(samples in rows, orders in columns) when \code{out = "matrix"}.
 }
 \description{
 Compute a diversity profile: Hill numbers evaluated over a fine sweep of

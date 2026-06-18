@@ -1,5 +1,19 @@
 # hilldiv3 (development version)
 
+* **Breaking:** the `out = "matrix"` form of the per-sample functions
+  (`hilldiv()`, `hillprof()`, `hilleven()`) now returns samples in rows and
+  diversity orders (`q0`, `q1`, ...) in columns, instead of the previous
+  orders-in-rows/samples-in-columns layout. This matches the usual
+  observations-in-rows convention and joins cleanly with per-sample metadata.
+  Code that indexed these matrices by `["q0", ]` should switch to `[, "q0"]`
+  (or transpose). The component/metric matrices from `hillpart()`,
+  `hilldiss()` and `hillred()` are unchanged.
+* `hilldiv()` and friends now accept count tables whose first column holds
+  taxa names: a leading non-numeric column is automatically promoted to row
+  names (instead of failing with "Count data must be numeric"). Any other
+  non-numeric column raises a clear error asking the user to fix the input.
+* Verbose output now reports the number of taxa and samples being analysed.
+
 ## hilldiv3 3.0.0
 
 Complete redesign of the package built on a tested, isolated compute engine.

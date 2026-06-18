@@ -23,7 +23,7 @@ test_that("hillprof tibble is long-format and consistent with the matrix", {
 
   mat <- suppressMessages(hillprof(counts, q = q, out = "matrix"))
   val <- prof[prof$sample == "s2" & prof$q == 1, "value"]
-  expect_equal(val, mat["q1", "s2"])
+  expect_equal(val, mat["s2", "q1"])
 })
 
 test_that("hill_profile has a working plot method", {
@@ -39,7 +39,7 @@ test_that("hilleven returns qD / 0D in (0, 1]", {
   ev <- suppressMessages(hilleven(counts, q = q, out = "matrix"))
   qd <- suppressMessages(hilldiv(counts, q = q, out = "matrix"))
   q0 <- suppressMessages(hilldiv(counts, q = 0, out = "matrix"))
-  expect_equal(ev, sweep(qd, 2, q0[1, ], "/"))
+  expect_equal(ev, sweep(qd, 1, q0[, 1], "/"))
   expect_true(all(ev > 0 & ev <= 1 + 1e-9))
 })
 
@@ -47,7 +47,7 @@ test_that("a perfectly even community has evenness 1", {
   even <- matrix(rep(5, 9), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2", "s3")))
   ev <- suppressMessages(hilleven(even, q = c(1, 2), out = "matrix"))
-  expect_equal(unname(ev), matrix(1, 2, 3))
+  expect_equal(unname(ev), matrix(1, 3, 2))
 })
 
 test_that("profile and evenness route through phylogenetic type", {
@@ -58,5 +58,5 @@ test_that("profile and evenness route through phylogenetic type", {
   expect_equal(prof, ref)
 
   ev <- suppressMessages(hilleven(counts, q = 2, tree = tree, out = "matrix"))
-  expect_equal(dim(ev), c(1, ncol(counts)))
+  expect_equal(dim(ev), c(ncol(counts), 1))
 })

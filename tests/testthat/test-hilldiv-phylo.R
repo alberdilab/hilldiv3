@@ -18,7 +18,7 @@ test_that("q = 0 phylogenetic Hill number is Faith's PD / T", {
   # mean depth, here equal to tree height since the tree is rooted at depth.
   ba <- hilldiv3:::branch_abundance(tree, tss(counts))
   Tj <- sum(ba$Li * ba$ai[, 1])
-  expect_equal(unname(out["q0", 1]), sum(tree$edge.length) / Tj)
+  expect_equal(unname(out[1, "q0"]), sum(tree$edge.length) / Tj)
 })
 
 test_that("sample reference agrees with the partition engine at N = 1", {
@@ -32,7 +32,7 @@ test_that("sample reference agrees with the partition engine at N = 1", {
     Tj <- sum(prep$Li * prep$aij[, 1])
     hd <- suppressMessages(
       hilldiv(cj, q = q, tree = tree, reference = "sample", out = "matrix"))
-    expect_equal(unname(hd[, 1]), unname(pe[, "alpha"] / Tj))
+    expect_equal(unname(hd[1, ]), unname(pe[, "alpha"] / Tj))
   }
 })
 
@@ -43,7 +43,7 @@ test_that("pool reference reads all samples at one common depth", {
     hilldiv(counts, q = 0, tree = tree, reference = "pool", out = "matrix"))
   # Both samples contain every tip, so at q = 0 the pooled-depth phylo Hill
   # number (PD / T_pool) is identical across samples.
-  expect_equal(unname(out["q0", "s1"]), unname(out["q0", "s2"]))
+  expect_equal(unname(out["s1", "q0"]), unname(out["s2", "q0"]))
 })
 
 test_that("pool and sample references coincide on an ultrametric tree", {

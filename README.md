@@ -26,7 +26,7 @@ based on Hill numbers. It provides a unified framework for **neutral**,
   reuses it across all sample pairs.
 * **Tidy by default**: every `hill*` function returns a long-format
   `data.frame` with `print()`/`plot()`/`autoplot()` methods; pass
-  `out = "matrix"` for the legacy shape.
+  `out = "matrix"` for a plain matrix.
 * An explicit `type = c("auto", "neutral", "phylogenetic", "functional")`
   argument that asserts and validates the diversity type (auto-detected by
   default).
@@ -69,7 +69,7 @@ hilldiv(gut_counts, dist = dist)       # functional
 
 # Results are tidy by default and plot directly.
 plot(hillprof(gut_counts))             # diversity profile
-hilldiv(gut_counts, out = "matrix")    # legacy matrix shape
+hilldiv(gut_counts, out = "matrix")    # matrix: samples x q orders
 ```
 
 ## References

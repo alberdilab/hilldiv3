@@ -29,12 +29,12 @@
 #'   is a valid decomposition with `beta` in `[1, N]`.
 #' @param out Output shape: `"tibble"` (default) returns a long-format
 #'   `data.frame` with columns `q`, `sample`, `value` and `print()`/`plot()`
-#'   methods; `"matrix"` returns the legacy matrix (orders in rows, samples in
-#'   columns).
+#'   methods; `"matrix"` returns a matrix with samples in rows and diversity
+#'   orders (`q0`, `q1`, ...) in columns.
 #'
 #' @return A long-format `data.frame` of class `hill_diversity` (default), or a
-#'   matrix of Hill numbers with diversity orders in rows (`q0`, `q1`, ...) and
-#'   samples in columns when `out = "matrix"`.
+#'   matrix of Hill numbers with samples in rows and diversity orders (`q0`,
+#'   `q1`, ...) in columns when `out = "matrix"`.
 #'
 #' @references
 #' Chao, A., Chiu, C.-H. & Jost, L. (2010). Phylogenetic diversity measures
@@ -59,10 +59,15 @@ hilldiv <- function(data, q = c(0, 1, 2), tree = NULL, dist = NULL, tau = NULL,
   reference <- match.arg(reference)
   x <- prep_data(as_hill_input(data, tree = tree, dist = dist), q, type)
   type <- attr(x, "type")
-  cli::cli_inform("Computing {type} Hill numbers of {.val {paste0('q', q)}}.")
+  n_taxa <- nrow(x$counts)
+  n_samples <- ncol(x$counts)
+  cli::cli_inform(c(
+    "Computing {type} Hill numbers of {.val {paste0('q', q)}}.",
+    "i" = "{n_taxa} {?taxon/taxa} across {n_samples} sample{?s}."
+  ))
   mat <- hill_alpha(x$counts, q = q, type = type,
                     tree = x$tree, dist = x$dist, tau = tau,
                     reference = reference)
-  if (out == "matrix") return(mat)
+  if (out == "matrix") return(t(mat))
   new_hill_result(.hill_longify(mat, q, "sample"), "hill_diversity", type)
 }

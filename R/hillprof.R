@@ -12,7 +12,7 @@
 #'
 #' @return A long-format `data.frame` of class `hill_profile` (columns `q`,
 #'   `sample`, `value`) with a [plot()][plot.hill_profile] method, or a matrix
-#'   (orders in rows, samples in columns) when `out = "matrix"`.
+#'   (samples in rows, orders in columns) when `out = "matrix"`.
 #'
 #' @seealso [hilldiv()]
 #' @examples
@@ -36,7 +36,7 @@ hillprof <- function(data, q = seq(0, 3, by = 0.1), tree = NULL, dist = NULL,
   mat <- hill_alpha(x$counts, q = q, type = type,
                     tree = x$tree, dist = x$dist, tau = tau,
                     reference = reference)
-  if (out == "matrix") return(mat)
+  if (out == "matrix") return(t(mat))
   new_hill_result(.hill_longify(mat, q, "sample"), "hill_profile", type)
 }
 
@@ -62,11 +62,11 @@ plot.hill_profile <- function(x, ...) {
 #' @param q Numeric vector of diversity orders (> 0 are meaningful for
 #'   evenness). Defaults to `c(1, 2)`.
 #' @param out Output shape: `"tibble"` (default) returns a long-format
-#'   `data.frame` with columns `q`, `sample`, `value`; `"matrix"` returns the
-#'   legacy matrix (orders in rows, samples in columns).
+#'   `data.frame` with columns `q`, `sample`, `value`; `"matrix"` returns a
+#'   matrix with samples in rows and orders in columns.
 #'
 #' @return A long-format `data.frame` of class `hill_evenness` (default) with a
-#'   `plot()` method, or a matrix of evenness values (orders in rows, samples in
+#'   `plot()` method, or a matrix of evenness values (samples in rows, orders in
 #'   columns) when `out = "matrix"`.
 #' @seealso [hilldiv()]
 #' @examples
@@ -90,7 +90,7 @@ hilleven <- function(data, q = c(1, 2), tree = NULL, dist = NULL, tau = NULL,
                    tree = x$tree, dist = x$dist, tau = tau)
   even <- sweep(qd, 2, q0[1, ], "/")
   rownames(even) <- paste0("q", q)
-  if (out == "matrix") return(even)
+  if (out == "matrix") return(t(even))
   new_hill_result(.hill_longify(even, q, "sample"), "hill_evenness", type,
                   value_label = "Evenness")
 }

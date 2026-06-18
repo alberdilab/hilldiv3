@@ -31,6 +31,46 @@ as_hill_input.default <- function(data, tree = NULL, dist = NULL) {
 }
 
 #' @noRd
+as_hill_input.data.frame <- function(data, tree = NULL, dist = NULL) {
+  new_hill_input(df_to_counts(data), tree = tree, dist = dist)
+}
+
+# Turn a data frame / tibble into a numeric counts matrix.
+#
+# Tibbles never carry row names, and users routinely keep taxa identifiers in a
+# leading column (e.g. `genome`, `taxon`, `OTU`). A naive `as.matrix()` on such
+# a frame coerces *every* column to character. When the first column is
+# non-numeric and the rest are counts, promote it to row names. Any other
+# non-numeric column is ambiguous, so ask the user to fix the input.
+df_to_counts <- function(data) {
+  is_num <- vapply(data, is.numeric, logical(1))
+  if (all(is_num)) {
+    counts <- as.matrix(data)
+    # A tibble drops row names; recover them from the underlying data frame.
+    rn <- attr(data, "row.names")
+    if (is.null(rownames(counts)) && is.character(rn)) rownames(counts) <- rn
+    return(counts)
+  }
+
+  # Only the first column may be non-numeric (the taxa-name column).
+  if (!is_num[1] && all(is_num[-1])) {
+    id_col <- names(data)[1]
+    counts <- as.matrix(data[, -1, drop = FALSE])
+    rownames(counts) <- as.character(data[[1]])
+    cli::cli_inform("Using the first column ({.field {id_col}}) as taxa names.")
+    return(counts)
+  }
+
+  bad <- names(data)[!is_num]
+  cli::cli_abort(c(
+    "Count data must be numeric.",
+    "x" = "Non-numeric column{?s} found: {.field {bad}}.",
+    "i" = "Put taxa names in the first column and keep the rest numeric, or
+           set row names; then re-run."
+  ))
+}
+
+#' @noRd
 as_hill_input.phyloseq <- function(data, tree = NULL, dist = NULL) {
   rlang::check_installed("phyloseq")
   otu <- methods::as(phyloseq::otu_table(data), "matrix")

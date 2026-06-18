@@ -35,12 +35,12 @@ type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
 \code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
 
 \item{out}{Output shape: \code{"tibble"} (default) returns a long-format
-\code{data.frame} with columns \code{q}, \code{sample}, \code{value}; \code{"matrix"} returns the
-legacy matrix (orders in rows, samples in columns).}
+\code{data.frame} with columns \code{q}, \code{sample}, \code{value}; \code{"matrix"} returns a
+matrix with samples in rows and orders in columns.}
 }
 \value{
 A long-format \code{data.frame} of class \code{hill_evenness} (default) with a
-\code{plot()} method, or a matrix of evenness values (orders in rows, samples in
+\code{plot()} method, or a matrix of evenness values (samples in rows, orders in
 columns) when \code{out = "matrix"}.
 }
 \description{
