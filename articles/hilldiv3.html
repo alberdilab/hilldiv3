@@ -36,17 +36,17 @@
 <li><a class="dropdown-item" href="../articles/diversity-types.html">Diversity types (neutral, phylogenetic, functional)</a></li>
     <li><a class="dropdown-item" href="../articles/partitioning-and-dissimilarity.html">Partitioning and (dis)similarity</a></li>
     <li><a class="dropdown-item" href="../articles/profiles-evenness-redundancy.html">Profiles, evenness and redundancy</a></li>
-    <li><a class="dropdown-item" href="../articles/performance.html">Performance benchmarks</a></li>
     <li><a class="dropdown-item" href="../articles/preparing-data.html">Preparing your data</a></li>
   </ul>
 </li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-examples" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Examples</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-examples">
-<li><a class="dropdown-item" href="../articles/use-case-bat-diet.html">Dietary niches of insectivorous bats</a></li>
-    <li><a class="dropdown-item" href="../articles/use-case-bacterial-mags.html">Three faces of diversity in a gut microbiome</a></li>
+<li><a class="dropdown-item" href="../articles/use-case-bat-diet.html">Case 1: Dietary niches of insectivorous bats</a></li>
+    <li><a class="dropdown-item" href="../articles/use-case-bacterial-mags.html">Case 2: Three faces of diversity in a gut microbiome</a></li>
   </ul>
 </li>
+<li class="nav-item"><a class="nav-link" href="../articles/performance.html">Benchmark</a></li>
 <li class="nav-item"><a class="nav-link" href="../reference/index.html">Reference</a></li>
 <li class="nav-item dropdown">
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-news" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">News</button>
@@ -151,9 +151,7 @@ simplest form:</p>
 <span><span class="co">#&gt; t2  0  8  4  2</span></span>
 <span><span class="co">#&gt; t3  5  1  0  7</span></span></code></pre></div>
 <p>Data frames, tibbles, <code>phyloseq</code> objects and
-<code>TreeSummarizedExperiment</code> objects work too — see
-<code>vignette("preparing-data")</code> <em>(article on the
-website)</em>.</p>
+<code>TreeSummarizedExperiment</code> objects work too — see <a href="preparing-data.html">Preparing your data</a>.</p>
 <p>The package also ships a small <strong>simulated</strong>
 gut-microbiome example — <code>gut_counts</code> (a MAG count table),
 <code>gut_tree</code> (a phylogeny) and <code>gut_traits</code> (a trait
@@ -256,18 +254,19 @@ object of pairwise dissimilarities ready for ordination:</p>
 <p>The website carries in-depth articles:</p>
 <ul>
 <li>
-<strong>Diversity types</strong> — neutral, phylogenetic and
-functional measurement.</li>
+<a href="diversity-types.html"><strong>Diversity types</strong></a>
+— neutral, phylogenetic and functional measurement.</li>
 <li>
-<strong>Partitioning and (dis)similarity</strong> —
-alpha/beta/gamma, the S/C/U/V metrics, and pairwise dissimilarity for
-ordination.</li>
+<a href="partitioning-and-dissimilarity.html"><strong>Partitioning
+and (dis)similarity</strong></a> — alpha/beta/gamma, the S/C/U/V
+metrics, and pairwise dissimilarity for ordination.</li>
 <li>
-<strong>Profiles, evenness and redundancy</strong> —
-<code><a href="../reference/hillprof.html">hillprof()</a></code>, <code><a href="../reference/hilleven.html">hilleven()</a></code>,
-<code><a href="../reference/hillred.html">hillred()</a></code>.</li>
+<a href="profiles-evenness-redundancy.html"><strong>Profiles,
+evenness and redundancy</strong></a> — <code><a href="../reference/hillprof.html">hillprof()</a></code>,
+<code><a href="../reference/hilleven.html">hilleven()</a></code>, <code><a href="../reference/hillred.html">hillred()</a></code>.</li>
 <li>
-<strong>Preparing your data</strong> — input formats,
+<a href="preparing-data.html"><strong>Preparing your
+data</strong></a> — input formats,
 <code>phyloseq</code>/<code>TreeSummarizedExperiment</code>,
 <code><a href="../reference/tss.html">tss()</a></code>, <code><a href="../reference/traits2dist.html">traits2dist()</a></code> and
 <code><a href="../reference/match_data.html">match_data()</a></code>.</li>

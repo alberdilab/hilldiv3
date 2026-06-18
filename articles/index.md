@@ -14,7 +14,7 @@
   data](https://alberdilab.github.io/hilldiv3/articles/preparing-data.md):
 - [Profiles, evenness and
   redundancy](https://alberdilab.github.io/hilldiv3/articles/profiles-evenness-redundancy.md):
-- [Use case: three faces of diversity in a gut
+- [Case 2: Three faces of diversity in a gut
   microbiome](https://alberdilab.github.io/hilldiv3/articles/use-case-bacterial-mags.md):
-- [Use case: dietary niches of insectivorous
+- [Case 1: Dietary niches of insectivorous
   bats](https://alberdilab.github.io/hilldiv3/articles/use-case-bat-diet.md):

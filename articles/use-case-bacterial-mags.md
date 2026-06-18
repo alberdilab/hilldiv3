@@ -1,4 +1,4 @@
-# Use case: three faces of diversity in a gut microbiome
+# Case 2: Three faces of diversity in a gut microbiome
 
 ``` r
 

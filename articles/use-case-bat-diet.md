@@ -1,4 +1,4 @@
-# Use case: dietary niches of insectivorous bats
+# Case 1: Dietary niches of insectivorous bats
 
 ``` r
 
