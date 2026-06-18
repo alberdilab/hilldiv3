@@ -28,5 +28,5 @@ Useful links:
 
 ## Author
 
-**Maintainer**: Antton Alberdi <antton.alberdi@bio.ku.dk>
+**Maintainer**: Antton Alberdi <antton.alberdi@sund.ku.dk>
 ([ORCID](https://orcid.org/0000-0002-2875-6446))
