@@ -148,6 +148,63 @@ A sample can be neutrally diverse yet phylogenetically or functionally
 redundant — quantifying exactly that gap is what `hillred()` does (see the
 profiles/evenness/redundancy article).
 
+## Contrasts with other packages
+
+Other R packages compute Hill numbers, and their **phylogenetic** results can
+disagree with `hilldiv3` even on identical data. These are not bugs: they are
+different conventions for the *reference depth* `T` — the tree depth at which an
+assemblage is read when branch lengths are converted into effective numbers of
+lineages. Knowing them makes migration painless. (Neutral and functional results
+match across packages; only the phylogenetic depth convention varies.)
+
+On an **ultrametric** tree every sample shares the same depth, so all conventions
+coincide. The differences below surface only on **non-ultrametric** trees (e.g.
+most genome or gene trees), and grow with how uneven the abundances are.
+
+### `hillR::hill_phylo`
+
+Two adjustments line it up with `hilldiv3`:
+
+* By default `hill_phylo()` returns the raw phylogenetic diversity `PD`
+  (branch-length units; Faith's PD at `q = 0`), **not** an effective number of
+  taxa. Pass `return_dt = TRUE` and read the `D_t` row to get the Hill number
+  `PD / T`.
+* It reads each sample at its *own* depth `T_j = sum(L_i a_i)`, so it corresponds
+  to `reference = "sample"`, not `reference = "pool"`.
+
+```{r hillr, eval = FALSE}
+# hillR expects sites x species; hilldiv3 expects taxa x samples.
+hillR::hill_phylo(t(counts), tree, q = 1, return_dt = TRUE)["D_t", ]
+hilldiv(counts, tree = tree, q = 1, reference = "sample")
+```
+
+With those two changes the packages agree **exactly for `q >= 1`**. They differ
+only at `q = 0`: `hillR` rebuilds `T` from a presence/absence (uniform) community
+for the richness case, whereas `hilldiv3` keeps a single abundance-based `T`
+across the whole `q` profile, following Chao et al. (2010). The Faith's PD
+numerator is identical; only the `T` in the denominator differs.
+
+### `hilldiv2::hilldiv`
+
+`reference = "sample"` reproduces `hilldiv2`'s **single-vector** phylogenetic
+formula exactly. `hilldiv2`'s **matrix** path is different: it folds a shared
+even-pool depth *into* the diversity transform. That is fine on ultrametric trees
+but breaks down on non-ultrametric ones — the branch weights no longer sum to
+one, and the `q`-profile becomes discontinuous around `q = 1`. `hilldiv3`'s
+`reference = "pool"` delivers comparable, common-depth values without that
+pathology, because it applies the reference depth as a final rescaling rather
+than inside the exponentiated sum.
+
+| Want to match | Use in `hilldiv3` |
+|---|---|
+| `hillR::hill_phylo(..., return_dt = TRUE)` | `reference = "sample"` (exact for `q >= 1`) |
+| `hilldiv2::hilldiv(vector, tree)` | `reference = "sample"` (exact) |
+| `hilldiv2::hilldiv(matrix, tree)` | no exact match — `reference = "pool"` is the sound analogue |
+
+In short: when results diverge, check (1) whether the other package reports `PD`
+or an effective number, and (2) which reference depth it uses. `hilldiv3` makes
+that choice explicit through `reference`.
+
 ## References
 
 * Chao, A., Chiu, C.-H. & Jost, L. (2010). Phylogenetic diversity measures based

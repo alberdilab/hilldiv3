@@ -1,0 +1,149 @@
+2026-06-17 17:03:32 | Starting benchmark: iterations=10, n_taxa=200, n_samples=50, seed=20260617, bench_memory=TRUE, mem_limit_gb=10 
+2026-06-17 17:03:35 | Starting B1.1 hilldiv3 neutral 
+2026-06-17 17:03:36 | Finished B1.1 hilldiv3 neutral median_seconds=0.00531 memory_bytes=4223000 iterations=10 
+2026-06-17 17:03:36 | Starting B1.2 hilldiv3 phylogenetic 
+2026-06-17 17:03:36 | Finished B1.2 hilldiv3 phylogenetic median_seconds=0.006354 memory_bytes=7310000 iterations=10 
+2026-06-17 17:03:36 | Starting B1.3 hilldiv3 functional 
+2026-06-17 17:03:37 | Finished B1.3 hilldiv3 functional median_seconds=0.006851 memory_bytes=6739000 iterations=10 
+2026-06-17 17:03:37 | Starting B2.1 hilldiv3 neutral 
+2026-06-17 17:03:37 | Finished B2.1 hilldiv3 neutral median_seconds=0.004994 memory_bytes=3796000 iterations=10 
+2026-06-17 17:03:37 | Starting B2.2 hilldiv3 phylogenetic 
+2026-06-17 17:03:37 | Finished B2.2 hilldiv3 phylogenetic median_seconds=0.006132 memory_bytes=5368000 iterations=10 
+2026-06-17 17:03:37 | Starting B2.3 hilldiv3 functional 
+2026-06-17 17:03:38 | Finished B2.3 hilldiv3 functional median_seconds=0.007115 memory_bytes=6206000 iterations=10 
+2026-06-17 17:03:38 | Starting B3.1 hilldiv3 neutral 
+2026-06-17 17:03:38 | Finished B3.1 hilldiv3 neutral median_seconds=0.009139 memory_bytes=5641000 iterations=10 
+2026-06-17 17:03:38 | Starting B3.2 hilldiv3 phylogenetic 
+2026-06-17 17:03:39 | Finished B3.2 hilldiv3 phylogenetic median_seconds=0.009874 memory_bytes=10040000 iterations=10 
+2026-06-17 17:03:39 | Starting B3.3 hilldiv3 functional 
+2026-06-17 17:03:39 | Finished B3.3 hilldiv3 functional median_seconds=0.009482 memory_bytes=9411000 iterations=10 
+2026-06-17 17:03:39 | Starting B4.1 hilldiv3 neutral 
+2026-06-17 17:03:42 | Finished B4.1 hilldiv3 neutral median_seconds=0.05352 memory_bytes=44930000 iterations=10 
+2026-06-17 17:03:42 | Starting B4.2 hilldiv3 phylogenetic 
+2026-06-17 17:03:45 | Finished B4.2 hilldiv3 phylogenetic median_seconds=0.06183 memory_bytes=98440000 iterations=10 
+2026-06-17 17:03:45 | Starting B4.3 hilldiv3 functional 
+2026-06-17 17:03:49 | Finished B4.3 hilldiv3 functional median_seconds=0.06984 memory_bytes=71300000 iterations=10 
+2026-06-17 17:03:49 | Starting B1.1 hilldiv2 neutral 
+2026-06-17 17:03:49 | Finished B1.1 hilldiv2 neutral median_seconds=0.001358 memory_bytes=2604000 iterations=10 
+2026-06-17 17:03:49 | Starting B1.2 hilldiv2 phylogenetic 
+2026-06-17 17:04:16 | Finished B1.2 hilldiv2 phylogenetic median_seconds=0.3009 memory_bytes=392300000 iterations=10 
+2026-06-17 17:04:16 | Starting B1.3 hilldiv2 functional 
+2026-06-17 17:04:17 | Finished B1.3 hilldiv2 functional median_seconds=0.008925 memory_bytes=21770000 iterations=10 
+2026-06-17 17:04:17 | Starting B2.1 hilldiv2 neutral 
+2026-06-17 17:04:17 | Finished B2.1 hilldiv2 neutral median_seconds=0.001834 memory_bytes=4374000 iterations=10 
+2026-06-17 17:04:17 | Starting B2.2 hilldiv2 phylogenetic 
+2026-06-17 17:04:41 | Finished B2.2 hilldiv2 phylogenetic median_seconds=0.262 memory_bytes=375100000 iterations=10 
+2026-06-17 17:04:41 | Starting B2.3 hilldiv2 functional 
+2026-06-17 17:04:41 | Finished B2.3 hilldiv2 functional median_seconds=0.006869 memory_bytes=21090000 iterations=10 
+2026-06-17 17:04:41 | Starting B3.1 hilldiv2 neutral 
+2026-06-17 17:04:41 | Skipping B3.1 hilldiv2 neutral (support=no) 
+2026-06-17 17:04:41 | Starting B3.2 hilldiv2 phylogenetic 
+2026-06-17 17:04:41 | Skipping B3.2 hilldiv2 phylogenetic (support=no) 
+2026-06-17 17:04:41 | Starting B3.3 hilldiv2 functional 
+2026-06-17 17:04:41 | Skipping B3.3 hilldiv2 functional (support=no) 
+2026-06-17 17:04:41 | Starting B4.1 hilldiv2 neutral 
+2026-06-17 17:05:17 | Finished B4.1 hilldiv2 neutral median_seconds=2.203 memory_bytes=116500000 iterations=10 
+2026-06-17 17:05:17 | Starting B4.2 hilldiv2 phylogenetic 
+2026-06-17 18:12:04 | Finished B4.2 hilldiv2 phylogenetic median_seconds=50.58 memory_bytes=20120000000 iterations=10 
+2026-06-17 18:12:04 | Starting B4.3 hilldiv2 functional 
+2026-06-17 18:12:39 | Finished B4.3 hilldiv2 functional median_seconds=2.059 memory_bytes=1732000000 iterations=10 
+2026-06-17 18:12:39 | Starting B1.1 hillR neutral 
+2026-06-17 18:12:39 | Finished B1.1 hillR neutral median_seconds=0.001173 memory_bytes=2255000 iterations=10 
+2026-06-17 18:12:39 | Starting B1.2 hillR phylogenetic 
+2026-06-17 18:12:40 | Finished B1.2 hillR phylogenetic median_seconds=0.02324 memory_bytes=25070000 iterations=10 
+2026-06-17 18:12:40 | Starting B1.3 hillR functional 
+2026-06-17 18:12:43 | Finished B1.3 hillR functional median_seconds=0.08791 memory_bytes=134000000 iterations=10 
+2026-06-17 18:12:43 | Starting B2.1 hillR neutral 
+2026-06-17 18:12:43 | Finished B2.1 hillR neutral median_seconds=0.001913 memory_bytes=2477000 iterations=10 
+2026-06-17 18:12:43 | Starting B2.2 hillR phylogenetic 
+2026-06-17 18:12:44 | Finished B2.2 hillR phylogenetic median_seconds=0.02315 memory_bytes=20890000 iterations=10 
+2026-06-17 18:12:44 | Starting B2.3 hillR functional 
+2026-06-17 18:14:05 | Finished B2.3 hillR functional median_seconds=4.759 memory_bytes=9825000000 iterations=10 
+2026-06-17 18:14:05 | Starting B3.1 hillR neutral 
+2026-06-17 18:14:05 | Skipping B3.1 hillR neutral (support=no) 
+2026-06-17 18:14:05 | Starting B3.2 hillR phylogenetic 
+2026-06-17 18:14:05 | Skipping B3.2 hillR phylogenetic (support=no) 
+2026-06-17 18:14:05 | Starting B3.3 hillR functional 
+2026-06-17 18:14:05 | Skipping B3.3 hillR functional (support=no) 
+2026-06-17 18:14:05 | Starting B4.1 hillR neutral 
+2026-06-17 18:14:17 | Finished B4.1 hillR neutral median_seconds=0.7766 memory_bytes=49530000 iterations=10 
+2026-06-17 18:14:17 | Starting B4.2 hillR phylogenetic 
+2026-06-17 18:19:48 | Finished B4.2 hillR phylogenetic median_seconds=6.738 memory_bytes=4672000000 iterations=10 
+2026-06-17 18:19:48 | Starting B4.3 hillR functional 
+2026-06-17 18:27:29 | Finished B4.3 hillR functional median_seconds=16.22 memory_bytes=10650000000 iterations=10 
+2026-06-17 18:27:29 | Starting B1.1 entropart neutral 
+2026-06-17 18:28:02 | Finished B1.1 entropart neutral median_seconds=2.72 memory_bytes=88530000 iterations=10 
+2026-06-17 18:28:02 | Starting B1.2 entropart phylogenetic 
+2026-06-17 18:38:30 | Finished B1.2 entropart phylogenetic median_seconds=47.73 memory_bytes=1076000000 iterations=10 
+2026-06-17 18:38:30 | Starting B1.3 entropart functional 
+2026-06-17 18:39:04 | Finished B1.3 entropart functional median_seconds=2.746 memory_bytes=144700000 iterations=10 
+2026-06-17 18:39:04 | Starting B2.1 entropart neutral 
+2026-06-17 18:39:38 | Finished B2.1 entropart neutral median_seconds=2.727 memory_bytes=88660000 iterations=10 
+2026-06-17 18:39:38 | Starting B2.2 entropart phylogenetic 
+2026-06-17 18:50:52 | Finished B2.2 entropart phylogenetic median_seconds=51.36 memory_bytes=1095000000 iterations=10 
+2026-06-17 18:50:52 | Starting B2.3 entropart functional 
+2026-06-17 18:51:27 | Finished B2.3 entropart functional median_seconds=2.748 memory_bytes=146900000 iterations=10 
+2026-06-17 18:51:27 | Starting B3.1 entropart neutral 
+2026-06-17 18:51:28 | Finished B3.1 entropart neutral median_seconds=0.1036 memory_bytes=7336000 iterations=10 
+2026-06-17 18:51:28 | Starting B3.2 entropart phylogenetic 
+2026-06-17 18:51:28 | Skipping B3.2 entropart phylogenetic (support=no) 
+2026-06-17 18:51:28 | Starting B3.3 entropart functional 
+2026-06-17 18:51:28 | Skipping B3.3 entropart functional (support=no) 
+2026-06-17 18:51:28 | Starting B4.1 entropart neutral 
+2026-06-17 18:51:28 | Skipping B4.1 entropart neutral (support=no) 
+2026-06-17 18:51:28 | Starting B4.2 entropart phylogenetic 
+2026-06-17 18:51:28 | Skipping B4.2 entropart phylogenetic (support=no) 
+2026-06-17 18:51:28 | Starting B4.3 entropart functional 
+2026-06-17 18:51:28 | Skipping B4.3 entropart functional (support=no) 
+2026-06-17 18:51:28 | Starting B1.1 vegan neutral 
+2026-06-17 18:51:29 | Finished B1.1 vegan neutral median_seconds=0.0002609 memory_bytes=459600 iterations=10 
+2026-06-17 18:51:29 | Starting B1.2 vegan phylogenetic 
+2026-06-17 18:51:29 | Skipping B1.2 vegan phylogenetic (support=no) 
+2026-06-17 18:51:29 | Starting B1.3 vegan functional 
+2026-06-17 18:51:29 | Skipping B1.3 vegan functional (support=no) 
+2026-06-17 18:51:29 | Starting B2.1 vegan neutral 
+2026-06-17 18:51:29 | Skipping B2.1 vegan neutral (support=no) 
+2026-06-17 18:51:29 | Starting B2.2 vegan phylogenetic 
+2026-06-17 18:51:29 | Skipping B2.2 vegan phylogenetic (support=no) 
+2026-06-17 18:51:29 | Starting B2.3 vegan functional 
+2026-06-17 18:51:29 | Skipping B2.3 vegan functional (support=no) 
+2026-06-17 18:51:29 | Starting B3.1 vegan neutral 
+2026-06-17 18:51:29 | Skipping B3.1 vegan neutral (support=no) 
+2026-06-17 18:51:29 | Starting B3.2 vegan phylogenetic 
+2026-06-17 18:51:29 | Skipping B3.2 vegan phylogenetic (support=no) 
+2026-06-17 18:51:29 | Starting B3.3 vegan functional 
+2026-06-17 18:51:29 | Skipping B3.3 vegan functional (support=no) 
+2026-06-17 18:51:29 | Starting B4.1 vegan neutral 
+2026-06-17 18:51:29 | Finished B4.1 vegan neutral median_seconds=0.0003243 memory_bytes=243700 iterations=10 
+2026-06-17 18:51:29 | Starting B4.2 vegan phylogenetic 
+2026-06-17 18:51:29 | Skipping B4.2 vegan phylogenetic (support=no) 
+2026-06-17 18:51:29 | Starting B4.3 vegan functional 
+2026-06-17 18:51:29 | Skipping B4.3 vegan functional (support=no) 
+2026-06-17 18:51:29 | Starting B1.1 BAT neutral 
+2026-06-17 18:51:29 | Finished B1.1 BAT neutral median_seconds=0.0008342 memory_bytes=1541000 iterations=10 
+2026-06-17 18:51:29 | Starting B1.2 BAT phylogenetic 
+2026-06-17 18:51:30 | Finished B1.2 BAT phylogenetic median_seconds=0.02052 memory_bytes=30170000 iterations=10 
+2026-06-17 18:51:30 | Starting B1.3 BAT functional 
+2026-06-17 18:51:41 | Finished B1.3 BAT functional median_seconds=0.7008 memory_bytes=38540000 iterations=10 
+2026-06-17 18:51:41 | Starting B2.1 BAT neutral 
+2026-06-17 18:51:41 | Skipping B2.1 BAT neutral (support=no) 
+2026-06-17 18:51:41 | Starting B2.2 BAT phylogenetic 
+2026-06-17 18:51:41 | Skipping B2.2 BAT phylogenetic (support=no) 
+2026-06-17 18:51:41 | Starting B2.3 BAT functional 
+2026-06-17 18:51:41 | Skipping B2.3 BAT functional (support=no) 
+2026-06-17 18:51:41 | Starting B3.1 BAT neutral 
+2026-06-17 18:51:41 | Skipping B3.1 BAT neutral (support=no) 
+2026-06-17 18:51:41 | Starting B3.2 BAT phylogenetic 
+2026-06-17 18:51:41 | Skipping B3.2 BAT phylogenetic (support=no) 
+2026-06-17 18:51:41 | Starting B3.3 BAT functional 
+2026-06-17 18:51:41 | Skipping B3.3 BAT functional (support=no) 
+2026-06-17 18:51:41 | Starting B4.1 BAT neutral 
+2026-06-17 18:51:47 | Finished B4.1 BAT neutral median_seconds=0.4175 memory_bytes=11070000 iterations=10 
+2026-06-17 18:51:47 | Starting B4.2 BAT phylogenetic 
+2026-06-17 18:51:57 | Finished B4.2 BAT phylogenetic median_seconds=0.445 memory_bytes=111200000 iterations=10 
+2026-06-17 18:51:57 | Starting B4.3 BAT functional 
+2026-06-17 18:52:15 | Finished B4.3 BAT functional median_seconds=1.136 memory_bytes=119500000 iterations=10 
+2026-06-17 18:52:15 | Wrote per-iteration benchmark results to: /Users/anttonalberdi/Github/hilldiv3/inst/benchmarks/results/performance.csv 
+2026-06-17 18:52:15 | Wrote benchmark summary to: /Users/anttonalberdi/Github/hilldiv3/inst/benchmarks/results/performance-summary.csv 
+2026-06-17 18:52:15 | Wrote benchmark timings to: /Users/anttonalberdi/Github/hilldiv3/inst/benchmarks/results/performance-times.csv 
+2026-06-17 18:52:15 | Wrote session info to: /Users/anttonalberdi/Github/hilldiv3/inst/benchmarks/results/session-info.txt 
