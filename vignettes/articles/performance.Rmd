@@ -291,15 +291,24 @@ if (has_results && has_ggplot && has_patchwork) {
 
 `hilldiv3` is the reference implementation. The contingency table below shows,
 for every benchmark, whether each package offers a directly comparable
-operation (**Yes**), a related but not identical operation (**Partial**), or no
-equivalent (**No**). `n/a` means the package was not installed when the
-benchmark ran. The caveats behind each *Partial* are listed as footnotes under
-the corresponding figure above.
+operation (<span style="color:#1a9850;font-weight:bold;">&#10003;</span> Yes), a
+related but not identical operation
+(<span style="color:#e8870c;font-weight:bold;">&#9680;</span> Partial), or no
+equivalent (<span style="color:#d73027;font-weight:bold;">&#10007;</span> No).
+A grey dash (<span style="color:#bbbbbb;">&ndash;</span>) means the package was
+not installed when the benchmark ran. The caveats behind each *Partial* are
+listed as footnotes under the corresponding figure above.
 
 ```{r comparability-table, echo = FALSE}
 if (has_results) {
-  sym <- c(yes = "Yes", partial = "Partial", no = "No",
-           unavailable = "n/a", failed = "Failed", out_of_memory = "OOM")
+  icon <- c(
+    yes = '<span style="color:#1a9850;font-weight:bold;" title="Yes">&#10003;</span>',
+    partial = '<span style="color:#e8870c;font-weight:bold;" title="Partial">&#9680;</span>',
+    no = '<span style="color:#d73027;font-weight:bold;" title="No">&#10007;</span>',
+    unavailable = '<span style="color:#bbbbbb;" title="Not installed">&ndash;</span>',
+    failed = '<span style="color:#d73027;" title="Failed">&#9888;</span>',
+    out_of_memory = '<span style="color:#999999;" title="Out of memory">&#9632;</span>'
+  )
   cont <- perf[order(perf$benchmark, perf$facet), ]
   cont$row <- paste0(cont$benchmark, " (", cont$facet, ")")
   pkgs <- levels(perf$package)
@@ -307,7 +316,7 @@ if (has_results) {
   mat <- matrix("", nrow = nrow(rows), ncol = length(pkgs),
                 dimnames = list(rows$row, pkgs))
   for (j in seq_len(nrow(cont))) {
-    mat[cont$row[[j]], as.character(cont$package[[j]])] <- sym[cont$support[[j]]]
+    mat[cont$row[[j]], as.character(cont$package[[j]])] <- icon[cont$support[[j]]]
   }
   contingency <- data.frame(
     Benchmark = rows$row,
@@ -316,7 +325,12 @@ if (has_results) {
     check.names = FALSE,
     row.names = NULL
   )
-  knitr::kable(contingency, row.names = FALSE)
+  knitr::kable(
+    contingency,
+    row.names = FALSE,
+    escape = FALSE,
+    align = c("l", "l", rep("c", length(pkgs)))
+  )
 }
 ```
 
