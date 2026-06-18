@@ -41,9 +41,9 @@ shared tree depth / \code{tau} across scales). Grouping variables are resolved
 against \code{metadata} when supplied, otherwise against the calling
 environment.}
 
-\item{metadata}{Optional per-sample \code{data.frame} supplying the variables named
-in \code{hierarchy}; rows are matched to the count-table columns by name when
-possible, otherwise by position.}
+\item{metadata}{Optional per-sample \code{data.frame} supplying the variables
+named in \code{hierarchy}; rows are matched to the count-table columns by name
+when possible, otherwise by position.}
 
 \item{type}{Diversity type: \code{"auto"} (default) infers it from the inputs
 (counts only -> neutral, \code{+tree} -> phylogenetic, \code{+dist} -> functional);

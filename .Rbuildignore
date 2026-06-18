@@ -5,9 +5,14 @@
 ^docs$
 ^pkgdown$
 ^LICENSE\.md$
-^\.DS_Store$
+\.DS_Store$
 ^README\.Rmd$
 ^vignettes/articles$
 ^data-raw$
 ^\.lintr$
 ^codecov\.yml$
+^AGENTS\.md$
+^inst/manuscript$
+^inst/benchmarks$
+^cran-comments\.md$
+^CRAN-SUBMISSION$

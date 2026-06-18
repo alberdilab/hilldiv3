@@ -42,8 +42,8 @@ axis (matching hilldiv2's \code{multi} behaviour); \code{"sample"} reads each sa
 at its own depth \code{T_j} (effective lineages at that sample's depth). The two
 coincide on ultrametric trees. This reference depth is intentionally \emph{not}
 offered by \code{\link[=hillpart]{hillpart()}}: in a partition \code{T} is fixed at the mean per-sample
-depth of Chiu et al. (2014), the unique value for which \code{gamma / alpha} is a
-valid decomposition with \code{beta} in \verb{[1, N]}.}
+depth of Chiu et al. (2014), the unique value for which \code{gamma / alpha}
+is a valid decomposition with \code{beta} in \verb{[1, N]}.}
 
 \item{out}{Output type: \code{"tibble"} (default, long format ready for plotting)
 or \code{"matrix"}.}

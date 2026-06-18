@@ -18,7 +18,7 @@ Useful links:
 
 }
 \author{
-\strong{Maintainer}: Antton Alberdi \email{antton.alberdi@bio.ku.dk} (\href{https://orcid.org/0000-0002-2875-6446}{ORCID})
+\strong{Maintainer}: Antton Alberdi \email{antton.alberdi@sund.ku.dk} (\href{https://orcid.org/0000-0002-2875-6446}{ORCID})
 
 }
 \keyword{internal}
