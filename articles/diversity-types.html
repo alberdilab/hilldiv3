@@ -413,6 +413,100 @@ functionally redundant — quantifying exactly that gap is what
 article).</p>
 </div>
 <div class="section level2">
+<h2 id="contrasts-with-other-packages">Contrasts with other packages<a class="anchor" aria-label="anchor" href="#contrasts-with-other-packages"></a>
+</h2>
+<p>Other R packages compute Hill numbers, and their
+<strong>phylogenetic</strong> results can disagree with
+<code>hilldiv3</code> even on identical data. These are not bugs: they
+are different conventions for the <em>reference depth</em>
+<code>T</code> — the tree depth at which an assemblage is read when
+branch lengths are converted into effective numbers of lineages. Knowing
+them makes migration painless. (Neutral and functional results match
+across packages; only the phylogenetic depth convention varies.)</p>
+<p>On an <strong>ultrametric</strong> tree every sample shares the same
+depth, so all conventions coincide. The differences below surface only
+on <strong>non-ultrametric</strong> trees (e.g. most genome or gene
+trees), and grow with how uneven the abundances are.</p>
+<div class="section level3">
+<h3 id="hillrhill_phylo">
+<code>hillR::hill_phylo</code><a class="anchor" aria-label="anchor" href="#hillrhill_phylo"></a>
+</h3>
+<p>Two adjustments line it up with <code>hilldiv3</code>:</p>
+<ul>
+<li>By default <code>hill_phylo()</code> returns the raw phylogenetic
+diversity <code>PD</code> (branch-length units; Faith’s PD at
+<code>q = 0</code>), <strong>not</strong> an effective number of taxa.
+Pass <code>return_dt = TRUE</code> and read the <code>D_t</code> row to
+get the Hill number <code>PD / T</code>.</li>
+<li>It reads each sample at its <em>own</em> depth
+<code>T_j = sum(L_i a_i)</code>, so it corresponds to
+<code>reference = "sample"</code>, not
+<code>reference = "pool"</code>.</li>
+</ul>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># hillR expects sites x species; hilldiv3 expects taxa x samples.</span></span>
+<span><span class="fu">hillR</span><span class="fu">::</span><span class="fu">hill_phylo</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html" class="external-link">t</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>, <span class="va">tree</span>, q <span class="op">=</span> <span class="fl">1</span>, return_dt <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span><span class="op">[</span><span class="st">"D_t"</span>, <span class="op">]</span></span>
+<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span>, q <span class="op">=</span> <span class="fl">1</span>, reference <span class="op">=</span> <span class="st">"sample"</span><span class="op">)</span></span></code></pre></div>
+<p>With those two changes the packages agree <strong>exactly for
+<code>q &gt;= 1</code></strong>. They differ only at <code>q = 0</code>:
+<code>hillR</code> rebuilds <code>T</code> from a presence/absence
+(uniform) community for the richness case, whereas <code>hilldiv3</code>
+keeps a single abundance-based <code>T</code> across the whole
+<code>q</code> profile, following Chao et al. (2010). The Faith’s PD
+numerator is identical; only the <code>T</code> in the denominator
+differs.</p>
+</div>
+<div class="section level3">
+<h3 id="hilldiv2hilldiv">
+<code>hilldiv2::hilldiv</code><a class="anchor" aria-label="anchor" href="#hilldiv2hilldiv"></a>
+</h3>
+<p><code>reference = "sample"</code> reproduces <code>hilldiv2</code>’s
+<strong>single-vector</strong> phylogenetic formula exactly.
+<code>hilldiv2</code>’s <strong>matrix</strong> path is different: it
+folds a shared even-pool depth <em>into</em> the diversity transform.
+That is fine on ultrametric trees but breaks down on non-ultrametric
+ones — the branch weights no longer sum to one, and the
+<code>q</code>-profile becomes discontinuous around <code>q = 1</code>.
+<code>hilldiv3</code>’s <code>reference = "pool"</code> delivers
+comparable, common-depth values without that pathology, because it
+applies the reference depth as a final rescaling rather than inside the
+exponentiated sum.</p>
+<table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
+<thead><tr class="header">
+<th>Want to match</th>
+<th>Use in <code>hilldiv3</code>
+</th>
+</tr></thead>
+<tbody>
+<tr class="odd">
+<td><code>hillR::hill_phylo(..., return_dt = TRUE)</code></td>
+<td>
+<code>reference = "sample"</code> (exact for
+<code>q &gt;= 1</code>)</td>
+</tr>
+<tr class="even">
+<td><code>hilldiv2::hilldiv(vector, tree)</code></td>
+<td>
+<code>reference = "sample"</code> (exact)</td>
+</tr>
+<tr class="odd">
+<td><code>hilldiv2::hilldiv(matrix, tree)</code></td>
+<td>no exact match — <code>reference = "pool"</code> is the sound
+analogue</td>
+</tr>
+</tbody>
+</table>
+<p>In short: when results diverge, check (1) whether the other package
+reports <code>PD</code> or an effective number, and (2) which reference
+depth it uses. <code>hilldiv3</code> makes that choice explicit through
+<code>reference</code>.</p>
+</div>
+</div>
+<div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <ul>
