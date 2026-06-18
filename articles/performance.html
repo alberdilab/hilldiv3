@@ -159,153 +159,154 @@ dissimilarity.<br>
 </h2>
 <p><code>hilldiv3</code> is the reference implementation. The
 contingency table below shows, for every benchmark, whether each package
-offers a directly comparable operation (<strong>Yes</strong>), a related
-but not identical operation (<strong>Partial</strong>), or no equivalent
-(<strong>No</strong>). <code>n/a</code> means the package was not
-installed when the benchmark ran. The caveats behind each
+offers a directly comparable operation (<span style="color:#1a9850;font-weight:bold;">✓</span> Yes), a related but not
+identical operation (<span style="color:#e8870c;font-weight:bold;">◐</span> Partial), or no
+equivalent (<span style="color:#d73027;font-weight:bold;">✗</span> No).
+A grey dash (<span style="color:#bbbbbb;">–</span>) means the package
+was not installed when the benchmark ran. The caveats behind each
 <em>Partial</em> are listed as footnotes under the corresponding figure
 above.</p>
 <table style="width:100%;" class="table">
 <colgroup>
-<col width="17%">
-<col width="39%">
-<col width="7%">
-<col width="7%">
-<col width="5%">
+<col width="3%">
 <col width="8%">
-<col width="6%">
-<col width="6%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
+<col width="14%">
 </colgroup>
 <thead><tr class="header">
 <th align="left">Benchmark</th>
 <th align="left">Operation</th>
-<th align="left">hilldiv3</th>
-<th align="left">hilldiv2</th>
-<th align="left">hillR</th>
-<th align="left">entropart</th>
-<th align="left">vegan</th>
-<th align="left">BAT</th>
+<th align="center">hilldiv3</th>
+<th align="center">hilldiv2</th>
+<th align="center">hillR</th>
+<th align="center">entropart</th>
+<th align="center">vegan</th>
+<th align="center">BAT</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
 <td align="left">B1.1 (neutral)</td>
 <td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
 </tr>
 <tr class="even">
 <td align="left">B1.2 (phylogenetic)</td>
 <td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Partial</td>
-<td align="left">No</td>
-<td align="left">Partial</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
 </tr>
 <tr class="odd">
 <td align="left">B1.3 (functional)</td>
 <td align="left">Alpha diversity at q = 0, 1, 2</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Partial</td>
-<td align="left">No</td>
-<td align="left">Partial</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
 </tr>
 <tr class="even">
 <td align="left">B2.1 (neutral)</td>
 <td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">No</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
 </tr>
 <tr class="odd">
 <td align="left">B2.2 (phylogenetic)</td>
 <td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Partial</td>
-<td align="left">No</td>
-<td align="left">No</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
 </tr>
 <tr class="even">
 <td align="left">B2.3 (functional)</td>
 <td align="left">Diversity partitioning at q = 0, 1, 2</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Partial</td>
-<td align="left">No</td>
-<td align="left">No</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
 </tr>
 <tr class="odd">
 <td align="left">B3.1 (neutral)</td>
 <td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">Partial</td>
-<td align="left">No</td>
-<td align="left">No</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
 </tr>
 <tr class="even">
 <td align="left">B3.2 (phylogenetic)</td>
 <td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">No</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
 </tr>
 <tr class="odd">
 <td align="left">B3.3 (functional)</td>
 <td align="left">Nested diversity partitioning at q = 0, 1, 2</td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">No</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
 </tr>
 <tr class="even">
 <td align="left">B4.1 (neutral)</td>
 <td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">Partial</td>
-<td align="left">Partial</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
 </tr>
 <tr class="odd">
 <td align="left">B4.2 (phylogenetic)</td>
 <td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">Partial</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
 </tr>
 <tr class="even">
 <td align="left">B4.3 (functional)</td>
 <td align="left">Pairwise beta diversity matrix at q = 1</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">Yes</td>
-<td align="left">No</td>
-<td align="left">No</td>
-<td align="left">Partial</td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#1a9850;font-weight:bold;" title="Yes">✓</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#d73027;font-weight:bold;" title="No">✗</span></td>
+<td align="center"><span style="color:#e8870c;font-weight:bold;" title="Partial">◐</span></td>
 </tr>
 </tbody>
 </table>

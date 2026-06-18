@@ -63,25 +63,25 @@ dissimilarity.
 
 `hilldiv3` is the reference implementation. The contingency table below
 shows, for every benchmark, whether each package offers a directly
-comparable operation (**Yes**), a related but not identical operation
-(**Partial**), or no equivalent (**No**). `n/a` means the package was
+comparable operation (✓ Yes), a related but not identical operation (◐
+Partial), or no equivalent (✗ No). A grey dash (–) means the package was
 not installed when the benchmark ran. The caveats behind each *Partial*
 are listed as footnotes under the corresponding figure above.
 
 | Benchmark | Operation | hilldiv3 | hilldiv2 | hillR | entropart | vegan | BAT |
-|:---|:---|:---|:---|:---|:---|:---|:---|
-| B1.1 (neutral) | Alpha diversity at q = 0, 1, 2 | Yes | Yes | Yes | Yes | Yes | Yes |
-| B1.2 (phylogenetic) | Alpha diversity at q = 0, 1, 2 | Yes | Yes | Yes | Partial | No | Partial |
-| B1.3 (functional) | Alpha diversity at q = 0, 1, 2 | Yes | Yes | Yes | Partial | No | Partial |
-| B2.1 (neutral) | Diversity partitioning at q = 0, 1, 2 | Yes | Yes | Yes | Yes | No | No |
-| B2.2 (phylogenetic) | Diversity partitioning at q = 0, 1, 2 | Yes | Yes | Yes | Partial | No | No |
-| B2.3 (functional) | Diversity partitioning at q = 0, 1, 2 | Yes | Yes | Yes | Partial | No | No |
-| B3.1 (neutral) | Nested diversity partitioning at q = 0, 1, 2 | Yes | No | No | Partial | No | No |
-| B3.2 (phylogenetic) | Nested diversity partitioning at q = 0, 1, 2 | Yes | No | No | No | No | No |
-| B3.3 (functional) | Nested diversity partitioning at q = 0, 1, 2 | Yes | No | No | No | No | No |
-| B4.1 (neutral) | Pairwise beta diversity matrix at q = 1 | Yes | Yes | Yes | No | Partial | Partial |
-| B4.2 (phylogenetic) | Pairwise beta diversity matrix at q = 1 | Yes | Yes | Yes | No | No | Partial |
-| B4.3 (functional) | Pairwise beta diversity matrix at q = 1 | Yes | Yes | Yes | No | No | Partial |
+|:---|:---|:--:|:--:|:--:|:--:|:--:|:--:|
+| B1.1 (neutral) | Alpha diversity at q = 0, 1, 2 | ✓ | ✓ | ✓ | ✓ | ✓ | ✓ |
+| B1.2 (phylogenetic) | Alpha diversity at q = 0, 1, 2 | ✓ | ✓ | ✓ | ◐ | ✗ | ◐ |
+| B1.3 (functional) | Alpha diversity at q = 0, 1, 2 | ✓ | ✓ | ✓ | ◐ | ✗ | ◐ |
+| B2.1 (neutral) | Diversity partitioning at q = 0, 1, 2 | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ |
+| B2.2 (phylogenetic) | Diversity partitioning at q = 0, 1, 2 | ✓ | ✓ | ✓ | ◐ | ✗ | ✗ |
+| B2.3 (functional) | Diversity partitioning at q = 0, 1, 2 | ✓ | ✓ | ✓ | ◐ | ✗ | ✗ |
+| B3.1 (neutral) | Nested diversity partitioning at q = 0, 1, 2 | ✓ | ✗ | ✗ | ◐ | ✗ | ✗ |
+| B3.2 (phylogenetic) | Nested diversity partitioning at q = 0, 1, 2 | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| B3.3 (functional) | Nested diversity partitioning at q = 0, 1, 2 | ✓ | ✗ | ✗ | ✗ | ✗ | ✗ |
+| B4.1 (neutral) | Pairwise beta diversity matrix at q = 1 | ✓ | ✓ | ✓ | ✗ | ◐ | ◐ |
+| B4.2 (phylogenetic) | Pairwise beta diversity matrix at q = 1 | ✓ | ✓ | ✓ | ✗ | ✗ | ◐ |
+| B4.3 (functional) | Pairwise beta diversity matrix at q = 1 | ✓ | ✓ | ✓ | ✗ | ✗ | ◐ |
 
 ## Full results
 
