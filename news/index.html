@@ -54,7 +54,12 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="development version" id="hilldiv3-development-version">hilldiv3 (development version)<a class="anchor" aria-label="anchor" href="#hilldiv3-development-version"></a></h2>
-<div class="section level3">
+<ul><li>
+<strong>Breaking:</strong> the <code>out = "matrix"</code> form of the per-sample functions (<code><a href="../reference/hilldiv.html">hilldiv()</a></code>, <code><a href="../reference/hillprof.html">hillprof()</a></code>, <code><a href="../reference/hilleven.html">hilleven()</a></code>) now returns samples in rows and diversity orders (<code>q0</code>, <code>q1</code>, …) in columns, instead of the previous orders-in-rows/samples-in-columns layout. This matches the usual observations-in-rows convention and joins cleanly with per-sample metadata. Code that indexed these matrices by <code>["q0", ]</code> should switch to <code>[, "q0"]</code> (or transpose). The component/metric matrices from <code><a href="../reference/hillpart.html">hillpart()</a></code>, <code><a href="../reference/hilldiss.html">hilldiss()</a></code> and <code><a href="../reference/hillred.html">hillred()</a></code> are unchanged.</li>
+<li>
+<code><a href="../reference/hilldiv.html">hilldiv()</a></code> and friends now accept count tables whose first column holds taxa names: a leading non-numeric column is automatically promoted to row names (instead of failing with “Count data must be numeric”). Any other non-numeric column raises a clear error asking the user to fix the input.</li>
+<li>Verbose output now reports the number of taxa and samples being analysed.</li>
+</ul><div class="section level3">
 <h3 id="hilldiv3-development-version-1">hilldiv3 3.0.0<a class="anchor" aria-label="anchor" href="#hilldiv3-development-version-1"></a></h3>
 <p>Complete redesign of the package built on a tested, isolated compute engine.</p>
 <div class="section level4">

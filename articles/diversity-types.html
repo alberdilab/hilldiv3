@@ -148,8 +148,8 @@ by common taxa (inverse Simpson concentration).</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -179,8 +179,8 @@ article.</p>
 as equally distinct:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -209,8 +209,8 @@ al. 2010).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"((t1:1,t2:1):1,t3:2);"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -250,8 +250,8 @@ than three contrasting ones (Chiu &amp; Chao 2014).</p>
 <span>             row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"t1"</span>, <span class="st">"t2"</span>, <span class="st">"t3"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -298,8 +298,8 @@ full range of distances. Lowering <code>tau</code> makes more taxa
 “functionally equivalent” and reduces functional diversity:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span>, tau <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">fdist</span><span class="op">)</span><span class="op">)</span>   <span class="co"># default</span></span>
-<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -317,8 +317,8 @@ full range of distances. Lowering <code>tau</code> makes more taxa
 <span><span class="co">#&gt; 11 1     s4 1.617041</span></span>
 <span><span class="co">#&gt; 12 2     s4 1.590106</span></span>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span>, tau <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">fdist</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
-<span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
 <span><span class="co">#&gt; </span></span>
@@ -349,8 +349,11 @@ each lens sees in the <em>same</em> samples:</p>
 <span>  functional    <span class="op">=</span> <span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; $neutral</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>

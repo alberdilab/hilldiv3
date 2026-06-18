@@ -110,14 +110,14 @@ type and is validated against the inputs (e.g. <code>"phylogenetic"</code> requi
 
 <dt id="arg-out">out<a class="anchor" aria-label="anchor" href="#arg-out"></a></dt>
 <dd><p>Output shape: <code>"tibble"</code> (default) returns a long-format
-<code>data.frame</code> with columns <code>q</code>, <code>sample</code>, <code>value</code>; <code>"matrix"</code> returns the
-legacy matrix (orders in rows, samples in columns).</p></dd>
+<code>data.frame</code> with columns <code>q</code>, <code>sample</code>, <code>value</code>; <code>"matrix"</code> returns a
+matrix with samples in rows and orders in columns.</p></dd>
 
 </dl></div>
     <div class="section level2">
     <h2 id="value">Value<a class="anchor" aria-label="anchor" href="#value"></a></h2>
     <p>A long-format <code>data.frame</code> of class <code>hill_evenness</code> (default) with a
-<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method, or a matrix of evenness values (orders in rows, samples in
+<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code> method, or a matrix of evenness values (samples in rows, orders in
 columns) when <code>out = "matrix"</code>.</p>
     </div>
     <div class="section level2">

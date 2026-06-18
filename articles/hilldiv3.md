@@ -65,8 +65,8 @@ returns Hill numbers per sample. By default it computes orders `q = 0`
 ``` r
 
 hilldiv(counts)
-#> Computing neutral Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: neutral>
 #> 12 rows x 3 cols
 #> 
@@ -93,8 +93,8 @@ flavour:
 
 tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
 hilldiv(counts, tree = tree)              # phylogenetic
-#> Computing phylogenetic Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: phylogenetic>
 #> 12 rows x 3 cols
 #> 

@@ -51,8 +51,8 @@ weight rare taxa carry:
 ``` r
 
 hilldiv(counts, q = c(0, 1, 2))
-#> Computing neutral Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: neutral>
 #> 12 rows x 3 cols
 #> 
@@ -84,8 +84,8 @@ equally distinct:
 ``` r
 
 hilldiv(counts)
-#> Computing neutral Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: neutral>
 #> 12 rows x 3 cols
 #> 
@@ -116,8 +116,8 @@ length, crediting samples that span deeper, more divergent lineages
 
 tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
 hilldiv(counts, tree = tree)
-#> Computing phylogenetic Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: phylogenetic>
 #> 12 rows x 3 cols
 #> 
@@ -161,8 +161,8 @@ fdist <- as.matrix(dist(
              row.names = c("t1", "t2", "t3"))
 ))
 hilldiv(counts, dist = fdist)
-#> Computing functional Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing functional Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: functional>
 #> 12 rows x 3 cols
 #> 
@@ -215,8 +215,8 @@ diversity:
 ``` r
 
 hilldiv(counts, dist = fdist, tau = max(fdist))   # default
-#> Computing functional Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing functional Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: functional>
 #> 12 rows x 3 cols
 #> 
@@ -234,8 +234,8 @@ hilldiv(counts, dist = fdist, tau = max(fdist))   # default
 #> 11 1     s4 1.617041
 #> 12 2     s4 1.590106
 hilldiv(counts, dist = fdist, tau = max(fdist) / 2)
-#> Computing functional Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing functional Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: functional>
 #> 12 rows x 3 cols
 #> 
@@ -267,8 +267,11 @@ list(
   functional    = hilldiv(counts, dist = fdist)
 )
 #> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> Computing functional Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> $neutral
 #> <hilldiv3 result: neutral>
 #> 12 rows x 3 cols

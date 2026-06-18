@@ -45,6 +45,7 @@ A data frame with 24 rows (MAGs) and 4 columns:
 d <- traits2dist(gut_traits)
 hilldiv(gut_counts, q = c(0, 1), dist = d)
 #> Computing functional Hill numbers of "q0" and "q1".
+#> ℹ 24 taxa across 12 samples.
 #> <hilldiv3 result: functional>
 #> 24 rows x 3 cols
 #> 

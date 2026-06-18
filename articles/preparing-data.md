@@ -56,8 +56,8 @@ the same representation, so you call the functions the same way:
 
 # A single sample as a named vector.
 hilldiv(c(t1 = 10, t2 = 2, t3 = 3))
-#> Computing neutral Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 1 sample.
 #> <hilldiv3 result: neutral>
 #> 3 rows x 3 cols
 #> 
@@ -79,8 +79,8 @@ ps <- phyloseq(
   phy_tree(ape::read.tree(text = "((t1:1,t2:1):1,t3:2);"))
 )
 hilldiv(ps)        # phylogenetic, tree taken from the object
-#> Computing phylogenetic Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: phylogenetic>
 #> 12 rows x 3 cols
 #> 
@@ -144,8 +144,8 @@ round(fdist, 3)
 #> t3 0.562 0.437 0.000
 
 hilldiv(counts, dist = fdist)
-#> Computing functional Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing functional Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: functional>
 #> 12 rows x 3 cols
 #> 
@@ -217,6 +217,7 @@ tree3 <- ape::read.tree(text = "(t1:1,t2:1);")
 hilldiv(match_data(counts, tree = tree3), tree = tree3)
 #> Dropped 1 taxon from `data` not in the tree tips.
 #> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
+#> ℹ 2 taxa across 4 samples.
 #> <hilldiv3 result: phylogenetic>
 #> 12 rows x 3 cols
 #> 
@@ -259,8 +260,8 @@ counts2 <- match_data(counts, dist = fdist)
 
 # 4. Measure and compare.
 hilldiv(counts2, dist = fdist)
-#> Computing functional Hill numbers of "q0", "q1", and
-#> "q2".
+#> Computing functional Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: functional>
 #> 12 rows x 3 cols
 #> 

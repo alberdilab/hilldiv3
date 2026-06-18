@@ -54,14 +54,14 @@ hilleven(
 - out:
 
   Output shape: `"tibble"` (default) returns a long-format `data.frame`
-  with columns `q`, `sample`, `value`; `"matrix"` returns the legacy
-  matrix (orders in rows, samples in columns).
+  with columns `q`, `sample`, `value`; `"matrix"` returns a matrix with
+  samples in rows and orders in columns.
 
 ## Value
 
 A long-format `data.frame` of class `hill_evenness` (default) with a
 [`plot()`](https://rdrr.io/r/graphics/plot.default.html) method, or a
-matrix of evenness values (orders in rows, samples in columns) when
+matrix of evenness values (samples in rows, orders in columns) when
 `out = "matrix"`.
 
 ## See also

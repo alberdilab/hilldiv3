@@ -78,7 +78,7 @@ hillprof(
 A long-format `data.frame` of class `hill_profile` (columns `q`,
 `sample`, `value`) with a
 [plot()](https://alberdilab.github.io/hilldiv3/reference/plot.hill_profile.md)
-method, or a matrix (orders in rows, samples in columns) when
+method, or a matrix (samples in rows, orders in columns) when
 `out = "matrix"`.
 
 ## See also

@@ -143,17 +143,19 @@ unambiguously more diverse — the answer depends on how much you weight
 rare taxa.</li>
 </ul>
 <p>Profiles work for phylogenetic and functional diversity too, and you
-can grab a matrix instead of the tidy form:</p>
+can grab a matrix instead of the tidy form (samples in rows, diversity
+orders in columns):</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">phylo_prof</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillprof.html">hillprof</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing phylogenetic diversity profile over 31 orders.</span></span>
 <span><span class="va">mat</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillprof.html">hillprof</a></span><span class="op">(</span><span class="va">counts</span>, out <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing neutral diversity profile over 31 orders.</span></span>
-<span><span class="va">mat</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">]</span></span>
-<span><span class="co">#&gt;            s1       s2       s3       s4</span></span>
-<span><span class="co">#&gt; q0   2.000000 3.000000 2.000000 3.000000</span></span>
-<span><span class="co">#&gt; q0.1 1.988282 2.889634 1.997940 2.961206</span></span>
-<span><span class="co">#&gt; q0.2 1.976692 2.783926 1.995884 2.924319</span></span></code></pre></div>
+<span><span class="va">mat</span><span class="op">[</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">3</span><span class="op">]</span></span>
+<span><span class="co">#&gt;    q0     q0.1     q0.2</span></span>
+<span><span class="co">#&gt; s1  2 1.988282 1.976692</span></span>
+<span><span class="co">#&gt; s2  3 2.889634 2.783926</span></span>
+<span><span class="co">#&gt; s3  2 1.997940 1.995884</span></span>
+<span><span class="co">#&gt; s4  3 2.961206 2.924319</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="evenness">Evenness<a class="anchor" aria-label="anchor" href="#evenness"></a>

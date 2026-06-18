@@ -71,7 +71,8 @@ How to read it:
   — the answer depends on how much you weight rare taxa.
 
 Profiles work for phylogenetic and functional diversity too, and you can
-grab a matrix instead of the tidy form:
+grab a matrix instead of the tidy form (samples in rows, diversity
+orders in columns):
 
 ``` r
 
@@ -79,11 +80,12 @@ phylo_prof <- hillprof(counts, tree = tree)
 #> Computing phylogenetic diversity profile over 31 orders.
 mat <- hillprof(counts, out = "matrix")
 #> Computing neutral diversity profile over 31 orders.
-mat[1:3, ]
-#>            s1       s2       s3       s4
-#> q0   2.000000 3.000000 2.000000 3.000000
-#> q0.1 1.988282 2.889634 1.997940 2.961206
-#> q0.2 1.976692 2.783926 1.995884 2.924319
+mat[, 1:3]
+#>    q0     q0.1     q0.2
+#> s1  2 1.988282 1.976692
+#> s2  3 2.889634 2.783926
+#> s3  2 1.997940 1.995884
+#> s4  3 2.961206 2.924319
 ```
 
 ## Evenness

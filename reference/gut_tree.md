@@ -26,6 +26,7 @@ the rows of
 ``` r
 hilldiv(gut_counts, q = c(0, 1), tree = gut_tree)
 #> Computing phylogenetic Hill numbers of "q0" and "q1".
+#> ℹ 24 taxa across 12 samples.
 #> <hilldiv3 result: phylogenetic>
 #> 24 rows x 3 cols
 #> 

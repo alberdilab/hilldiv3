@@ -73,14 +73,14 @@ hilldiv(
   Output shape: `"tibble"` (default) returns a long-format `data.frame`
   with columns `q`, `sample`, `value` and
   [`print()`](https://rdrr.io/r/base/print.html)/[`plot()`](https://rdrr.io/r/graphics/plot.default.html)
-  methods; `"matrix"` returns the legacy matrix (orders in rows, samples
-  in columns).
+  methods; `"matrix"` returns a matrix with samples in rows and
+  diversity orders (`q0`, `q1`, ...) in columns.
 
 ## Value
 
 A long-format `data.frame` of class `hill_diversity` (default), or a
-matrix of Hill numbers with diversity orders in rows (`q0`, `q1`, ...)
-and samples in columns when `out = "matrix"`.
+matrix of Hill numbers with samples in rows and diversity orders (`q0`,
+`q1`, ...) in columns when `out = "matrix"`.
 
 ## References
 
@@ -104,6 +104,7 @@ counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
                  dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
 hilldiv(counts)
 #> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 2 samples.
 #> <hilldiv3 result: neutral>
 #> 6 rows x 3 cols
 #> 
@@ -116,6 +117,7 @@ hilldiv(counts)
 #> 6 2     s2 1.753623
 hilldiv(counts, q = c(0, 1, 2))
 #> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 2 samples.
 #> <hilldiv3 result: neutral>
 #> 6 rows x 3 cols
 #> 
@@ -128,4 +130,5 @@ hilldiv(counts, q = c(0, 1, 2))
 #> 6 2     s2 1.753623
 plot(hilldiv(counts, q = c(0, 1, 2)))
 #> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 2 samples.
 ```

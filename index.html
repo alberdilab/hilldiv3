@@ -88,7 +88,7 @@
 <strong>Dual input support</strong>: matrices, data frames, tibbles, <code>phyloseq</code> and <code>TreeSummarizedExperiment</code> objects via <code>as_hill_input()</code>.</li>
 <li>Faster phylogenetic computation using an <code>ape</code> post-order traversal in place of <code>geiger::tips()</code>; <code><a href="reference/hillpair.html">hillpair()</a></code> computes the shared structure once and reuses it across all sample pairs.</li>
 <li>
-<strong>Tidy by default</strong>: every <code>hill*</code> function returns a long-format <code>data.frame</code> with <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>/<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>/<code>autoplot()</code> methods; pass <code>out = "matrix"</code> for the legacy shape.</li>
+<strong>Tidy by default</strong>: every <code>hill*</code> function returns a long-format <code>data.frame</code> with <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>/<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>/<code>autoplot()</code> methods; pass <code>out = "matrix"</code> for a plain matrix.</li>
 <li>An explicit <code>type = c("auto", "neutral", "phylogenetic", "functional")</code> argument that asserts and validates the diversity type (auto-detected by default).</li>
 <li>New: <code><a href="reference/hillprof.html">hillprof()</a></code> (diversity profiles) and <code><a href="reference/hilleven.html">hilleven()</a></code> (evenness), plus bundled example data (<code>gut_counts</code>, <code>gut_tree</code>, <code>gut_traits</code>).</li>
 <li>The familiar <code><a href="reference/hilldiv.html">hilldiv()</a></code>, <code><a href="reference/hillpart.html">hillpart()</a></code>, <code><a href="reference/hilldiss.html">hilldiss()</a></code>, <code><a href="reference/hillsim.html">hillsim()</a></code>, <code><a href="reference/hillpair.html">hillpair()</a></code>, <code><a href="reference/hillred.html">hillred()</a></code>, <code><a href="reference/tss.html">tss()</a></code> and <code><a href="reference/traits2dist.html">traits2dist()</a></code> names are kept.</li>
@@ -130,7 +130,7 @@
 <span></span>
 <span><span class="co"># Results are tidy by default and plot directly.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/hillprof.html">hillprof</a></span><span class="op">(</span><span class="va">gut_counts</span><span class="op">)</span><span class="op">)</span>             <span class="co"># diversity profile</span></span>
-<span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, out <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>    <span class="co"># legacy matrix shape</span></span></code></pre></div>
+<span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, out <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>    <span class="co"># matrix: samples x q orders</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
