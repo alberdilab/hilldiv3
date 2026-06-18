@@ -53,8 +53,16 @@ source it here to obtain a count table (`bat_counts`), a prey phylogeny
 (`bat_tree`) and a sample-design table (`bat_metadata`).
 
 ```{r data}
-sim <- source(system.file("manuscript", "data-bat-diet.R",
-                          package = "hilldiv3"))$value
+data_candidates <- c(
+  file.path("inst", "manuscript", "data-bat-diet.R"),
+  file.path("..", "inst", "manuscript", "data-bat-diet.R"),
+  file.path("..", "..", "inst", "manuscript", "data-bat-diet.R"),
+  system.file("manuscript", "data-bat-diet.R", package = "hilldiv3")
+)
+data_candidates <- data_candidates[nzchar(data_candidates)]
+data_path <- data_candidates[file.exists(data_candidates)][[1]]
+
+sim <- source(data_path)$value
 bat_counts   <- sim$counts
 bat_tree     <- sim$tree
 bat_metadata <- sim$metadata
