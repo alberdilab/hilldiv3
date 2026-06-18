@@ -59,7 +59,7 @@ counts
 ```
 
 Data frames, tibbles, `phyloseq` objects and `TreeSummarizedExperiment`
-objects work too — see `vignette("preparing-data")` *(article on the website)*.
+objects work too — see [Preparing your data](preparing-data.html).
 
 The package also ships a small **simulated** gut-microbiome example —
 `gut_counts` (a MAG count table), `gut_tree` (a phylogeny) and `gut_traits`
@@ -105,13 +105,16 @@ hilldiss(counts, q = 1)
 
 The website carries in-depth articles:
 
-* **Diversity types** — neutral, phylogenetic and functional measurement.
-* **Partitioning and (dis)similarity** — alpha/beta/gamma, the S/C/U/V
-  metrics, and pairwise dissimilarity for ordination.
-* **Profiles, evenness and redundancy** — `hillprof()`, `hilleven()`,
-  `hillred()`.
-* **Preparing your data** — input formats, `phyloseq`/`TreeSummarizedExperiment`,
-  `tss()`, `traits2dist()` and `match_data()`.
+* [**Diversity types**](diversity-types.html) — neutral, phylogenetic and
+  functional measurement.
+* [**Partitioning and (dis)similarity**](partitioning-and-dissimilarity.html) —
+  alpha/beta/gamma, the S/C/U/V metrics, and pairwise dissimilarity for
+  ordination.
+* [**Profiles, evenness and redundancy**](profiles-evenness-redundancy.html) —
+  `hillprof()`, `hilleven()`, `hillred()`.
+* [**Preparing your data**](preparing-data.html) — input formats,
+  `phyloseq`/`TreeSummarizedExperiment`, `tss()`, `traits2dist()` and
+  `match_data()`.
 
 ## References
 

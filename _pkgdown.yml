@@ -7,7 +7,7 @@ template:
 
 navbar:
   structure:
-    left: [intro, articles, examples, reference, news]
+    left: [intro, articles, examples, benchmark, reference, news]
     right: [search, github]
   components:
     articles:
@@ -19,16 +19,17 @@ navbar:
           href: articles/partitioning-and-dissimilarity.html
         - text: Profiles, evenness and redundancy
           href: articles/profiles-evenness-redundancy.html
-        - text: Performance benchmarks
-          href: articles/performance.html
         - text: Preparing your data
           href: articles/preparing-data.html
+    benchmark:
+      text: Benchmark
+      href: articles/performance.html
     examples:
       text: Examples
       menu:
-        - text: Dietary niches of insectivorous bats
+        - text: "Case 1: Dietary niches of insectivorous bats"
           href: articles/use-case-bat-diet.html
-        - text: Three faces of diversity in a gut microbiome
+        - text: "Case 2: Three faces of diversity in a gut microbiome"
           href: articles/use-case-bacterial-mags.html
 
 reference:

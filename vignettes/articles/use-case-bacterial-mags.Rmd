@@ -1,5 +1,5 @@
 ---
-title: "Use case: three faces of diversity in a gut microbiome"
+title: "Case 2: Three faces of diversity in a gut microbiome"
 ---
 
 ```{r, include = FALSE}

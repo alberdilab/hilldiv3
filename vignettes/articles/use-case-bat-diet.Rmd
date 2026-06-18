@@ -1,5 +1,5 @@
 ---
-title: "Use case: dietary niches of insectivorous bats"
+title: "Case 1: Dietary niches of insectivorous bats"
 ---
 
 ```{r, include = FALSE}
