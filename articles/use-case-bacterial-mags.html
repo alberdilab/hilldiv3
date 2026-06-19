@@ -97,6 +97,13 @@
 <span><span class="co"># base `$&lt;-` / `rbind` (and ggplot2) work without coercion.</span></span>
 <span><span class="va">as_df</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">{</span> <span class="fu"><a href="https://rdrr.io/r/base/class.html" class="external-link">class</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="st">"data.frame"</span>; <span class="va">x</span> <span class="op">}</span></span>
 <span><span class="va">pal</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>control <span class="op">=</span> <span class="st">"#1F77B4"</span>, treatment <span class="op">=</span> <span class="st">"#D62728"</span><span class="op">)</span></span></code></pre></div>
+<blockquote>
+<p><strong>New to Hill numbers?</strong> This is a complete worked
+example. If terms like diversity order <code>q</code>, alpha/beta
+diversity or phylogenetic/functional diversity are unfamiliar, start
+with the <a href="hilldiv3.html">Getting started</a> guide and the <a href="diversity-types.html">Diversity types</a> article, then come back
+here.</p>
+</blockquote>
 <p>Genome-resolved metagenomics summarises a microbial community as a
 table of metagenome-assembled genome (MAG) abundances. Each MAG carries
 two extra layers of information that a raw count ignores: its

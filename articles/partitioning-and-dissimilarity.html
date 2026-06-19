@@ -88,13 +88,26 @@
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/alberdilab/hilldiv3" class="external-link">hilldiv3</a></span><span class="op">)</span></span></code></pre></div>
 <p>Measuring <em>how different</em> samples are from one another is a
-separate question from how diverse each one is. <code>hilldiv3</code>
-answers it by <strong>partitioning</strong> the total (gamma) diversity
-of a set of samples into a within-sample (alpha) and a between-sample
-(beta) component, then converting beta into bounded (dis)similarity
-metrics. All of this works for neutral, phylogenetic and functional
-diversity — just add a <code>tree</code> or <code>dist</code> as in the
-<a href="diversity-types.html">diversity-types article</a>.</p>
+separate question from how diverse each one is. The classic way to
+connect the two uses three quantities (Whittaker’s
+alpha/beta/gamma):</p>
+<ul>
+<li>
+<strong>alpha</strong> — the diversity <em>within</em> a typical
+single sample;</li>
+<li>
+<strong>gamma</strong> — the diversity of <em>all</em> samples
+pooled together;</li>
+<li>
+<strong>beta</strong> — how much the samples <em>differ</em> from
+one another, obtained from the other two.</li>
+</ul>
+<p><code>hilldiv3</code> computes this split by
+<strong>partitioning</strong> gamma into an alpha and a beta component,
+then (optionally) converting beta into bounded (dis)similarity metrics
+that are easy to compare across studies. All of this works for neutral,
+phylogenetic and functional diversity — just add a <code>tree</code> or
+<code>dist</code> as in the <a href="diversity-types.html">diversity-types article</a>.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">5</span>,</span>
@@ -217,6 +230,12 @@ transition, and <code>gamma</code>.</p>
 <div class="section level3">
 <h3 id="how-it-works-and-what-it-assumes">How it works (and what it assumes)<a class="anchor" aria-label="anchor" href="#how-it-works-and-what-it-assumes"></a>
 </h3>
+<blockquote>
+<p><strong>Advanced — skip on a first read.</strong> The formula below
+explains <em>why</em> the betas behave well; you do not need it to use
+<code><a href="../reference/hillpart.html">hillpart()</a></code>. The practical takeaways are the bullet points
+on assumptions that follow it.</p>
+</blockquote>
 <p>All three diversity types share one construction under <strong>global
 equal sample weighting</strong> (every sample weighted
 <code>1/n</code>). Each scale’s diversity is Jost’s (2007) weighted
@@ -454,6 +473,11 @@ installed:</p>
 <div class="section level2">
 <h2 id="contrasts-with-other-packages">Contrasts with other packages<a class="anchor" aria-label="anchor" href="#contrasts-with-other-packages"></a>
 </h2>
+<blockquote>
+<p><strong>Advanced — skip on a first read.</strong> This section is for
+users coming from other Hill-number tools who want to reconcile
+differing numbers. Newcomers can safely move on.</p>
+</blockquote>
 <p><code>hillR</code> and <code>hilldiv2</code> also split Hill numbers
 into alpha, gamma and beta. For <strong>neutral</strong> and
 <strong>phylogenetic</strong> diversity their partitions match

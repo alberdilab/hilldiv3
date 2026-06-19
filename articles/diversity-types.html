@@ -87,9 +87,28 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/alberdilab/hilldiv3" class="external-link">hilldiv3</a></span><span class="op">)</span></span></code></pre></div>
-<p><code>hilldiv3</code> measures three flavours of diversity from the
-same count table. You never switch functions — you switch
-<em>inputs</em>, and the diversity type is inferred:</p>
+<p>“Diversity” can mean three different things, and which one you want
+depends on the question you are asking:</p>
+<ul>
+<li>
+<strong>Neutral</strong> diversity counts taxa and weighs them by
+abundance, treating every taxon as equally distinct. Two communities
+with the same number of equally common taxa are equally diverse, no
+matter <em>which</em> taxa they are.</li>
+<li>
+<strong>Phylogenetic</strong> diversity also asks how
+<em>related</em> the taxa are. A community of three close cousins is
+less diverse than three taxa from distant branches of the tree of life,
+even if both have three taxa.</li>
+<li>
+<strong>Functional</strong> diversity asks how <em>different</em>
+the taxa are in their traits (size, diet, metabolism…). Three taxa that
+do very similar things are less diverse than three that do contrasting
+things.</li>
+</ul>
+<p><code>hilldiv3</code> measures all three from the same count table.
+You never switch functions — you switch <em>inputs</em>, and the
+diversity type is inferred from what you supply:</p>
 <table class="table">
 <thead><tr class="header">
 <th>You pass</th>
@@ -415,6 +434,12 @@ article).</p>
 <div class="section level2">
 <h2 id="contrasts-with-other-packages">Contrasts with other packages<a class="anchor" aria-label="anchor" href="#contrasts-with-other-packages"></a>
 </h2>
+<blockquote>
+<p><strong>Advanced — skip on a first read.</strong> This section is for
+users coming from other Hill-number tools who want to know why the
+numbers can differ. If you are just getting started, you can move on to
+the next article.</p>
+</blockquote>
 <p>Other R packages compute Hill numbers, and their
 <strong>phylogenetic</strong> results can disagree with
 <code>hilldiv3</code> even on identical data. These are not bugs: they

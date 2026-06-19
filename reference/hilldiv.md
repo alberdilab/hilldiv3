@@ -59,10 +59,10 @@ hilldiv(
   Reference tree depth for *phylogenetic* Hill numbers (ignored for
   neutral and functional types). `"pool"` (default) reads every sample
   at one common depth `T = mean(T_j)`, so values share a comparable axis
-  (matching hilldiv2's `multi` behaviour); `"sample"` reads each sample
-  at its own depth `T_j` (effective lineages at that sample's depth).
-  The two coincide on ultrametric trees. This reference depth is
-  intentionally *not* offered by
+  across samples; `"sample"` reads each sample at its own depth `T_j`
+  (effective lineages at that sample's depth). The two coincide on
+  ultrametric trees. This reference depth is intentionally *not* offered
+  by
   [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md):
   in a partition `T` is fixed at the mean per-sample depth of Chiu et
   al. (2014), the unique value for which `gamma / alpha` is a valid

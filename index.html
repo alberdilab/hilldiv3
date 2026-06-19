@@ -77,43 +77,14 @@
 </h1></div>
 <!-- badges: start -->
 
-<p><code>hilldiv3</code> is a redesign of <a href="https://github.com/anttonalberdi/hilldiv2" class="external-link">hilldiv2</a> for analysing the diversity of biological communities (OTU/ASV/MAG tables) based on Hill numbers. It provides a unified framework for <strong>neutral</strong>, <strong>phylogenetic</strong> and <strong>functional</strong> diversity: measurement, partitioning, (dis)similarity, profiles, evenness and redundancy.</p>
-<div class="section level2">
-<h2 id="whats-new-in-v3">What’s new in v3<a class="anchor" aria-label="anchor" href="#whats-new-in-v3"></a>
-</h2>
-<ul>
-<li>A tested, isolated <strong>compute engine</strong> — the diversity maths lives in one place and is unit-tested independently of the user-facing functions.</li>
-<li>A single <strong>validation/alignment layer</strong> that reorders data to match the tree or distance matrix (fixing silent-misalignment in v2), plus a real <code><a href="reference/match_data.html">match_data()</a></code> helper.</li>
-<li>
-<strong>Dual input support</strong>: matrices, data frames, tibbles, <code>phyloseq</code> and <code>TreeSummarizedExperiment</code> objects via <code>as_hill_input()</code>.</li>
-<li>Faster phylogenetic computation using an <code>ape</code> post-order traversal in place of <code>geiger::tips()</code>; <code><a href="reference/hillpair.html">hillpair()</a></code> computes the shared structure once and reuses it across all sample pairs.</li>
-<li>
-<strong>Tidy by default</strong>: every <code>hill*</code> function returns a long-format <code>data.frame</code> with <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>/<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>/<code>autoplot()</code> methods; pass <code>out = "matrix"</code> for a plain matrix.</li>
-<li>An explicit <code>type = c("auto", "neutral", "phylogenetic", "functional")</code> argument that asserts and validates the diversity type (auto-detected by default).</li>
-<li>New: <code><a href="reference/hillprof.html">hillprof()</a></code> (diversity profiles) and <code><a href="reference/hilleven.html">hilleven()</a></code> (evenness), plus bundled example data (<code>gut_counts</code>, <code>gut_tree</code>, <code>gut_traits</code>).</li>
-<li>The familiar <code><a href="reference/hilldiv.html">hilldiv()</a></code>, <code><a href="reference/hillpart.html">hillpart()</a></code>, <code><a href="reference/hilldiss.html">hilldiss()</a></code>, <code><a href="reference/hillsim.html">hillsim()</a></code>, <code><a href="reference/hillpair.html">hillpair()</a></code>, <code><a href="reference/hillred.html">hillred()</a></code>, <code><a href="reference/tss.html">tss()</a></code> and <code><a href="reference/traits2dist.html">traits2dist()</a></code> names are kept.</li>
-</ul>
-</div>
+<p><code>hilldiv3</code> measures and compares the diversity of biological communities — OTU, ASV or MAG count tables — using <strong>Hill numbers</strong>. Hill numbers are a single, intuitive family of diversity metrics: each one is an <em>effective number of taxa</em> (“how many equally-abundant taxa would give this much diversity”), and one parameter, the <em>diversity order</em> <code>q</code>, slides smoothly between counting all taxa equally (richness), weighting them by abundance (Shannon) and focusing on the common ones (Simpson). Because everything is expressed in the same currency, results are directly comparable across samples, studies and methods.</p>
+<p>From that one foundation, <code>hilldiv3</code> provides a unified toolkit for <strong>neutral</strong> diversity (abundances only), <strong>phylogenetic</strong> diversity (accounting for how related taxa are) and <strong>functional</strong> diversity (accounting for how different their traits are), covering measurement, partitioning, (dis)similarity, profiles, evenness and redundancy. You call the same functions for all three — the diversity type is chosen by whether you supply a tree or a distance matrix.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alberdilab/hilldiv3"</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level2">
-<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
-</h2>
-<p>Full documentation lives on the package website: <strong><a href="https://alberdilab.github.io/hilldiv3/" class="uri">https://alberdilab.github.io/hilldiv3/</a></strong></p>
-<ul>
-<li>
-<strong>Get started</strong> — <code><a href="articles/hilldiv3.html">vignette("hilldiv3")</a></code>.</li>
-<li>
-<strong>Articles</strong> — in-depth guides to diversity types, partitioning &amp; (dis)similarity, profiles/evenness/redundancy, and preparing your data.</li>
-<li>
-<strong>Reference</strong> — every exported function, grouped by task.</li>
-</ul>
-<p>This package is a complete redesign of hilldiv2; see <a href="NEWS.html"><code>NEWS.md</code></a> for what changed.</p>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
@@ -131,6 +102,38 @@
 <span><span class="co"># Results are tidy by default and plot directly.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/hillprof.html">hillprof</a></span><span class="op">(</span><span class="va">gut_counts</span><span class="op">)</span><span class="op">)</span>             <span class="co"># diversity profile</span></span>
 <span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, out <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>    <span class="co"># matrix: samples x q orders</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="documentation">Documentation<a class="anchor" aria-label="anchor" href="#documentation"></a>
+</h2>
+<p>Full documentation lives on the package website: <strong><a href="https://alberdilab.github.io/hilldiv3/" class="uri">https://alberdilab.github.io/hilldiv3/</a></strong></p>
+<ul>
+<li>
+<strong>Get started</strong> — <code><a href="articles/hilldiv3.html">vignette("hilldiv3")</a></code>, a gentle introduction for anyone using Hill numbers for the first time.</li>
+<li>
+<strong>Articles</strong> — step-by-step guides to diversity types, partitioning &amp; (dis)similarity, profiles/evenness/redundancy, and preparing your data.</li>
+<li>
+<strong>Examples</strong> — complete worked analyses (bat diets, gut microbiomes).</li>
+<li>
+<strong>Reference</strong> — every exported function, grouped by task.</li>
+</ul>
+</div>
+<div class="section level2">
+<h2 id="whats-new-in-v3">What’s new in v3<a class="anchor" aria-label="anchor" href="#whats-new-in-v3"></a>
+</h2>
+<p>If you have used <a href="https://github.com/anttonalberdi/hilldiv2" class="external-link">hilldiv2</a>, v3 is a full redesign that keeps the familiar function names (<code><a href="reference/hilldiv.html">hilldiv()</a></code>, <code><a href="reference/hillpart.html">hillpart()</a></code>, <code><a href="reference/hilldiss.html">hilldiss()</a></code>, <code><a href="reference/hillsim.html">hillsim()</a></code>, <code><a href="reference/hillpair.html">hillpair()</a></code>, <code><a href="reference/hillred.html">hillred()</a></code>, <code><a href="reference/tss.html">tss()</a></code>, <code><a href="reference/traits2dist.html">traits2dist()</a></code>) while changing how they work underneath:</p>
+<ul>
+<li>A tested, isolated <strong>compute engine</strong> — the diversity maths lives in one place and is unit-tested independently of the user-facing functions.</li>
+<li>A single <strong>validation/alignment layer</strong> that reorders data to match the tree or distance matrix (fixing silent misalignment in v2), plus a real <code><a href="reference/match_data.html">match_data()</a></code> helper.</li>
+<li>
+<strong>Broad input support</strong>: matrices, data frames, tibbles, <code>phyloseq</code> and <code>TreeSummarizedExperiment</code> objects.</li>
+<li>Faster phylogenetic computation using an <code>ape</code> post-order traversal in place of <code>geiger::tips()</code>; <code><a href="reference/hillpair.html">hillpair()</a></code> computes the shared structure once and reuses it across all sample pairs.</li>
+<li>
+<strong>Tidy by default</strong>: every <code>hill*</code> function returns a long-format <code>data.frame</code> with <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>/<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>/<code>autoplot()</code> methods; pass <code>out = "matrix"</code> for a plain matrix.</li>
+<li>An explicit <code>type = c("auto", "neutral", "phylogenetic", "functional")</code> argument that asserts and validates the diversity type (auto-detected by default).</li>
+<li>New functions <code><a href="reference/hillprof.html">hillprof()</a></code> (diversity profiles) and <code><a href="reference/hilleven.html">hilleven()</a></code> (evenness), hierarchical multi-scale partitioning in <code><a href="reference/hillpart.html">hillpart()</a></code>, plus bundled example data (<code>gut_counts</code>, <code>gut_tree</code>, <code>gut_traits</code>).</li>
+</ul>
+<p>See <a href="NEWS.html"><code>NEWS.md</code></a> for the full changelog.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
@@ -180,6 +183,10 @@
 <li><a href="https://github.com/alberdilab/hilldiv3/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/alberdilab/hilldiv3/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/alberdilab/hilldiv3" class="external-link"><img src="https://codecov.io/gh/alberdilab/hilldiv3/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://github.com/alberdilab/hilldiv3/actions/workflows/lint.yaml" class="external-link"><img src="https://github.com/alberdilab/hilldiv3/actions/workflows/lint.yaml/badge.svg" alt="lint"></a></li>
+<li><a href="https://CRAN.R-project.org/package=hilldiv3" class="external-link"><img src="https://www.r-pkg.org/badges/version/hilldiv3" alt="CRAN status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=hilldiv3" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/hilldiv3" alt="CRAN downloads"></a></li>
+<li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
+<li><a href="https://www.gnu.org/licenses/gpl-3.0" class="external-link"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3"></a></li>
 </ul>
 </div>
 

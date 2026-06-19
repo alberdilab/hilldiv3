@@ -15,6 +15,15 @@ as_df <- function(x) { class(x) <- "data.frame"; x }
 pal <- c(control = "#1F77B4", treatment = "#D62728")
 ```
 
+> **New to Hill numbers?** This is a complete worked example. If terms
+> like diversity order `q`, alpha/beta diversity or
+> phylogenetic/functional diversity are unfamiliar, start with the
+> [Getting
+> started](https://alberdilab.github.io/hilldiv3/articles/hilldiv3.md)
+> guide and the [Diversity
+> types](https://alberdilab.github.io/hilldiv3/articles/diversity-types.md)
+> article, then come back here.
+
 Genome-resolved metagenomics summarises a microbial community as a table
 of metagenome-assembled genome (MAG) abundances. Each MAG carries two
 extra layers of information that a raw count ignores: its **position on

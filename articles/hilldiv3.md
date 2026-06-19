@@ -10,9 +10,19 @@ library(hilldiv3)
 `hilldiv3` measures and compares the diversity of biological communities
 (OTU/ASV/MAG tables) using **Hill numbers**, a single family of metrics
 that unifies richness, Shannon and Simpson diversity through one
-parameter, the *diversity order* `q`. From the same framework it derives
-diversity **partitioning**, **(dis)similarity**, **profiles**,
-**evenness** and **redundancy**, for three flavours of diversity:
+parameter, the *diversity order* `q`.
+
+If Hill numbers are new to you, the key idea is the **effective number
+of taxa**: every value answers “how many equally-abundant taxa would
+give this much diversity?”. A community of 10 taxa where one dominates
+and the rest are rare behaves, in practice, like far fewer than 10 — and
+the Hill number says exactly how many. Because all the metrics below
+share this one currency, you can compare them directly across samples,
+studies and diversity types.
+
+From the same framework `hilldiv3` derives diversity **partitioning**,
+**(dis)similarity**, **profiles**, **evenness** and **redundancy**, for
+three flavours of diversity:
 
 | Flavour          | What it accounts for     | How you ask for it |
 |------------------|--------------------------|--------------------|
@@ -56,11 +66,13 @@ The package also ships a small **simulated** gut-microbiome example —
 `gut_counts` (a MAG count table), `gut_tree` (a phylogeny) and
 `gut_traits` (a trait table) — used throughout the website articles.
 
-## Alpha diversity
+## Alpha diversity (within a sample)
 
 [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md)
-returns Hill numbers per sample. By default it computes orders `q = 0`
-(richness), `q = 1` (Shannon diversity) and `q = 2` (Simpson diversity):
+returns Hill numbers per sample — the diversity *within* each community,
+traditionally called **alpha diversity**. By default it computes orders
+`q = 0` (richness), `q = 1` (Shannon diversity) and `q = 2` (Simpson
+diversity):
 
 ``` r
 

@@ -94,7 +94,15 @@
 biological communities (OTU/ASV/MAG tables) using <strong>Hill
 numbers</strong>, a single family of metrics that unifies richness,
 Shannon and Simpson diversity through one parameter, the <em>diversity
-order</em> <code>q</code>. From the same framework it derives diversity
+order</em> <code>q</code>.</p>
+<p>If Hill numbers are new to you, the key idea is the <strong>effective
+number of taxa</strong>: every value answers “how many equally-abundant
+taxa would give this much diversity?”. A community of 10 taxa where one
+dominates and the rest are rare behaves, in practice, like far fewer
+than 10 — and the Hill number says exactly how many. Because all the
+metrics below share this one currency, you can compare them directly
+across samples, studies and diversity types.</p>
+<p>From the same framework <code>hilldiv3</code> derives diversity
 <strong>partitioning</strong>, <strong>(dis)similarity</strong>,
 <strong>profiles</strong>, <strong>evenness</strong> and
 <strong>redundancy</strong>, for three flavours of diversity:</p>
@@ -158,11 +166,13 @@ gut-microbiome example — <code>gut_counts</code> (a MAG count table),
 table) — used throughout the website articles.</p>
 </div>
 <div class="section level2">
-<h2 id="alpha-diversity">Alpha diversity<a class="anchor" aria-label="anchor" href="#alpha-diversity"></a>
+<h2 id="alpha-diversity-within-a-sample">Alpha diversity (within a sample)<a class="anchor" aria-label="anchor" href="#alpha-diversity-within-a-sample"></a>
 </h2>
-<p><code><a href="../reference/hilldiv.html">hilldiv()</a></code> returns Hill numbers per sample. By default it
-computes orders <code>q = 0</code> (richness), <code>q = 1</code>
-(Shannon diversity) and <code>q = 2</code> (Simpson diversity):</p>
+<p><code><a href="../reference/hilldiv.html">hilldiv()</a></code> returns Hill numbers per sample — the
+diversity <em>within</em> each community, traditionally called
+<strong>alpha diversity</strong>. By default it computes orders
+<code>q = 0</code> (richness), <code>q = 1</code> (Shannon diversity)
+and <code>q = 2</code> (Simpson diversity):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>

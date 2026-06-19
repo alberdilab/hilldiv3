@@ -6,12 +6,19 @@ library(hilldiv3)
 ```
 
 Measuring *how different* samples are from one another is a separate
-question from how diverse each one is. `hilldiv3` answers it by
-**partitioning** the total (gamma) diversity of a set of samples into a
-within-sample (alpha) and a between-sample (beta) component, then
-converting beta into bounded (dis)similarity metrics. All of this works
-for neutral, phylogenetic and functional diversity — just add a `tree`
-or `dist` as in the [diversity-types
+question from how diverse each one is. The classic way to connect the
+two uses three quantities (Whittaker’s alpha/beta/gamma):
+
+- **alpha** — the diversity *within* a typical single sample;
+- **gamma** — the diversity of *all* samples pooled together;
+- **beta** — how much the samples *differ* from one another, obtained
+  from the other two.
+
+`hilldiv3` computes this split by **partitioning** gamma into an alpha
+and a beta component, then (optionally) converting beta into bounded
+(dis)similarity metrics that are easy to compare across studies. All of
+this works for neutral, phylogenetic and functional diversity — just add
+a `tree` or `dist` as in the [diversity-types
 article](https://alberdilab.github.io/hilldiv3/articles/diversity-types.md).
 
 ``` r
@@ -136,6 +143,12 @@ the same information as `alpha`, one `beta_<level>` column per
 transition, and `gamma`.
 
 ### How it works (and what it assumes)
+
+> **Advanced — skip on a first read.** The formula below explains *why*
+> the betas behave well; you do not need it to use
+> [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md).
+> The practical takeaways are the bullet points on assumptions that
+> follow it.
 
 All three diversity types share one construction under **global equal
 sample weighting** (every sample weighted `1/n`). Each scale’s diversity
@@ -351,6 +364,10 @@ hillpair(counts, q = 1, metric = "C", parallel = TRUE)
 ```
 
 ## Contrasts with other packages
+
+> **Advanced — skip on a first read.** This section is for users coming
+> from other Hill-number tools who want to reconcile differing numbers.
+> Newcomers can safely move on.
 
 `hillR` and `hilldiv2` also split Hill numbers into alpha, gamma and
 beta. For **neutral** and **phylogenetic** diversity their partitions
