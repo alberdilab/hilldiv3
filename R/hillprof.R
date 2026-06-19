@@ -5,6 +5,11 @@
 #' diversity of assemblages, since the ranking of samples can change with `q`.
 #'
 #' @inheritParams hilldiv
+#' @param type Diversity type: `"auto"` (default) infers it from the inputs
+#'   (counts only -> neutral, `+tree` -> phylogenetic, `+dist` -> functional);
+#'   an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts the
+#'   type and is validated against the inputs (e.g. `"phylogenetic"` requires a
+#'   `tree`; `"neutral"` ignores any tree/dist carried by the object).
 #' @param q Numeric vector of diversity orders to evaluate. Defaults to a fine
 #'   sweep from 0 to 3.
 #' @param out Output type: `"tibble"` (default, long format ready for plotting)
@@ -59,6 +64,11 @@ plot.hill_profile <- function(x, ...) {
 #' `q` to richness (`qD / 0D`), which ranges from 0 to 1.
 #'
 #' @inheritParams hilldiv
+#' @param type Diversity type: `"auto"` (default) infers it from the inputs
+#'   (counts only -> neutral, `+tree` -> phylogenetic, `+dist` -> functional);
+#'   an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts the
+#'   type and is validated against the inputs (e.g. `"phylogenetic"` requires a
+#'   `tree`; `"neutral"` ignores any tree/dist carried by the object).
 #' @param q Numeric vector of diversity orders (> 0 are meaningful for
 #'   evenness). Defaults to `c(1, 2)`.
 #' @param out Output shape: `"tibble"` (default) returns a long-format

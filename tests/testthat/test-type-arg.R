@@ -17,12 +17,32 @@ test_that("type = 'auto' reproduces input-based detection", {
   expect_equal(auto, detected)
 })
 
-test_that("explicit type matching the inputs equals auto", {
-  ph <- suppressMessages(hilldiv(counts, q = c(0, 1), tree = tree,
-                                 type = "phylogenetic", out = "matrix"))
+test_that("auto is cumulative: a tree adds phylogenetic to neutral", {
   auto <- suppressMessages(hilldiv(counts, q = c(0, 1), tree = tree,
                                    out = "matrix"))
-  expect_equal(ph, auto)
+  # Several types -> a named list of matrices, one per type.
+  expect_named(auto, c("neutral", "phylogenetic"))
+  ph <- suppressMessages(hilldiv(counts, q = c(0, 1), tree = tree,
+                                 type = "phylogenetic", out = "matrix"))
+  neu <- suppressMessages(hilldiv(counts, q = c(0, 1), out = "matrix"))
+  expect_equal(auto$phylogenetic, ph)
+  expect_equal(auto$neutral, neu)
+})
+
+test_that("auto with tree and dist returns all three types in one tibble", {
+  out <- suppressMessages(hilldiv(counts, q = c(0, 1), tree = tree,
+                                  dist = dist))
+  expect_named(out, c("q", "sample", "type", "value"))
+  expect_setequal(unique(out$type),
+                  c("neutral", "phylogenetic", "functional"))
+  expect_equal(nrow(out), 2L * ncol(counts) * 3L)
+})
+
+test_that("a type vector restricts which types are computed", {
+  out <- suppressMessages(hilldiv(counts, q = c(0, 1), tree = tree,
+                                  dist = dist,
+                                  type = c("neutral", "phylogenetic")))
+  expect_setequal(unique(out$type), c("neutral", "phylogenetic"))
 })
 
 test_that("type = 'neutral' ignores a supplied tree", {

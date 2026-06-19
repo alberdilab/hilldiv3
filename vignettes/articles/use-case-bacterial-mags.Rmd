@@ -80,20 +80,21 @@ range(fdist)
 
 ## Neutral, phylogenetic and functional diversity from one call
 
-The diversity *type* is chosen by what you supply: nothing extra → neutral,
-`tree =` → phylogenetic, `dist =` → functional. The interface never changes.
+The diversity *type* follows from what you supply, cumulatively: counts give
+neutral, `tree =` adds phylogenetic, `dist =` adds functional. Supplying both a
+tree and a distance matrix returns all three at once in a single tibble, with a
+`type` column telling them apart (`type =` restricts the output). The interface
+never changes.
 
 ```{r alpha}
-neu <- as_df(hilldiv(gut_counts, q = c(0, 1, 2)))
-phy <- as_df(hilldiv(gut_counts, q = c(0, 1, 2), tree = gut_tree))
-fun <- as_df(hilldiv(gut_counts, q = c(0, 1, 2), dist = fdist))
-neu$flavour <- "Neutral (qD)"
-phy$flavour <- "Phylogenetic (qPD)"
-fun$flavour <- "Functional (qFD)"
-alpha <- rbind(neu, phy, fun)
+# One call with both `tree =` and `dist =` returns neutral, phylogenetic and
+# functional diversity together, tagged by a `type` column.
+labs <- c(neutral = "Neutral (qD)", phylogenetic = "Phylogenetic (qPD)",
+          functional = "Functional (qFD)")
+alpha <- as_df(hilldiv(gut_counts, q = c(0, 1, 2),
+                       tree = gut_tree, dist = fdist))
+alpha$flavour <- factor(labs[alpha$type], labs)
 alpha$group   <- grp(alpha$sample)
-alpha$flavour <- factor(alpha$flavour,
-                        c("Neutral (qD)", "Phylogenetic (qPD)", "Functional (qFD)"))
 
 aggregate(value ~ flavour + q + group, alpha, function(x) round(mean(x), 2))
 ```

@@ -41,17 +41,15 @@ theme_set(theme_bw(base_size = 12) +
             theme(panel.grid.minor = element_blank(),
                   legend.position = "top"))
 
-# --- 1. The same call, three flavours of diversity --------------------------
-neu <- as_df(hilldiv(gut_counts, q = c(0, 1, 2)))
-phy <- as_df(hilldiv(gut_counts, q = c(0, 1, 2), tree = gut_tree))
-fun <- as_df(hilldiv(gut_counts, q = c(0, 1, 2), dist = fdist))
-neu$flavour <- "Neutral (qD)"
-phy$flavour <- "Phylogenetic (qPD)"
-fun$flavour <- "Functional (qFD)"
-alpha <- rbind(neu, phy, fun)
+# --- 1. One call, three flavours of diversity -------------------------------
+# Supplying both `tree =` and `dist =` returns neutral, phylogenetic and
+# functional diversity together, tagged by a `type` column.
+labs <- c(neutral = "Neutral (qD)", phylogenetic = "Phylogenetic (qPD)",
+          functional = "Functional (qFD)")
+alpha <- as_df(hilldiv(gut_counts, q = c(0, 1, 2),
+                       tree = gut_tree, dist = fdist))
+alpha$flavour <- factor(labs[alpha$type], labs)
 alpha$group   <- grp(alpha$sample)
-alpha$flavour <- factor(alpha$flavour,
-                        c("Neutral (qD)", "Phylogenetic (qPD)", "Functional (qFD)"))
 
 p_alpha <- ggplot(alpha, aes(factor(q), value, fill = group)) +
   geom_boxplot(outlier.size = 0.6, width = 0.7) +

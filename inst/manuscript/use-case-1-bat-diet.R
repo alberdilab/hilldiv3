@@ -34,12 +34,12 @@ theme_set(theme_bw(base_size = 12) +
                   legend.position = "top"))
 
 # --- 1. Neutral vs. phylogenetic alpha diversity ----------------------------
-neu <- as_df(hilldiv(bat_counts, q = c(0, 1, 2)))
-phy <- as_df(hilldiv(bat_counts, q = c(0, 1, 2), tree = bat_tree))
-neu$flavour <- "Neutral (qD)";        phy$flavour <- "Phylogenetic (qPD)"
-alpha <- rbind(neu, phy)
+# One call with `tree =` returns neutral and phylogenetic diversity together,
+# tagged by a `type` column.
+labs <- c(neutral = "Neutral (qD)", phylogenetic = "Phylogenetic (qPD)")
+alpha <- as_df(hilldiv(bat_counts, q = c(0, 1, 2), tree = bat_tree))
+alpha$flavour <- factor(labs[alpha$type], labs)
 alpha$habitat <- hab(alpha$sample)
-alpha$flavour <- factor(alpha$flavour, c("Neutral (qD)", "Phylogenetic (qPD)"))
 
 p_alpha <- ggplot(alpha, aes(factor(q), value, fill = habitat)) +
   geom_boxplot(outlier.size = 0.6, width = 0.7) +

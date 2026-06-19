@@ -29,37 +29,46 @@ taxa in \code{data}.}
 
 \item{tau}{Optional functional distance threshold. Defaults to \code{max(dist)}.}
 
-\item{type}{Diversity type: \code{"auto"} (default) infers it from the inputs
-(counts only -> neutral, \code{+tree} -> phylogenetic, \code{+dist} -> functional);
-an explicit \code{"neutral"}, \code{"phylogenetic"} or \code{"functional"} asserts the
-type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
-\code{tree}; \code{"neutral"} ignores any tree/dist carried by the object).}
+\item{type}{Diversity type(s) to compute. \code{"auto"} (default) returns every
+type whose inputs are present (always neutral, plus phylogenetic with a
+\code{tree} and functional with a \code{dist}). Pass an explicit type, or a character
+vector of types, to restrict the output -- e.g. \code{"neutral"} ignores any
+tree/dist carried by the object, and \code{c("neutral", "phylogenetic")} drops
+functional even when a \code{dist} is supplied. A requested type that lacks its
+input (e.g. \code{"phylogenetic"} without a \code{tree}) is an error.}
 
 \item{reference}{Reference tree depth for \emph{phylogenetic} Hill numbers
 (ignored for neutral and functional types). \code{"pool"} (default) reads every
 sample at one common depth \code{T = mean(T_j)}, so values share a comparable
-axis across samples; \code{"sample"} reads each sample
-at its own depth \code{T_j} (effective lineages at that sample's depth). The two
+axis across samples; \code{"sample"} reads each sample at its own depth \code{T_j}
+(effective lineages at that sample's depth). The two
 coincide on ultrametric trees. This reference depth is intentionally \emph{not}
 offered by \code{\link[=hillpart]{hillpart()}}: in a partition \code{T} is fixed at the mean per-sample
 depth of Chiu et al. (2014), the unique value for which \code{gamma / alpha}
 is a valid decomposition with \code{beta} in \verb{[1, N]}.}
 
 \item{out}{Output shape: \code{"tibble"} (default) returns a long-format
-\code{data.frame} with columns \code{q}, \code{sample}, \code{value} and \code{print()}/\code{plot()}
-methods; \code{"matrix"} returns a matrix with samples in rows and diversity
-orders (\code{q0}, \code{q1}, ...) in columns.}
+\code{data.frame} with columns \code{q}, \code{sample}, \code{value} (plus a \code{type} column when
+more than one type is computed) and \code{print()}/\code{plot()} methods; \code{"matrix"}
+returns a matrix with samples in rows and diversity orders (\code{q0}, \code{q1},
+...) in columns, or, when more than one type is computed, a named list of
+such matrices (one per type).}
 }
 \value{
-A long-format \code{data.frame} of class \code{hill_diversity} (default), or a
-matrix of Hill numbers with samples in rows and diversity orders (\code{q0},
-\code{q1}, ...) in columns when \code{out = "matrix"}.
+A long-format \code{data.frame} of class \code{hill_diversity} (default). With
+\code{out = "matrix"}, a matrix of Hill numbers (samples in rows, diversity
+orders \code{q0}, \code{q1}, ... in columns) for a single type, or a named list of
+such matrices when several types are computed.
 }
 \description{
-Compute neutral, phylogenetic or functional Hill numbers (alpha diversity)
-from a single sample or a count table. The diversity type is inferred from
-the inputs: counts only -> neutral; counts + \code{tree} -> phylogenetic;
-counts + \code{dist} -> functional.
+Compute neutral, phylogenetic and/or functional Hill numbers (alpha
+diversity) from a single sample or a count table. By default the computation
+is \emph{cumulative}: every diversity type whose inputs are present is returned.
+Counts are always available, so neutral is always computed; a \code{tree} adds
+phylogenetic and a \code{dist} adds functional. Supplying both a \code{tree} and a
+\code{dist} therefore returns neutral, phylogenetic and functional side by side in
+a single tibble (with a \code{type} column). Use \code{type} to restrict the output to
+a subset.
 }
 \examples{
 counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
@@ -67,6 +76,15 @@ counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,
 hilldiv(counts)
 hilldiv(counts, q = c(0, 1, 2))
 plot(hilldiv(counts, q = c(0, 1, 2)))
+
+# Supplying both a tree and a distance matrix returns neutral, phylogenetic
+# and functional diversity together, distinguished by a `type` column.
+tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
+dist <- as.matrix(stats::dist(c(t1 = 0, t2 = 1, t3 = 4)))
+hilldiv(counts, tree = tree, dist = dist)
+
+# Restrict the output with `type` (a scalar or a vector):
+hilldiv(counts, tree = tree, dist = dist, type = c("neutral", "functional"))
 }
 \references{
 Chao, A., Chiu, C.-H. & Jost, L. (2010). Phylogenetic diversity measures

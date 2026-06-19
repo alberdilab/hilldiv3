@@ -86,11 +86,15 @@ hilldiv(counts)
 ```
 
 Higher `q` down-weights rare taxa, so `qD` decreases as `q` grows unless the
-sample is perfectly even. Add a tree or a distance matrix to switch flavour:
+sample is perfectly even. Add a tree or a distance matrix to layer on more
+flavours: a `tree` adds phylogenetic diversity alongside neutral, and supplying
+both a `tree` and a `dist` returns all three types at once (a `type` column
+tells them apart). Restrict the output with `type =`.
 
 ```{r}
 tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
-hilldiv(counts, tree = tree)              # phylogenetic
+hilldiv(counts, tree = tree)                   # neutral + phylogenetic
+hilldiv(counts, tree = tree, type = "phylogenetic")   # phylogenetic only
 ```
 
 ## Partitioning and dissimilarity

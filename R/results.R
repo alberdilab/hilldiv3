@@ -69,6 +69,12 @@ print.hill_result <- function(x, ...) {
 
 #' @exportS3Method graphics::plot hill_diversity
 plot.hill_diversity <- function(x, ...) {
+  # Combined neutral/phylo/functional output carries a `type` column; draw one
+  # line per type-and-sample so the flavours do not collapse onto each other.
+  if ("type" %in% names(x)) {
+    x$.group <- paste(x$type, x$sample, sep = " / ")
+    return(.hill_lineplot(x, ".group", attr(x, "hill_value_label"), ...))
+  }
   .hill_lineplot(x, "sample", attr(x, "hill_value_label"), ...)
 }
 
@@ -116,6 +122,22 @@ plot.hill_similarity <- function(x, ...) {
 }
 
 autoplot.hill_diversity <- function(object, ...) {
+  # Facet the combined output by diversity type; colour stays per sample.
+  if ("type" %in% names(object)) {
+    rlang::check_installed("ggplot2", "for `autoplot()` methods.")
+    return(
+      ggplot2::ggplot(
+        object,
+        ggplot2::aes(x = .data$q, y = .data$value,
+                     colour = .data$sample, group = .data$sample)
+      ) +
+        ggplot2::geom_line(linewidth = 1) +
+        ggplot2::geom_point() +
+        ggplot2::facet_wrap(ggplot2::vars(.data$type), scales = "free_y") +
+        ggplot2::labs(x = "Diversity order (q)",
+                      y = attr(object, "hill_value_label"), colour = NULL)
+    )
+  }
   .hill_autoplot(object, "sample", attr(object, "hill_value_label"), ...)
 }
 autoplot.hill_profile <- function(object, ...) {

@@ -36,13 +36,16 @@ fdist <- traits2dist(gut_traits)   # Gower distance, range 0–1
 
 ## Neutral, phylogenetic and functional diversity from one call
 
-The diversity *type* is chosen by what you supply: nothing extra → neutral,
-`tree =` → phylogenetic, `dist =` → functional. The interface never changes.
+The diversity *type* follows from what you supply, cumulatively: counts give
+neutral, `tree =` adds phylogenetic, `dist =` adds functional. Supplying both a
+tree and a distance matrix returns all three at once in a single tibble, with a
+`type` column telling them apart; `type =` restricts the output. The interface
+never changes.
 
 ```r
-hilldiv(gut_counts, q = c(0, 1, 2))                # neutral, qD
-hilldiv(gut_counts, q = c(0, 1, 2), tree = gut_tree)   # phylogenetic, qPD
-hilldiv(gut_counts, q = c(0, 1, 2), dist = fdist)      # functional, qFD
+hilldiv(gut_counts, q = c(0, 1, 2))                                 # neutral, qD
+hilldiv(gut_counts, q = c(0, 1, 2), tree = gut_tree)                # neutral + phylogenetic
+hilldiv(gut_counts, q = c(0, 1, 2), tree = gut_tree, dist = fdist)  # all three at once
 ```
 
 ![Neutral, phylogenetic and functional alpha diversity by group](figures/uc2-alpha.png)

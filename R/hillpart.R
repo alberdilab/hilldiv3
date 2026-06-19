@@ -6,6 +6,11 @@
 #' one beta per hierarchical level.
 #'
 #' @inheritParams hilldiv
+#' @param type Diversity type: `"auto"` (default) infers it from the inputs
+#'   (counts only -> neutral, `+tree` -> phylogenetic, `+dist` -> functional);
+#'   an explicit `"neutral"`, `"phylogenetic"` or `"functional"` asserts the
+#'   type and is validated against the inputs (e.g. `"phylogenetic"` requires a
+#'   `tree`; `"neutral"` ignores any tree/dist carried by the object).
 #' @param data A count table (taxa x samples) or a supported object; a single
 #'   sample is not meaningful for partitioning.
 #' @param hierarchy Optional one-sided nesting formula, coarsest to finest, e.g.

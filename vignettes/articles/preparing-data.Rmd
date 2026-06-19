@@ -67,7 +67,7 @@ ps <- phyloseq(
   otu_table(counts, taxa_are_rows = TRUE),
   phy_tree(ape::read.tree(text = "((t1:1,t2:1):1,t3:2);"))
 )
-hilldiv(ps)        # phylogenetic, tree taken from the object
+hilldiv(ps)        # neutral + phylogenetic, tree taken from the object
 ```
 
 ## Normalisation with `tss()`

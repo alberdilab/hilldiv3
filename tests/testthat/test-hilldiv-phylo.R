@@ -13,7 +13,8 @@ test_that("q = 0 phylogenetic Hill number is Faith's PD / T", {
   counts <- matrix(c(5, 3, 1, 1), ncol = 1,
                    dimnames = list(c("t1", "t2", "t3", "t4"), "s1"))
   out <- suppressMessages(
-    hilldiv(counts, q = 0, tree = tree, reference = "sample", out = "matrix"))
+    hilldiv(counts, q = 0, tree = tree, reference = "sample",
+            type = "phylogenetic", out = "matrix"))
   # All tips present -> PD is the whole tree length; T is the abundance-weighted
   # mean depth, here equal to tree height since the tree is rooted at depth.
   ba <- hilldiv3:::branch_abundance(tree, tss(counts))
@@ -31,7 +32,8 @@ test_that("sample reference agrees with the partition engine at N = 1", {
     pe <- hilldiv3:::part_eval(prep, 1, q)
     Tj <- sum(prep$Li * prep$aij[, 1])
     hd <- suppressMessages(
-      hilldiv(cj, q = q, tree = tree, reference = "sample", out = "matrix"))
+      hilldiv(cj, q = q, tree = tree, reference = "sample",
+              type = "phylogenetic", out = "matrix"))
     expect_equal(unname(hd[1, ]), unname(pe[, "alpha"] / Tj))
   }
 })
@@ -40,7 +42,8 @@ test_that("pool reference reads all samples at one common depth", {
   tree <- phylo_tree()
   counts <- phylo_counts()
   out <- suppressMessages(
-    hilldiv(counts, q = 0, tree = tree, reference = "pool", out = "matrix"))
+    hilldiv(counts, q = 0, tree = tree, reference = "pool",
+            type = "phylogenetic", out = "matrix"))
   # Both samples contain every tip, so at q = 0 the pooled-depth phylo Hill
   # number (PD / T_pool) is identical across samples.
   expect_equal(unname(out["s1", "q0"]), unname(out["s2", "q0"]))
@@ -51,9 +54,11 @@ test_that("pool and sample references coincide on an ultrametric tree", {
   counts <- phylo_counts()
   q <- c(0, 1, 2)
   a <- suppressMessages(
-    hilldiv(counts, q = q, tree = ut, reference = "sample", out = "matrix"))
+    hilldiv(counts, q = q, tree = ut, reference = "sample",
+            type = "phylogenetic", out = "matrix"))
   b <- suppressMessages(
-    hilldiv(counts, q = q, tree = ut, reference = "pool", out = "matrix"))
+    hilldiv(counts, q = q, tree = ut, reference = "pool",
+            type = "phylogenetic", out = "matrix"))
   expect_equal(a, b)
 })
 
@@ -62,8 +67,9 @@ test_that("pool is the default reference", {
   counts <- phylo_counts()
   q <- c(0, 1, 2)
   default <- suppressMessages(
-    hilldiv(counts, q = q, tree = tree, out = "matrix"))
+    hilldiv(counts, q = q, tree = tree, type = "phylogenetic", out = "matrix"))
   pool <- suppressMessages(
-    hilldiv(counts, q = q, tree = tree, reference = "pool", out = "matrix"))
+    hilldiv(counts, q = q, tree = tree, reference = "pool",
+         type = "phylogenetic", out = "matrix"))
   expect_equal(default, pool)
 })

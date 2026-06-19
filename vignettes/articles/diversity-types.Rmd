@@ -29,18 +29,25 @@ the question you are asking:
   diverse than three that do contrasting things.
 
 `hilldiv3` measures all three from the same count table. You never switch
-functions — you switch *inputs*, and the diversity type is inferred from what
-you supply:
+functions — you switch *inputs*, and the diversity types follow cumulatively
+from what you supply:
 
-| You pass | Diversity type |
+| You pass | `hilldiv()` returns |
 |---|---|
 | counts only | **neutral** |
-| counts + `tree` | **phylogenetic** |
-| counts + `dist` | **functional** |
+| counts + `tree` | neutral + **phylogenetic** |
+| counts + `dist` | neutral + **functional** |
+| counts + `tree` + `dist` | neutral + **phylogenetic** + **functional** |
+
+When more than one type is returned they are stacked in a single tibble with a
+`type` column. Pass `type =` (a single type or a vector) to restrict the output
+— e.g. `type = "phylogenetic"` for that flavour alone. The examples below use
+`type =` to isolate each type in turn; the [last section](#all-three-at-once)
+shows them all from one call.
 
 This article walks through all three with `hilldiv()`, the alpha-diversity
 workhorse. The same `tree` / `dist` logic applies to every other `hill*`
-function.
+function (which return one type at a time).
 
 ```{r data}
 counts <- matrix(
@@ -90,7 +97,7 @@ crediting samples that span deeper, more divergent lineages (Chao et al. 2010).
 
 ```{r phylo}
 tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
-hilldiv(counts, tree = tree)
+hilldiv(counts, tree = tree, type = "phylogenetic")
 ```
 
 The tip labels must cover the same taxa as the count table. `hilldiv3`
@@ -114,7 +121,7 @@ fdist <- as.matrix(dist(
   data.frame(body = c(1, 0.2, 0.9), diet = c(0, 1, 1),
              row.names = c("t1", "t2", "t3"))
 ))
-hilldiv(counts, dist = fdist)
+hilldiv(counts, dist = fdist, type = "functional")
 ```
 
 ### Building distances from traits
@@ -141,22 +148,25 @@ the measure use the full range of distances. Lowering `tau` makes more taxa
 "functionally equivalent" and reduces functional diversity:
 
 ```{r tau}
-hilldiv(counts, dist = fdist, tau = max(fdist))   # default
-hilldiv(counts, dist = fdist, tau = max(fdist) / 2)
+hilldiv(counts, dist = fdist, type = "functional", tau = max(fdist))   # default
+hilldiv(counts, dist = fdist, type = "functional", tau = max(fdist) / 2)
 ```
 
-## One taxon, many flavours
+## All three at once {#all-three-at-once}
 
 Because all three share the Hill-number scale, you can compare what each lens
-sees in the *same* samples:
+sees in the *same* samples. Supply both a `tree` and a `dist` and `hilldiv()`
+returns neutral, phylogenetic and functional diversity together, stacked in one
+tibble with a `type` column — no need to call it three times:
 
 ```{r compare}
-list(
-  neutral       = hilldiv(counts),
-  phylogenetic  = hilldiv(counts, tree = tree),
-  functional    = hilldiv(counts, dist = fdist)
-)
+hilldiv(counts, tree = tree, dist = fdist)
 ```
+
+This is the default whenever both references are present; restrict it with
+`type =` (e.g. `type = c("neutral", "functional")`) when you only want a subset.
+With `out = "matrix"` the same call returns a named list of matrices, one per
+type.
 
 A sample can be neutrally diverse yet phylogenetically or functionally
 redundant — quantifying exactly that gap is what `hillred()` does (see the

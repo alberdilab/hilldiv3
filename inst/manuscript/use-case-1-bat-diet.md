@@ -37,12 +37,15 @@ head(bat_metadata)     # habitat / roost / bat
 ## Neutral and phylogenetic diversity from one interface
 
 `hilldiv()` returns Hill numbers per sample at diversity orders `q = 0`
-(richness), `q = 1` (Shannon) and `q = 2` (Simpson). Adding `tree =` switches
-the same call from neutral to phylogenetic diversity:
+(richness), `q = 1` (Shannon) and `q = 2` (Simpson). The computation is
+cumulative: counts alone give neutral diversity, and adding `tree =` returns
+neutral *and* phylogenetic diversity together in one tibble, tagged by a `type`
+column. Pass `type =` to keep just one flavour.
 
 ```r
-hilldiv(bat_counts, q = c(0, 1, 2))               # neutral, qD
-hilldiv(bat_counts, q = c(0, 1, 2), tree = bat_tree)   # phylogenetic, qPD
+hilldiv(bat_counts, q = c(0, 1, 2))                    # neutral, qD
+hilldiv(bat_counts, q = c(0, 1, 2), tree = bat_tree)   # neutral + phylogenetic
+hilldiv(bat_counts, q = c(0, 1, 2), tree = bat_tree, type = "phylogenetic")  # qPD only
 ```
 
 ![Neutral and phylogenetic alpha diversity by habitat](figures/uc1-alpha.png)

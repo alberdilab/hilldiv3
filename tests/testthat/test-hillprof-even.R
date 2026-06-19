@@ -54,7 +54,7 @@ test_that("profile and evenness route through phylogenetic type", {
   prof <- suppressMessages(hillprof(counts, q = c(0, 1), tree = tree,
                                     out = "matrix"))
   ref <- suppressMessages(hilldiv(counts, q = c(0, 1), tree = tree,
-                                  out = "matrix"))
+                                  type = "phylogenetic", out = "matrix"))
   expect_equal(prof, ref)
 
   ev <- suppressMessages(hilleven(counts, q = 2, tree = tree, out = "matrix"))

@@ -40,10 +40,11 @@ library(hilldiv3)
 
 # Bundled simulated gut-microbiome MAG data.
 hilldiv(gut_counts)                    # neutral Hill numbers q = 0, 1, 2
-hilldiv(gut_counts, tree = gut_tree)   # phylogenetic
+hilldiv(gut_counts, tree = gut_tree)   # neutral + phylogenetic
 
 dist <- traits2dist(gut_traits)
-hilldiv(gut_counts, dist = dist)       # functional
+hilldiv(gut_counts, dist = dist)                   # neutral + functional
+hilldiv(gut_counts, tree = gut_tree, dist = dist)  # all three types at once
 
 # Results are tidy by default and plot directly.
 plot(hillprof(gut_counts))             # diversity profile

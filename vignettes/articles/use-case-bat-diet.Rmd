@@ -85,17 +85,16 @@ hab <- function(s) bat_metadata$habitat[match(s, bat_metadata$bat)]
 ## Neutral and phylogenetic diversity from one interface
 
 `hilldiv()` returns Hill numbers per sample at diversity orders `q = 0`
-(richness), `q = 1` (Shannon) and `q = 2` (Simpson). Adding `tree =` switches
-the same call from neutral to phylogenetic diversity.
+(richness), `q = 1` (Shannon) and `q = 2` (Simpson). The computation is
+cumulative: adding `tree =` returns neutral *and* phylogenetic diversity
+together in one tibble, tagged by a `type` column (`type =` keeps just one).
 
 ```{r alpha}
-neu <- as_df(hilldiv(bat_counts, q = c(0, 1, 2)))
-phy <- as_df(hilldiv(bat_counts, q = c(0, 1, 2), tree = bat_tree))
-neu$flavour <- "Neutral (qD)"
-phy$flavour <- "Phylogenetic (qPD)"
-alpha <- rbind(neu, phy)
+# A single call with `tree =` returns both flavours, tagged by `type`.
+labs <- c(neutral = "Neutral (qD)", phylogenetic = "Phylogenetic (qPD)")
+alpha <- as_df(hilldiv(bat_counts, q = c(0, 1, 2), tree = bat_tree))
+alpha$flavour <- factor(labs[alpha$type], labs)
 alpha$habitat <- hab(alpha$sample)
-alpha$flavour <- factor(alpha$flavour, c("Neutral (qD)", "Phylogenetic (qPD)"))
 
 aggregate(value ~ flavour + q + habitat, alpha, function(x) round(mean(x), 2))
 ```

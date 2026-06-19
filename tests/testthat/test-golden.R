@@ -48,13 +48,16 @@ test_that("q = 1 is the continuous limit of nearby q for every type", {
   counts <- matrix(c(8, 1, 4, 2, 3, 5, 3, 1), nrow = 4,
                    dimnames = list(c("t1", "t2", "t3", "t4"), c("s1", "s2")))
 
+  # Output is a bare matrix for one type and a named list of matrices when a
+  # tree or dist adds further types; strip dimnames through either shape.
+  strip <- function(z) if (is.list(z)) lapply(z, unname) else unname(z)
   for (args in list(list(), list(tree = tree), list(dist = dist))) {
     lim <- do.call(hilldiv, c(list(counts, q = 1, out = "matrix"), args)) |>
       suppressMessages()
     near <- do.call(hilldiv,
                     c(list(counts, q = 1 + 1e-6, out = "matrix"), args)) |>
       suppressMessages()
-    expect_equal(unname(lim), unname(near), tolerance = 1e-4)
+    expect_equal(strip(lim), strip(near), tolerance = 1e-4)
   }
 })
 
