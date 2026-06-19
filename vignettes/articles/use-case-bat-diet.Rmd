@@ -27,6 +27,12 @@ as_df <- function(x) { class(x) <- "data.frame"; x }
 pal <- c(forest = "#2E7D32", farmland = "#C9A227")
 ```
 
+> **New to Hill numbers?** This is a complete worked example. If terms like
+> diversity order `q`, alpha/beta diversity or phylogenetic diversity are
+> unfamiliar, start with the
+> [Getting started](hilldiv3.html) guide and the
+> [Diversity types](diversity-types.html) article, then come back here.
+
 Dietary metabarcoding turns faecal or guano samples into a count table of prey
 amplicon sequence variants (ASVs), and a question that immediately follows is
 *how diverse, and how different, are the diets of the animals we sampled?*

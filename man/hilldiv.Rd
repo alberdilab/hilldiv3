@@ -38,7 +38,7 @@ type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
 \item{reference}{Reference tree depth for \emph{phylogenetic} Hill numbers
 (ignored for neutral and functional types). \code{"pool"} (default) reads every
 sample at one common depth \code{T = mean(T_j)}, so values share a comparable
-axis (matching hilldiv2's \code{multi} behaviour); \code{"sample"} reads each sample
+axis across samples; \code{"sample"} reads each sample
 at its own depth \code{T_j} (effective lineages at that sample's depth). The two
 coincide on ultrametric trees. This reference depth is intentionally \emph{not}
 offered by \code{\link[=hillpart]{hillpart()}}: in a partition \code{T} is fixed at the mean per-sample

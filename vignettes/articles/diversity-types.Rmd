@@ -15,8 +15,22 @@ knitr::opts_chunk$set(
 library(hilldiv3)
 ```
 
-`hilldiv3` measures three flavours of diversity from the same count table. You
-never switch functions — you switch *inputs*, and the diversity type is inferred:
+"Diversity" can mean three different things, and which one you want depends on
+the question you are asking:
+
+* **Neutral** diversity counts taxa and weighs them by abundance, treating every
+  taxon as equally distinct. Two communities with the same number of equally
+  common taxa are equally diverse, no matter *which* taxa they are.
+* **Phylogenetic** diversity also asks how *related* the taxa are. A community of
+  three close cousins is less diverse than three taxa from distant branches of
+  the tree of life, even if both have three taxa.
+* **Functional** diversity asks how *different* the taxa are in their traits
+  (size, diet, metabolism…). Three taxa that do very similar things are less
+  diverse than three that do contrasting things.
+
+`hilldiv3` measures all three from the same count table. You never switch
+functions — you switch *inputs*, and the diversity type is inferred from what
+you supply:
 
 | You pass | Diversity type |
 |---|---|
@@ -149,6 +163,10 @@ redundant — quantifying exactly that gap is what `hillred()` does (see the
 profiles/evenness/redundancy article).
 
 ## Contrasts with other packages
+
+> **Advanced — skip on a first read.** This section is for users coming from
+> other Hill-number tools who want to know why the numbers can differ. If you are
+> just getting started, you can move on to the next article.
 
 Other R packages compute Hill numbers, and their **phylogenetic** results can
 disagree with `hilldiv3` even on identical data. These are not bugs: they are
