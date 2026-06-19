@@ -93,36 +93,60 @@ for the functional-diversity paths.</p>
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="traits2dist.html">traits2dist</a></span><span class="op">(</span><span class="va">gut_traits</span><span class="op">)</span></span></span>
 <span class="r-in"><span><span class="fu"><a href="hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, dist <span class="op">=</span> <span class="va">d</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span> and <span style="color: #0000BB;">"q1"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing <span style="color: #0000BB;">"neutral"</span> and <span style="color: #0000BB;">"functional"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span> and <span style="color: #0000BB;">"q1"</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 24 taxa across 12 samples.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hilldiv3 result: functional&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24 rows x 3 cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hilldiv3 result: neutral, functional&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48 rows x 4 cols</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    q sample    value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0 ctrl01 1.903890</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1 ctrl01 1.864119</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0 ctrl02 2.011087</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1 ctrl02 1.997614</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0 ctrl03 1.962929</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1 ctrl03 1.928385</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0 ctrl04 1.947593</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1 ctrl04 1.913489</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0 ctrl05 1.864104</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1 ctrl05 1.816147</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0 ctrl06 1.914662</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1 ctrl06 1.874010</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0  trt01 1.974545</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1  trt01 1.954243</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0  trt02 1.841115</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1  trt02 1.796213</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0  trt03 1.954853</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1  trt03 1.941623</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0  trt04 1.874825</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1  trt04 1.854832</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 0  trt05 1.763973</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 1  trt05 1.722022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 0  trt06 1.831259</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24 1  trt06 1.802398</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    q sample       type     value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0 ctrl01    neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1 ctrl01    neutral 12.329592</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0 ctrl02    neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1 ctrl02    neutral 14.784342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0 ctrl03    neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1 ctrl03    neutral 11.832847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0 ctrl04    neutral 23.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1 ctrl04    neutral 11.266414</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0 ctrl05    neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1 ctrl05    neutral 10.035886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0 ctrl06    neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1 ctrl06    neutral 13.277945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0  trt01    neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1  trt01    neutral 11.888942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0  trt02    neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1  trt02    neutral  8.350790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0  trt03    neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1  trt03    neutral 15.681517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0  trt04    neutral 23.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1  trt04    neutral 11.671685</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 0  trt05    neutral 23.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 1  trt05    neutral  9.043005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 0  trt06    neutral 23.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24 1  trt06    neutral 10.901319</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25 0 ctrl01 functional  1.903890</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26 1 ctrl01 functional  1.864119</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27 0 ctrl02 functional  2.011087</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28 1 ctrl02 functional  1.997614</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29 0 ctrl03 functional  1.962929</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30 1 ctrl03 functional  1.928385</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31 0 ctrl04 functional  1.947593</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32 1 ctrl04 functional  1.913489</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33 0 ctrl05 functional  1.864104</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34 1 ctrl05 functional  1.816147</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35 0 ctrl06 functional  1.914662</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36 1 ctrl06 functional  1.874010</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37 0  trt01 functional  1.974545</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38 1  trt01 functional  1.954243</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39 0  trt02 functional  1.841115</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40 1  trt02 functional  1.796213</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41 0  trt03 functional  1.954853</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42 1  trt03 functional  1.941623</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43 0  trt04 functional  1.874825</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44 1  trt04 functional  1.854832</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45 0  trt05 functional  1.763973</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46 1  trt05 functional  1.722022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47 0  trt06 functional  1.831259</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48 1  trt06 functional  1.802398</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>

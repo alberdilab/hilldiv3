@@ -94,10 +94,11 @@
 <span></span>
 <span><span class="co"># Bundled simulated gut-microbiome MAG data.</span></span>
 <span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span><span class="op">)</span>                    <span class="co"># neutral Hill numbers q = 0, 1, 2</span></span>
-<span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, tree <span class="op">=</span> <span class="va">gut_tree</span><span class="op">)</span>   <span class="co"># phylogenetic</span></span>
+<span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, tree <span class="op">=</span> <span class="va">gut_tree</span><span class="op">)</span>   <span class="co"># neutral + phylogenetic</span></span>
 <span></span>
 <span><span class="va">dist</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/traits2dist.html">traits2dist</a></span><span class="op">(</span><span class="va">gut_traits</span><span class="op">)</span></span>
-<span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, dist <span class="op">=</span> <span class="va">dist</span><span class="op">)</span>       <span class="co"># functional</span></span>
+<span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, dist <span class="op">=</span> <span class="va">dist</span><span class="op">)</span>                   <span class="co"># neutral + functional</span></span>
+<span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, tree <span class="op">=</span> <span class="va">gut_tree</span>, dist <span class="op">=</span> <span class="va">dist</span><span class="op">)</span>  <span class="co"># all three types at once</span></span>
 <span></span>
 <span><span class="co"># Results are tidy by default and plot directly.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/hillprof.html">hillprof</a></span><span class="op">(</span><span class="va">gut_counts</span><span class="op">)</span><span class="op">)</span>             <span class="co"># diversity profile</span></span>

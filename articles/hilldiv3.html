@@ -175,7 +175,7 @@ diversity <em>within</em> each community, traditionally called
 and <code>q = 2</code> (Simpson diversity):</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
@@ -195,11 +195,46 @@ and <code>q = 2</code> (Simpson diversity):</p>
 <span><span class="co">#&gt; 12 2     s4 2.528090</span></span></code></pre></div>
 <p>Higher <code>q</code> down-weights rare taxa, so <code>qD</code>
 decreases as <code>q</code> grows unless the sample is perfectly even.
-Add a tree or a distance matrix to switch flavour:</p>
+Add a tree or a distance matrix to layer on more flavours: a
+<code>tree</code> adds phylogenetic diversity alongside neutral, and
+supplying both a <code>tree</code> and a <code>dist</code> returns all
+three types at once (a <code>type</code> column tells them apart).
+Restrict the output with <code>type =</code>.</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"((t1:1,t2:1):1,t3:2);"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span>              <span class="co"># phylogenetic</span></span>
-<span><span class="co">#&gt; Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span>                   <span class="co"># neutral + phylogenetic</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> and <span style="color: #0000BB;">"phylogenetic"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral, phylogenetic&gt;</span></span>
+<span><span class="co">#&gt; 24 rows x 4 cols</span></span>
+<span><span class="co">#&gt; </span></span>
+<span><span class="co">#&gt;    q sample         type    value</span></span>
+<span><span class="co">#&gt; 1  0     s1      neutral 2.000000</span></span>
+<span><span class="co">#&gt; 2  1     s1      neutral 1.889882</span></span>
+<span><span class="co">#&gt; 3  2     s1      neutral 1.800000</span></span>
+<span><span class="co">#&gt; 4  0     s2      neutral 3.000000</span></span>
+<span><span class="co">#&gt; 5  1     s2      neutral 2.137309</span></span>
+<span><span class="co">#&gt; 6  2     s2      neutral 1.753623</span></span>
+<span><span class="co">#&gt; 7  0     s3      neutral 2.000000</span></span>
+<span><span class="co">#&gt; 8  1     s3      neutral 1.979626</span></span>
+<span><span class="co">#&gt; 9  2     s3      neutral 1.960000</span></span>
+<span><span class="co">#&gt; 10 0     s4      neutral 3.000000</span></span>
+<span><span class="co">#&gt; 11 1     s4      neutral 2.693484</span></span>
+<span><span class="co">#&gt; 12 2     s4      neutral 2.528090</span></span>
+<span><span class="co">#&gt; 13 0     s1 phylogenetic 2.000000</span></span>
+<span><span class="co">#&gt; 14 1     s1 phylogenetic 1.889882</span></span>
+<span><span class="co">#&gt; 15 2     s1 phylogenetic 1.800000</span></span>
+<span><span class="co">#&gt; 16 0     s2 phylogenetic 2.500000</span></span>
+<span><span class="co">#&gt; 17 1     s2 phylogenetic 1.702490</span></span>
+<span><span class="co">#&gt; 18 2     s2 phylogenetic 1.423529</span></span>
+<span><span class="co">#&gt; 19 0     s3 phylogenetic 1.500000</span></span>
+<span><span class="co">#&gt; 20 1     s3 phylogenetic 1.406992</span></span>
+<span><span class="co">#&gt; 21 2     s3 phylogenetic 1.324324</span></span>
+<span><span class="co">#&gt; 22 0     s4 phylogenetic 2.500000</span></span>
+<span><span class="co">#&gt; 23 1     s4 phylogenetic 2.318405</span></span>
+<span><span class="co">#&gt; 24 2     s4 phylogenetic 2.227723</span></span>
+<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span>, type <span class="op">=</span> <span class="st">"phylogenetic"</span><span class="op">)</span>   <span class="co"># phylogenetic only</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"phylogenetic"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>

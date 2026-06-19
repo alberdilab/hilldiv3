@@ -108,11 +108,16 @@ things.</li>
 </ul>
 <p><code>hilldiv3</code> measures all three from the same count table.
 You never switch functions — you switch <em>inputs</em>, and the
-diversity type is inferred from what you supply:</p>
+diversity types follow cumulatively from what you supply:</p>
 <table class="table">
+<colgroup>
+<col width="50%">
+<col width="50%">
+</colgroup>
 <thead><tr class="header">
 <th>You pass</th>
-<th>Diversity type</th>
+<th>
+<code><a href="../reference/hilldiv.html">hilldiv()</a></code> returns</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
@@ -122,19 +127,35 @@ diversity type is inferred from what you supply:</p>
 <tr class="even">
 <td>counts + <code>tree</code>
 </td>
-<td><strong>phylogenetic</strong></td>
+<td>neutral + <strong>phylogenetic</strong>
+</td>
 </tr>
 <tr class="odd">
 <td>counts + <code>dist</code>
 </td>
-<td><strong>functional</strong></td>
+<td>neutral + <strong>functional</strong>
+</td>
+</tr>
+<tr class="even">
+<td>counts + <code>tree</code> + <code>dist</code>
+</td>
+<td>neutral + <strong>phylogenetic</strong> +
+<strong>functional</strong>
+</td>
 </tr>
 </tbody>
 </table>
+<p>When more than one type is returned they are stacked in a single
+tibble with a <code>type</code> column. Pass <code>type =</code> (a
+single type or a vector) to restrict the output —
+e.g. <code>type = "phylogenetic"</code> for that flavour alone. The
+examples below use <code>type =</code> to isolate each type in turn; the
+<a href="#all-three-at-once">last section</a> shows them all from one
+call.</p>
 <p>This article walks through all three with <code><a href="../reference/hilldiv.html">hilldiv()</a></code>, the
 alpha-diversity workhorse. The same <code>tree</code> /
 <code>dist</code> logic applies to every other <code>hill*</code>
-function.</p>
+function (which return one type at a time).</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">5</span>,</span>
@@ -167,7 +188,7 @@ by common taxa (inverse Simpson concentration).</li>
 </ul>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
@@ -198,7 +219,7 @@ article.</p>
 as equally distinct:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
@@ -227,8 +248,8 @@ samples that span deeper, more divergent lineages (Chao et
 al. 2010).</p>
 <div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"((t1:1,t2:1):1,t3:2);"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span>, type <span class="op">=</span> <span class="st">"phylogenetic"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"phylogenetic"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
@@ -268,8 +289,8 @@ than three contrasting ones (Chiu &amp; Chao 2014).</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>body <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">0.2</span>, <span class="fl">0.9</span><span class="op">)</span>, diet <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">1</span><span class="op">)</span>,</span>
 <span>             row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"t1"</span>, <span class="st">"t2"</span>, <span class="st">"t3"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span>, type <span class="op">=</span> <span class="st">"functional"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"functional"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
@@ -316,8 +337,8 @@ default <code>tau = max(dist)</code>, which makes the measure use the
 full range of distances. Lowering <code>tau</code> makes more taxa
 “functionally equivalent” and reduces functional diversity:</p>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span>, tau <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">fdist</span><span class="op">)</span><span class="op">)</span>   <span class="co"># default</span></span>
-<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span>, type <span class="op">=</span> <span class="st">"functional"</span>, tau <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">fdist</span><span class="op">)</span><span class="op">)</span>   <span class="co"># default</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"functional"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
@@ -335,8 +356,8 @@ full range of distances. Lowering <code>tau</code> makes more taxa
 <span><span class="co">#&gt; 10 0     s4 1.650074</span></span>
 <span><span class="co">#&gt; 11 1     s4 1.617041</span></span>
 <span><span class="co">#&gt; 12 2     s4 1.590106</span></span>
-<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span>, tau <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">fdist</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span>, type <span class="op">=</span> <span class="st">"functional"</span>, tau <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Extremes.html" class="external-link">max</a></span><span class="op">(</span><span class="va">fdist</span><span class="op">)</span> <span class="op">/</span> <span class="fl">2</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"functional"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>
 <span><span class="co">#&gt; 12 rows x 3 cols</span></span>
@@ -357,75 +378,64 @@ full range of distances. Lowering <code>tau</code> makes more taxa
 </div>
 </div>
 <div class="section level2">
-<h2 id="one-taxon-many-flavours">One taxon, many flavours<a class="anchor" aria-label="anchor" href="#one-taxon-many-flavours"></a>
+<h2 id="all-three-at-once">All three at once<a class="anchor" aria-label="anchor" href="#all-three-at-once"></a>
 </h2>
 <p>Because all three share the Hill-number scale, you can compare what
-each lens sees in the <em>same</em> samples:</p>
+each lens sees in the <em>same</em> samples. Supply both a
+<code>tree</code> and a <code>dist</code> and <code><a href="../reference/hilldiv.html">hilldiv()</a></code>
+returns neutral, phylogenetic and functional diversity together, stacked
+in one tibble with a <code>type</code> column — no need to call it three
+times:</p>
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span></span>
-<span>  neutral       <span class="op">=</span> <span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span>,</span>
-<span>  phylogenetic  <span class="op">=</span> <span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span>,</span>
-<span>  functional    <span class="op">=</span> <span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
-<span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span>, <span style="color: #0000BB;">"phylogenetic"</span>, and <span style="color: #0000BB;">"functional"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>,</span></span>
+<span><span class="co">#&gt; <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
-<span><span class="co">#&gt; Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
-<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
-<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
-<span><span class="co">#&gt; $neutral</span></span>
-<span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
-<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral, phylogenetic, functional&gt;</span></span>
+<span><span class="co">#&gt; 36 rows x 4 cols</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    q sample    value</span></span>
-<span><span class="co">#&gt; 1  0     s1 2.000000</span></span>
-<span><span class="co">#&gt; 2  1     s1 1.889882</span></span>
-<span><span class="co">#&gt; 3  2     s1 1.800000</span></span>
-<span><span class="co">#&gt; 4  0     s2 3.000000</span></span>
-<span><span class="co">#&gt; 5  1     s2 2.137309</span></span>
-<span><span class="co">#&gt; 6  2     s2 1.753623</span></span>
-<span><span class="co">#&gt; 7  0     s3 2.000000</span></span>
-<span><span class="co">#&gt; 8  1     s3 1.979626</span></span>
-<span><span class="co">#&gt; 9  2     s3 1.960000</span></span>
-<span><span class="co">#&gt; 10 0     s4 3.000000</span></span>
-<span><span class="co">#&gt; 11 1     s4 2.693484</span></span>
-<span><span class="co">#&gt; 12 2     s4 2.528090</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $phylogenetic</span></span>
-<span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
-<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    q sample    value</span></span>
-<span><span class="co">#&gt; 1  0     s1 2.000000</span></span>
-<span><span class="co">#&gt; 2  1     s1 1.889882</span></span>
-<span><span class="co">#&gt; 3  2     s1 1.800000</span></span>
-<span><span class="co">#&gt; 4  0     s2 2.500000</span></span>
-<span><span class="co">#&gt; 5  1     s2 1.702490</span></span>
-<span><span class="co">#&gt; 6  2     s2 1.423529</span></span>
-<span><span class="co">#&gt; 7  0     s3 1.500000</span></span>
-<span><span class="co">#&gt; 8  1     s3 1.406992</span></span>
-<span><span class="co">#&gt; 9  2     s3 1.324324</span></span>
-<span><span class="co">#&gt; 10 0     s4 2.500000</span></span>
-<span><span class="co">#&gt; 11 1     s4 2.318405</span></span>
-<span><span class="co">#&gt; 12 2     s4 2.227723</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt; $functional</span></span>
-<span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>
-<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
-<span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    q sample    value</span></span>
-<span><span class="co">#&gt; 1  0     s1 1.353846</span></span>
-<span><span class="co">#&gt; 2  1     s1 1.343253</span></span>
-<span><span class="co">#&gt; 3  2     s1 1.333333</span></span>
-<span><span class="co">#&gt; 4  0     s2 1.911682</span></span>
-<span><span class="co">#&gt; 5  1     s2 1.658248</span></span>
-<span><span class="co">#&gt; 6  2     s2 1.517241</span></span>
-<span><span class="co">#&gt; 7  0     s3 2.000000</span></span>
-<span><span class="co">#&gt; 8  1     s3 1.979626</span></span>
-<span><span class="co">#&gt; 9  2     s3 1.960000</span></span>
-<span><span class="co">#&gt; 10 0     s4 1.650074</span></span>
-<span><span class="co">#&gt; 11 1     s4 1.617041</span></span>
-<span><span class="co">#&gt; 12 2     s4 1.590106</span></span></code></pre></div>
+<span><span class="co">#&gt;    q sample         type    value</span></span>
+<span><span class="co">#&gt; 1  0     s1      neutral 2.000000</span></span>
+<span><span class="co">#&gt; 2  1     s1      neutral 1.889882</span></span>
+<span><span class="co">#&gt; 3  2     s1      neutral 1.800000</span></span>
+<span><span class="co">#&gt; 4  0     s2      neutral 3.000000</span></span>
+<span><span class="co">#&gt; 5  1     s2      neutral 2.137309</span></span>
+<span><span class="co">#&gt; 6  2     s2      neutral 1.753623</span></span>
+<span><span class="co">#&gt; 7  0     s3      neutral 2.000000</span></span>
+<span><span class="co">#&gt; 8  1     s3      neutral 1.979626</span></span>
+<span><span class="co">#&gt; 9  2     s3      neutral 1.960000</span></span>
+<span><span class="co">#&gt; 10 0     s4      neutral 3.000000</span></span>
+<span><span class="co">#&gt; 11 1     s4      neutral 2.693484</span></span>
+<span><span class="co">#&gt; 12 2     s4      neutral 2.528090</span></span>
+<span><span class="co">#&gt; 13 0     s1 phylogenetic 2.000000</span></span>
+<span><span class="co">#&gt; 14 1     s1 phylogenetic 1.889882</span></span>
+<span><span class="co">#&gt; 15 2     s1 phylogenetic 1.800000</span></span>
+<span><span class="co">#&gt; 16 0     s2 phylogenetic 2.500000</span></span>
+<span><span class="co">#&gt; 17 1     s2 phylogenetic 1.702490</span></span>
+<span><span class="co">#&gt; 18 2     s2 phylogenetic 1.423529</span></span>
+<span><span class="co">#&gt; 19 0     s3 phylogenetic 1.500000</span></span>
+<span><span class="co">#&gt; 20 1     s3 phylogenetic 1.406992</span></span>
+<span><span class="co">#&gt; 21 2     s3 phylogenetic 1.324324</span></span>
+<span><span class="co">#&gt; 22 0     s4 phylogenetic 2.500000</span></span>
+<span><span class="co">#&gt; 23 1     s4 phylogenetic 2.318405</span></span>
+<span><span class="co">#&gt; 24 2     s4 phylogenetic 2.227723</span></span>
+<span><span class="co">#&gt; 25 0     s1   functional 1.353846</span></span>
+<span><span class="co">#&gt; 26 1     s1   functional 1.343253</span></span>
+<span><span class="co">#&gt; 27 2     s1   functional 1.333333</span></span>
+<span><span class="co">#&gt; 28 0     s2   functional 1.911682</span></span>
+<span><span class="co">#&gt; 29 1     s2   functional 1.658248</span></span>
+<span><span class="co">#&gt; 30 2     s2   functional 1.517241</span></span>
+<span><span class="co">#&gt; 31 0     s3   functional 2.000000</span></span>
+<span><span class="co">#&gt; 32 1     s3   functional 1.979626</span></span>
+<span><span class="co">#&gt; 33 2     s3   functional 1.960000</span></span>
+<span><span class="co">#&gt; 34 0     s4   functional 1.650074</span></span>
+<span><span class="co">#&gt; 35 1     s4   functional 1.617041</span></span>
+<span><span class="co">#&gt; 36 2     s4   functional 1.590106</span></span></code></pre></div>
+<p>This is the default whenever both references are present; restrict it
+with <code>type =</code>
+(e.g. <code>type = c("neutral", "functional")</code>) when you only want
+a subset. With <code>out = "matrix"</code> the same call returns a named
+list of matrices, one per type.</p>
 <p>A sample can be neutrally diverse yet phylogenetically or
 functionally redundant — quantifying exactly that gap is what
 <code><a href="../reference/hillred.html">hillred()</a></code> does (see the profiles/evenness/redundancy

@@ -135,7 +135,7 @@ phylogeny.</li>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># A single sample as a named vector.</span></span>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>t1 <span class="op">=</span> <span class="fl">10</span>, t2 <span class="op">=</span> <span class="fl">2</span>, t3 <span class="op">=</span> <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 1 sample.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
 <span><span class="co">#&gt; 3 rows x 3 cols</span></span>
@@ -154,25 +154,37 @@ yourself:</p>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/otu_table-methods.html" class="external-link">otu_table</a></span><span class="op">(</span><span class="va">counts</span>, taxa_are_rows <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/phyloseq/man/phy_tree-methods.html" class="external-link">phy_tree</a></span><span class="op">(</span><span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"((t1:1,t2:1):1,t3:2);"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
-<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">ps</span><span class="op">)</span>        <span class="co"># phylogenetic, tree taken from the object</span></span>
-<span><span class="co">#&gt; Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">ps</span><span class="op">)</span>        <span class="co"># neutral + phylogenetic, tree taken from the object</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> and <span style="color: #0000BB;">"phylogenetic"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
-<span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
-<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral, phylogenetic&gt;</span></span>
+<span><span class="co">#&gt; 24 rows x 4 cols</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    q sample    value</span></span>
-<span><span class="co">#&gt; 1  0     s1 2.000000</span></span>
-<span><span class="co">#&gt; 2  1     s1 1.889882</span></span>
-<span><span class="co">#&gt; 3  2     s1 1.800000</span></span>
-<span><span class="co">#&gt; 4  0     s2 2.500000</span></span>
-<span><span class="co">#&gt; 5  1     s2 1.702490</span></span>
-<span><span class="co">#&gt; 6  2     s2 1.423529</span></span>
-<span><span class="co">#&gt; 7  0     s3 1.500000</span></span>
-<span><span class="co">#&gt; 8  1     s3 1.406992</span></span>
-<span><span class="co">#&gt; 9  2     s3 1.324324</span></span>
-<span><span class="co">#&gt; 10 0     s4 2.500000</span></span>
-<span><span class="co">#&gt; 11 1     s4 2.318405</span></span>
-<span><span class="co">#&gt; 12 2     s4 2.227723</span></span></code></pre></div>
+<span><span class="co">#&gt;    q sample         type    value</span></span>
+<span><span class="co">#&gt; 1  0     s1      neutral 2.000000</span></span>
+<span><span class="co">#&gt; 2  1     s1      neutral 1.889882</span></span>
+<span><span class="co">#&gt; 3  2     s1      neutral 1.800000</span></span>
+<span><span class="co">#&gt; 4  0     s2      neutral 3.000000</span></span>
+<span><span class="co">#&gt; 5  1     s2      neutral 2.137309</span></span>
+<span><span class="co">#&gt; 6  2     s2      neutral 1.753623</span></span>
+<span><span class="co">#&gt; 7  0     s3      neutral 2.000000</span></span>
+<span><span class="co">#&gt; 8  1     s3      neutral 1.979626</span></span>
+<span><span class="co">#&gt; 9  2     s3      neutral 1.960000</span></span>
+<span><span class="co">#&gt; 10 0     s4      neutral 3.000000</span></span>
+<span><span class="co">#&gt; 11 1     s4      neutral 2.693484</span></span>
+<span><span class="co">#&gt; 12 2     s4      neutral 2.528090</span></span>
+<span><span class="co">#&gt; 13 0     s1 phylogenetic 2.000000</span></span>
+<span><span class="co">#&gt; 14 1     s1 phylogenetic 1.889882</span></span>
+<span><span class="co">#&gt; 15 2     s1 phylogenetic 1.800000</span></span>
+<span><span class="co">#&gt; 16 0     s2 phylogenetic 2.500000</span></span>
+<span><span class="co">#&gt; 17 1     s2 phylogenetic 1.702490</span></span>
+<span><span class="co">#&gt; 18 2     s2 phylogenetic 1.423529</span></span>
+<span><span class="co">#&gt; 19 0     s3 phylogenetic 1.500000</span></span>
+<span><span class="co">#&gt; 20 1     s3 phylogenetic 1.406992</span></span>
+<span><span class="co">#&gt; 21 2     s3 phylogenetic 1.324324</span></span>
+<span><span class="co">#&gt; 22 0     s4 phylogenetic 2.500000</span></span>
+<span><span class="co">#&gt; 23 1     s4 phylogenetic 2.318405</span></span>
+<span><span class="co">#&gt; 24 2     s4 phylogenetic 2.227723</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="normalisation-with-tss">Normalisation with <code>tss()</code><a class="anchor" aria-label="anchor" href="#normalisation-with-tss"></a>
@@ -213,24 +225,36 @@ continuous and categorical traits are handled correctly. Constant traits
 <span><span class="co">#&gt; t3 0.562 0.437 0.000</span></span>
 <span></span>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> and <span style="color: #0000BB;">"functional"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
-<span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>
-<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral, functional&gt;</span></span>
+<span><span class="co">#&gt; 24 rows x 4 cols</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    q sample    value</span></span>
-<span><span class="co">#&gt; 1  0     s1 1.353846</span></span>
-<span><span class="co">#&gt; 2  1     s1 1.343253</span></span>
-<span><span class="co">#&gt; 3  2     s1 1.333333</span></span>
-<span><span class="co">#&gt; 4  0     s2 1.911682</span></span>
-<span><span class="co">#&gt; 5  1     s2 1.658248</span></span>
-<span><span class="co">#&gt; 6  2     s2 1.517241</span></span>
-<span><span class="co">#&gt; 7  0     s3 2.000000</span></span>
-<span><span class="co">#&gt; 8  1     s3 1.979626</span></span>
-<span><span class="co">#&gt; 9  2     s3 1.960000</span></span>
-<span><span class="co">#&gt; 10 0     s4 1.650074</span></span>
-<span><span class="co">#&gt; 11 1     s4 1.617041</span></span>
-<span><span class="co">#&gt; 12 2     s4 1.590106</span></span></code></pre></div>
+<span><span class="co">#&gt;    q sample       type    value</span></span>
+<span><span class="co">#&gt; 1  0     s1    neutral 2.000000</span></span>
+<span><span class="co">#&gt; 2  1     s1    neutral 1.889882</span></span>
+<span><span class="co">#&gt; 3  2     s1    neutral 1.800000</span></span>
+<span><span class="co">#&gt; 4  0     s2    neutral 3.000000</span></span>
+<span><span class="co">#&gt; 5  1     s2    neutral 2.137309</span></span>
+<span><span class="co">#&gt; 6  2     s2    neutral 1.753623</span></span>
+<span><span class="co">#&gt; 7  0     s3    neutral 2.000000</span></span>
+<span><span class="co">#&gt; 8  1     s3    neutral 1.979626</span></span>
+<span><span class="co">#&gt; 9  2     s3    neutral 1.960000</span></span>
+<span><span class="co">#&gt; 10 0     s4    neutral 3.000000</span></span>
+<span><span class="co">#&gt; 11 1     s4    neutral 2.693484</span></span>
+<span><span class="co">#&gt; 12 2     s4    neutral 2.528090</span></span>
+<span><span class="co">#&gt; 13 0     s1 functional 1.353846</span></span>
+<span><span class="co">#&gt; 14 1     s1 functional 1.343253</span></span>
+<span><span class="co">#&gt; 15 2     s1 functional 1.333333</span></span>
+<span><span class="co">#&gt; 16 0     s2 functional 1.911682</span></span>
+<span><span class="co">#&gt; 17 1     s2 functional 1.658248</span></span>
+<span><span class="co">#&gt; 18 2     s2 functional 1.517241</span></span>
+<span><span class="co">#&gt; 19 0     s3 functional 2.000000</span></span>
+<span><span class="co">#&gt; 20 1     s3 functional 1.979626</span></span>
+<span><span class="co">#&gt; 21 2     s3 functional 1.960000</span></span>
+<span><span class="co">#&gt; 22 0     s4 functional 1.650074</span></span>
+<span><span class="co">#&gt; 23 1     s4 functional 1.617041</span></span>
+<span><span class="co">#&gt; 24 2     s4 functional 1.590106</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="matching-counts-to-a-tree-or-distances">Matching counts to a tree or distances<a class="anchor" aria-label="anchor" href="#matching-counts-to-a-tree-or-distances"></a>
@@ -249,6 +273,8 @@ taxa.</li>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">bad_tree</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"((t1:1,t2:1):1,t9:2);"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">bad_tree</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> and <span style="color: #0000BB;">"phylogenetic"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00; font-weight: bold;">Error</span><span style="font-weight: bold;"> in `.abort_mismatch()`:</span></span></span>
 <span><span class="co">#&gt; <span style="color: #BBBB00;">!</span> Taxa names in the count data and the tree tips do not match.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> Only in counts: <span style="color: #0000BB;">"t3"</span></span></span>
@@ -276,24 +302,36 @@ analysis runs:</p>
 <code class="sourceCode R"><span><span class="va">tree3</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"(t1:1,t2:1);"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="fu"><a href="../reference/match_data.html">match_data</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree3</span><span class="op">)</span>, tree <span class="op">=</span> <span class="va">tree3</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Dropped 1 taxon from `data` not in the tree tips.</span></span>
-<span><span class="co">#&gt; Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> and <span style="color: #0000BB;">"phylogenetic"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 2 taxa across 4 samples.</span></span>
-<span><span class="co">#&gt; &lt;hilldiv3 result: phylogenetic&gt;</span></span>
-<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral, phylogenetic&gt;</span></span>
+<span><span class="co">#&gt; 24 rows x 4 cols</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    q sample    value</span></span>
-<span><span class="co">#&gt; 1  0     s1 1.000000</span></span>
-<span><span class="co">#&gt; 2  1     s1 1.000000</span></span>
-<span><span class="co">#&gt; 3  2     s1 1.000000</span></span>
-<span><span class="co">#&gt; 4  0     s2 2.000000</span></span>
-<span><span class="co">#&gt; 5  1     s2 1.649385</span></span>
-<span><span class="co">#&gt; 6  2     s2 1.470588</span></span>
-<span><span class="co">#&gt; 7  0     s3 2.000000</span></span>
-<span><span class="co">#&gt; 8  1     s3 1.979626</span></span>
-<span><span class="co">#&gt; 9  2     s3 1.960000</span></span>
-<span><span class="co">#&gt; 10 0     s4 2.000000</span></span>
-<span><span class="co">#&gt; 11 1     s4 1.754765</span></span>
-<span><span class="co">#&gt; 12 2     s4 1.600000</span></span></code></pre></div>
+<span><span class="co">#&gt;    q sample         type    value</span></span>
+<span><span class="co">#&gt; 1  0     s1      neutral 1.000000</span></span>
+<span><span class="co">#&gt; 2  1     s1      neutral 1.000000</span></span>
+<span><span class="co">#&gt; 3  2     s1      neutral 1.000000</span></span>
+<span><span class="co">#&gt; 4  0     s2      neutral 2.000000</span></span>
+<span><span class="co">#&gt; 5  1     s2      neutral 1.649385</span></span>
+<span><span class="co">#&gt; 6  2     s2      neutral 1.470588</span></span>
+<span><span class="co">#&gt; 7  0     s3      neutral 2.000000</span></span>
+<span><span class="co">#&gt; 8  1     s3      neutral 1.979626</span></span>
+<span><span class="co">#&gt; 9  2     s3      neutral 1.960000</span></span>
+<span><span class="co">#&gt; 10 0     s4      neutral 2.000000</span></span>
+<span><span class="co">#&gt; 11 1     s4      neutral 1.754765</span></span>
+<span><span class="co">#&gt; 12 2     s4      neutral 1.600000</span></span>
+<span><span class="co">#&gt; 13 0     s1 phylogenetic 1.000000</span></span>
+<span><span class="co">#&gt; 14 1     s1 phylogenetic 1.000000</span></span>
+<span><span class="co">#&gt; 15 2     s1 phylogenetic 1.000000</span></span>
+<span><span class="co">#&gt; 16 0     s2 phylogenetic 2.000000</span></span>
+<span><span class="co">#&gt; 17 1     s2 phylogenetic 1.649385</span></span>
+<span><span class="co">#&gt; 18 2     s2 phylogenetic 1.470588</span></span>
+<span><span class="co">#&gt; 19 0     s3 phylogenetic 2.000000</span></span>
+<span><span class="co">#&gt; 20 1     s3 phylogenetic 1.979626</span></span>
+<span><span class="co">#&gt; 21 2     s3 phylogenetic 1.960000</span></span>
+<span><span class="co">#&gt; 22 0     s4 phylogenetic 2.000000</span></span>
+<span><span class="co">#&gt; 23 1     s4 phylogenetic 1.754765</span></span>
+<span><span class="co">#&gt; 24 2     s4 phylogenetic 1.600000</span></span></code></pre></div>
 <p><code><a href="../reference/match_data.html">match_data()</a></code> works the same way with a <code>dist</code>
 argument for functional data.</p>
 </div>
@@ -318,24 +356,36 @@ argument for functional data.</p>
 <span></span>
 <span><span class="co"># 4. Measure and compare.</span></span>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts2</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
-<span><span class="co">#&gt; Computing functional Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
+<span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> and <span style="color: #0000BB;">"functional"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
-<span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>
-<span><span class="co">#&gt; 12 rows x 3 cols</span></span>
+<span><span class="co">#&gt; &lt;hilldiv3 result: neutral, functional&gt;</span></span>
+<span><span class="co">#&gt; 24 rows x 4 cols</span></span>
 <span><span class="co">#&gt; </span></span>
-<span><span class="co">#&gt;    q sample    value</span></span>
-<span><span class="co">#&gt; 1  0     s1 1.353846</span></span>
-<span><span class="co">#&gt; 2  1     s1 1.343253</span></span>
-<span><span class="co">#&gt; 3  2     s1 1.333333</span></span>
-<span><span class="co">#&gt; 4  0     s2 1.911682</span></span>
-<span><span class="co">#&gt; 5  1     s2 1.658248</span></span>
-<span><span class="co">#&gt; 6  2     s2 1.517241</span></span>
-<span><span class="co">#&gt; 7  0     s3 2.000000</span></span>
-<span><span class="co">#&gt; 8  1     s3 1.979626</span></span>
-<span><span class="co">#&gt; 9  2     s3 1.960000</span></span>
-<span><span class="co">#&gt; 10 0     s4 1.650074</span></span>
-<span><span class="co">#&gt; 11 1     s4 1.617041</span></span>
-<span><span class="co">#&gt; 12 2     s4 1.590106</span></span>
+<span><span class="co">#&gt;    q sample       type    value</span></span>
+<span><span class="co">#&gt; 1  0     s1    neutral 2.000000</span></span>
+<span><span class="co">#&gt; 2  1     s1    neutral 1.889882</span></span>
+<span><span class="co">#&gt; 3  2     s1    neutral 1.800000</span></span>
+<span><span class="co">#&gt; 4  0     s2    neutral 3.000000</span></span>
+<span><span class="co">#&gt; 5  1     s2    neutral 2.137309</span></span>
+<span><span class="co">#&gt; 6  2     s2    neutral 1.753623</span></span>
+<span><span class="co">#&gt; 7  0     s3    neutral 2.000000</span></span>
+<span><span class="co">#&gt; 8  1     s3    neutral 1.979626</span></span>
+<span><span class="co">#&gt; 9  2     s3    neutral 1.960000</span></span>
+<span><span class="co">#&gt; 10 0     s4    neutral 3.000000</span></span>
+<span><span class="co">#&gt; 11 1     s4    neutral 2.693484</span></span>
+<span><span class="co">#&gt; 12 2     s4    neutral 2.528090</span></span>
+<span><span class="co">#&gt; 13 0     s1 functional 1.353846</span></span>
+<span><span class="co">#&gt; 14 1     s1 functional 1.343253</span></span>
+<span><span class="co">#&gt; 15 2     s1 functional 1.333333</span></span>
+<span><span class="co">#&gt; 16 0     s2 functional 1.911682</span></span>
+<span><span class="co">#&gt; 17 1     s2 functional 1.658248</span></span>
+<span><span class="co">#&gt; 18 2     s2 functional 1.517241</span></span>
+<span><span class="co">#&gt; 19 0     s3 functional 2.000000</span></span>
+<span><span class="co">#&gt; 20 1     s3 functional 1.979626</span></span>
+<span><span class="co">#&gt; 21 2     s3 functional 1.960000</span></span>
+<span><span class="co">#&gt; 22 0     s4 functional 1.650074</span></span>
+<span><span class="co">#&gt; 23 1     s4 functional 1.617041</span></span>
+<span><span class="co">#&gt; 24 2     s4 functional 1.590106</span></span>
 <span><span class="fu"><a href="../reference/hilldiss.html">hilldiss</a></span><span class="op">(</span><span class="va">counts2</span>, dist <span class="op">=</span> <span class="va">fdist</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; dissimilarity from functional Hill numbers of <span style="color: #0000BB;">"q1"</span>.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: functional&gt;</span></span>

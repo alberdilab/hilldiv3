@@ -56,7 +56,7 @@ the same representation, so you call the functions the same way:
 
 # A single sample as a named vector.
 hilldiv(c(t1 = 10, t2 = 2, t3 = 3))
-#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> Computing "neutral" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 1 sample.
 #> <hilldiv3 result: neutral>
 #> 3 rows x 3 cols
@@ -78,25 +78,37 @@ ps <- phyloseq(
   otu_table(counts, taxa_are_rows = TRUE),
   phy_tree(ape::read.tree(text = "((t1:1,t2:1):1,t3:2);"))
 )
-hilldiv(ps)        # phylogenetic, tree taken from the object
-#> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
+hilldiv(ps)        # neutral + phylogenetic, tree taken from the object
+#> Computing "neutral" and "phylogenetic" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
-#> <hilldiv3 result: phylogenetic>
-#> 12 rows x 3 cols
+#> <hilldiv3 result: neutral, phylogenetic>
+#> 24 rows x 4 cols
 #> 
-#>    q sample    value
-#> 1  0     s1 2.000000
-#> 2  1     s1 1.889882
-#> 3  2     s1 1.800000
-#> 4  0     s2 2.500000
-#> 5  1     s2 1.702490
-#> 6  2     s2 1.423529
-#> 7  0     s3 1.500000
-#> 8  1     s3 1.406992
-#> 9  2     s3 1.324324
-#> 10 0     s4 2.500000
-#> 11 1     s4 2.318405
-#> 12 2     s4 2.227723
+#>    q sample         type    value
+#> 1  0     s1      neutral 2.000000
+#> 2  1     s1      neutral 1.889882
+#> 3  2     s1      neutral 1.800000
+#> 4  0     s2      neutral 3.000000
+#> 5  1     s2      neutral 2.137309
+#> 6  2     s2      neutral 1.753623
+#> 7  0     s3      neutral 2.000000
+#> 8  1     s3      neutral 1.979626
+#> 9  2     s3      neutral 1.960000
+#> 10 0     s4      neutral 3.000000
+#> 11 1     s4      neutral 2.693484
+#> 12 2     s4      neutral 2.528090
+#> 13 0     s1 phylogenetic 2.000000
+#> 14 1     s1 phylogenetic 1.889882
+#> 15 2     s1 phylogenetic 1.800000
+#> 16 0     s2 phylogenetic 2.500000
+#> 17 1     s2 phylogenetic 1.702490
+#> 18 2     s2 phylogenetic 1.423529
+#> 19 0     s3 phylogenetic 1.500000
+#> 20 1     s3 phylogenetic 1.406992
+#> 21 2     s3 phylogenetic 1.324324
+#> 22 0     s4 phylogenetic 2.500000
+#> 23 1     s4 phylogenetic 2.318405
+#> 24 2     s4 phylogenetic 2.227723
 ```
 
 ## Normalisation with `tss()`
@@ -144,24 +156,36 @@ round(fdist, 3)
 #> t3 0.562 0.437 0.000
 
 hilldiv(counts, dist = fdist)
-#> Computing functional Hill numbers of "q0", "q1", and "q2".
+#> Computing "neutral" and "functional" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
-#> <hilldiv3 result: functional>
-#> 12 rows x 3 cols
+#> <hilldiv3 result: neutral, functional>
+#> 24 rows x 4 cols
 #> 
-#>    q sample    value
-#> 1  0     s1 1.353846
-#> 2  1     s1 1.343253
-#> 3  2     s1 1.333333
-#> 4  0     s2 1.911682
-#> 5  1     s2 1.658248
-#> 6  2     s2 1.517241
-#> 7  0     s3 2.000000
-#> 8  1     s3 1.979626
-#> 9  2     s3 1.960000
-#> 10 0     s4 1.650074
-#> 11 1     s4 1.617041
-#> 12 2     s4 1.590106
+#>    q sample       type    value
+#> 1  0     s1    neutral 2.000000
+#> 2  1     s1    neutral 1.889882
+#> 3  2     s1    neutral 1.800000
+#> 4  0     s2    neutral 3.000000
+#> 5  1     s2    neutral 2.137309
+#> 6  2     s2    neutral 1.753623
+#> 7  0     s3    neutral 2.000000
+#> 8  1     s3    neutral 1.979626
+#> 9  2     s3    neutral 1.960000
+#> 10 0     s4    neutral 3.000000
+#> 11 1     s4    neutral 2.693484
+#> 12 2     s4    neutral 2.528090
+#> 13 0     s1 functional 1.353846
+#> 14 1     s1 functional 1.343253
+#> 15 2     s1 functional 1.333333
+#> 16 0     s2 functional 1.911682
+#> 17 1     s2 functional 1.658248
+#> 18 2     s2 functional 1.517241
+#> 19 0     s3 functional 2.000000
+#> 20 1     s3 functional 1.979626
+#> 21 2     s3 functional 1.960000
+#> 22 0     s4 functional 1.650074
+#> 23 1     s4 functional 1.617041
+#> 24 2     s4 functional 1.590106
 ```
 
 ## Matching counts to a tree or distances
@@ -182,6 +206,8 @@ enforces this in one place:
 
 bad_tree <- ape::read.tree(text = "((t1:1,t2:1):1,t9:2);")
 hilldiv(counts, tree = bad_tree)
+#> Computing "neutral" and "phylogenetic" Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
 #> Error in `.abort_mismatch()`:
 #> ! Taxa names in the count data and the tree tips do not match.
 #> ℹ Only in counts: "t3"
@@ -216,24 +242,36 @@ analysis runs:
 tree3 <- ape::read.tree(text = "(t1:1,t2:1);")
 hilldiv(match_data(counts, tree = tree3), tree = tree3)
 #> Dropped 1 taxon from `data` not in the tree tips.
-#> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
+#> Computing "neutral" and "phylogenetic" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 2 taxa across 4 samples.
-#> <hilldiv3 result: phylogenetic>
-#> 12 rows x 3 cols
+#> <hilldiv3 result: neutral, phylogenetic>
+#> 24 rows x 4 cols
 #> 
-#>    q sample    value
-#> 1  0     s1 1.000000
-#> 2  1     s1 1.000000
-#> 3  2     s1 1.000000
-#> 4  0     s2 2.000000
-#> 5  1     s2 1.649385
-#> 6  2     s2 1.470588
-#> 7  0     s3 2.000000
-#> 8  1     s3 1.979626
-#> 9  2     s3 1.960000
-#> 10 0     s4 2.000000
-#> 11 1     s4 1.754765
-#> 12 2     s4 1.600000
+#>    q sample         type    value
+#> 1  0     s1      neutral 1.000000
+#> 2  1     s1      neutral 1.000000
+#> 3  2     s1      neutral 1.000000
+#> 4  0     s2      neutral 2.000000
+#> 5  1     s2      neutral 1.649385
+#> 6  2     s2      neutral 1.470588
+#> 7  0     s3      neutral 2.000000
+#> 8  1     s3      neutral 1.979626
+#> 9  2     s3      neutral 1.960000
+#> 10 0     s4      neutral 2.000000
+#> 11 1     s4      neutral 1.754765
+#> 12 2     s4      neutral 1.600000
+#> 13 0     s1 phylogenetic 1.000000
+#> 14 1     s1 phylogenetic 1.000000
+#> 15 2     s1 phylogenetic 1.000000
+#> 16 0     s2 phylogenetic 2.000000
+#> 17 1     s2 phylogenetic 1.649385
+#> 18 2     s2 phylogenetic 1.470588
+#> 19 0     s3 phylogenetic 2.000000
+#> 20 1     s3 phylogenetic 1.979626
+#> 21 2     s3 phylogenetic 1.960000
+#> 22 0     s4 phylogenetic 2.000000
+#> 23 1     s4 phylogenetic 1.754765
+#> 24 2     s4 phylogenetic 1.600000
 ```
 
 [`match_data()`](https://alberdilab.github.io/hilldiv3/reference/match_data.md)
@@ -260,24 +298,36 @@ counts2 <- match_data(counts, dist = fdist)
 
 # 4. Measure and compare.
 hilldiv(counts2, dist = fdist)
-#> Computing functional Hill numbers of "q0", "q1", and "q2".
+#> Computing "neutral" and "functional" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
-#> <hilldiv3 result: functional>
-#> 12 rows x 3 cols
+#> <hilldiv3 result: neutral, functional>
+#> 24 rows x 4 cols
 #> 
-#>    q sample    value
-#> 1  0     s1 1.353846
-#> 2  1     s1 1.343253
-#> 3  2     s1 1.333333
-#> 4  0     s2 1.911682
-#> 5  1     s2 1.658248
-#> 6  2     s2 1.517241
-#> 7  0     s3 2.000000
-#> 8  1     s3 1.979626
-#> 9  2     s3 1.960000
-#> 10 0     s4 1.650074
-#> 11 1     s4 1.617041
-#> 12 2     s4 1.590106
+#>    q sample       type    value
+#> 1  0     s1    neutral 2.000000
+#> 2  1     s1    neutral 1.889882
+#> 3  2     s1    neutral 1.800000
+#> 4  0     s2    neutral 3.000000
+#> 5  1     s2    neutral 2.137309
+#> 6  2     s2    neutral 1.753623
+#> 7  0     s3    neutral 2.000000
+#> 8  1     s3    neutral 1.979626
+#> 9  2     s3    neutral 1.960000
+#> 10 0     s4    neutral 3.000000
+#> 11 1     s4    neutral 2.693484
+#> 12 2     s4    neutral 2.528090
+#> 13 0     s1 functional 1.353846
+#> 14 1     s1 functional 1.343253
+#> 15 2     s1 functional 1.333333
+#> 16 0     s2 functional 1.911682
+#> 17 1     s2 functional 1.658248
+#> 18 2     s2 functional 1.517241
+#> 19 0     s3 functional 2.000000
+#> 20 1     s3 functional 1.979626
+#> 21 2     s3 functional 1.960000
+#> 22 0     s4 functional 1.650074
+#> 23 1     s4 functional 1.617041
+#> 24 2     s4 functional 1.590106
 hilldiss(counts2, dist = fdist, q = 1)
 #> dissimilarity from functional Hill numbers of "q1".
 #> <hilldiv3 result: functional>

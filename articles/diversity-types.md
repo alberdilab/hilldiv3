@@ -20,19 +20,26 @@ depends on the question you are asking:
   things are less diverse than three that do contrasting things.
 
 `hilldiv3` measures all three from the same count table. You never
-switch functions — you switch *inputs*, and the diversity type is
-inferred from what you supply:
+switch functions — you switch *inputs*, and the diversity types follow
+cumulatively from what you supply:
 
-| You pass        | Diversity type   |
-|-----------------|------------------|
-| counts only     | **neutral**      |
-| counts + `tree` | **phylogenetic** |
-| counts + `dist` | **functional**   |
+| You pass | [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md) returns |
+|----|----|
+| counts only | **neutral** |
+| counts + `tree` | neutral + **phylogenetic** |
+| counts + `dist` | neutral + **functional** |
+| counts + `tree` + `dist` | neutral + **phylogenetic** + **functional** |
+
+When more than one type is returned they are stacked in a single tibble
+with a `type` column. Pass `type =` (a single type or a vector) to
+restrict the output — e.g. `type = "phylogenetic"` for that flavour
+alone. The examples below use `type =` to isolate each type in turn; the
+[last section](#all-three-at-once) shows them all from one call.
 
 This article walks through all three with
 [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md),
 the alpha-diversity workhorse. The same `tree` / `dist` logic applies to
-every other `hill*` function.
+every other `hill*` function (which return one type at a time).
 
 ``` r
 
@@ -65,7 +72,7 @@ weight rare taxa carry:
 ``` r
 
 hilldiv(counts, q = c(0, 1, 2))
-#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> Computing "neutral" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: neutral>
 #> 12 rows x 3 cols
@@ -98,7 +105,7 @@ equally distinct:
 ``` r
 
 hilldiv(counts)
-#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> Computing "neutral" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: neutral>
 #> 12 rows x 3 cols
@@ -129,8 +136,8 @@ length, crediting samples that span deeper, more divergent lineages
 ``` r
 
 tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
-hilldiv(counts, tree = tree)
-#> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
+hilldiv(counts, tree = tree, type = "phylogenetic")
+#> Computing "phylogenetic" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: phylogenetic>
 #> 12 rows x 3 cols
@@ -174,8 +181,8 @@ fdist <- as.matrix(dist(
   data.frame(body = c(1, 0.2, 0.9), diet = c(0, 1, 1),
              row.names = c("t1", "t2", "t3"))
 ))
-hilldiv(counts, dist = fdist)
-#> Computing functional Hill numbers of "q0", "q1", and "q2".
+hilldiv(counts, dist = fdist, type = "functional")
+#> Computing "functional" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: functional>
 #> 12 rows x 3 cols
@@ -228,8 +235,8 @@ diversity:
 
 ``` r
 
-hilldiv(counts, dist = fdist, tau = max(fdist))   # default
-#> Computing functional Hill numbers of "q0", "q1", and "q2".
+hilldiv(counts, dist = fdist, type = "functional", tau = max(fdist))   # default
+#> Computing "functional" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: functional>
 #> 12 rows x 3 cols
@@ -247,8 +254,8 @@ hilldiv(counts, dist = fdist, tau = max(fdist))   # default
 #> 10 0     s4 1.650074
 #> 11 1     s4 1.617041
 #> 12 2     s4 1.590106
-hilldiv(counts, dist = fdist, tau = max(fdist) / 2)
-#> Computing functional Hill numbers of "q0", "q1", and "q2".
+hilldiv(counts, dist = fdist, type = "functional", tau = max(fdist) / 2)
+#> Computing "functional" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: functional>
 #> 12 rows x 3 cols
@@ -268,78 +275,66 @@ hilldiv(counts, dist = fdist, tau = max(fdist) / 2)
 #> 12 2     s4 2.432432
 ```
 
-## One taxon, many flavours
+## All three at once
 
 Because all three share the Hill-number scale, you can compare what each
-lens sees in the *same* samples:
+lens sees in the *same* samples. Supply both a `tree` and a `dist` and
+[`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md)
+returns neutral, phylogenetic and functional diversity together, stacked
+in one tibble with a `type` column — no need to call it three times:
 
 ``` r
 
-list(
-  neutral       = hilldiv(counts),
-  phylogenetic  = hilldiv(counts, tree = tree),
-  functional    = hilldiv(counts, dist = fdist)
-)
-#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+hilldiv(counts, tree = tree, dist = fdist)
+#> Computing "neutral", "phylogenetic", and "functional" Hill numbers of "q0",
+#> "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
-#> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
-#> ℹ 3 taxa across 4 samples.
-#> Computing functional Hill numbers of "q0", "q1", and "q2".
-#> ℹ 3 taxa across 4 samples.
-#> $neutral
-#> <hilldiv3 result: neutral>
-#> 12 rows x 3 cols
+#> <hilldiv3 result: neutral, phylogenetic, functional>
+#> 36 rows x 4 cols
 #> 
-#>    q sample    value
-#> 1  0     s1 2.000000
-#> 2  1     s1 1.889882
-#> 3  2     s1 1.800000
-#> 4  0     s2 3.000000
-#> 5  1     s2 2.137309
-#> 6  2     s2 1.753623
-#> 7  0     s3 2.000000
-#> 8  1     s3 1.979626
-#> 9  2     s3 1.960000
-#> 10 0     s4 3.000000
-#> 11 1     s4 2.693484
-#> 12 2     s4 2.528090
-#> 
-#> $phylogenetic
-#> <hilldiv3 result: phylogenetic>
-#> 12 rows x 3 cols
-#> 
-#>    q sample    value
-#> 1  0     s1 2.000000
-#> 2  1     s1 1.889882
-#> 3  2     s1 1.800000
-#> 4  0     s2 2.500000
-#> 5  1     s2 1.702490
-#> 6  2     s2 1.423529
-#> 7  0     s3 1.500000
-#> 8  1     s3 1.406992
-#> 9  2     s3 1.324324
-#> 10 0     s4 2.500000
-#> 11 1     s4 2.318405
-#> 12 2     s4 2.227723
-#> 
-#> $functional
-#> <hilldiv3 result: functional>
-#> 12 rows x 3 cols
-#> 
-#>    q sample    value
-#> 1  0     s1 1.353846
-#> 2  1     s1 1.343253
-#> 3  2     s1 1.333333
-#> 4  0     s2 1.911682
-#> 5  1     s2 1.658248
-#> 6  2     s2 1.517241
-#> 7  0     s3 2.000000
-#> 8  1     s3 1.979626
-#> 9  2     s3 1.960000
-#> 10 0     s4 1.650074
-#> 11 1     s4 1.617041
-#> 12 2     s4 1.590106
+#>    q sample         type    value
+#> 1  0     s1      neutral 2.000000
+#> 2  1     s1      neutral 1.889882
+#> 3  2     s1      neutral 1.800000
+#> 4  0     s2      neutral 3.000000
+#> 5  1     s2      neutral 2.137309
+#> 6  2     s2      neutral 1.753623
+#> 7  0     s3      neutral 2.000000
+#> 8  1     s3      neutral 1.979626
+#> 9  2     s3      neutral 1.960000
+#> 10 0     s4      neutral 3.000000
+#> 11 1     s4      neutral 2.693484
+#> 12 2     s4      neutral 2.528090
+#> 13 0     s1 phylogenetic 2.000000
+#> 14 1     s1 phylogenetic 1.889882
+#> 15 2     s1 phylogenetic 1.800000
+#> 16 0     s2 phylogenetic 2.500000
+#> 17 1     s2 phylogenetic 1.702490
+#> 18 2     s2 phylogenetic 1.423529
+#> 19 0     s3 phylogenetic 1.500000
+#> 20 1     s3 phylogenetic 1.406992
+#> 21 2     s3 phylogenetic 1.324324
+#> 22 0     s4 phylogenetic 2.500000
+#> 23 1     s4 phylogenetic 2.318405
+#> 24 2     s4 phylogenetic 2.227723
+#> 25 0     s1   functional 1.353846
+#> 26 1     s1   functional 1.343253
+#> 27 2     s1   functional 1.333333
+#> 28 0     s2   functional 1.911682
+#> 29 1     s2   functional 1.658248
+#> 30 2     s2   functional 1.517241
+#> 31 0     s3   functional 2.000000
+#> 32 1     s3   functional 1.979626
+#> 33 2     s3   functional 1.960000
+#> 34 0     s4   functional 1.650074
+#> 35 1     s4   functional 1.617041
+#> 36 2     s4   functional 1.590106
 ```
+
+This is the default whenever both references are present; restrict it
+with `type =` (e.g. `type = c("neutral", "functional")`) when you only
+want a subset. With `out = "matrix"` the same call returns a named list
+of matrices, one per type.
 
 A sample can be neutrally diverse yet phylogenetically or functionally
 redundant — quantifying exactly that gap is what

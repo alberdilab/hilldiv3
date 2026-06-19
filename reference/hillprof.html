@@ -116,8 +116,8 @@ type and is validated against the inputs (e.g. <code>"phylogenetic"</code> requi
 <dd><p>Reference tree depth for <em>phylogenetic</em> Hill numbers
 (ignored for neutral and functional types). <code>"pool"</code> (default) reads every
 sample at one common depth <code>T = mean(T_j)</code>, so values share a comparable
-axis (matching hilldiv2's <code>multi</code> behaviour); <code>"sample"</code> reads each sample
-at its own depth <code>T_j</code> (effective lineages at that sample's depth). The two
+axis across samples; <code>"sample"</code> reads each sample at its own depth <code>T_j</code>
+(effective lineages at that sample's depth). The two
 coincide on ultrametric trees. This reference depth is intentionally <em>not</em>
 offered by <code><a href="hillpart.html">hillpart()</a></code>: in a partition <code>T</code> is fixed at the mean per-sample
 depth of Chiu et al. (2014), the unique value for which <code>gamma / alpha</code>

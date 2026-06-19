@@ -25,34 +25,58 @@ the rows of
 
 ``` r
 hilldiv(gut_counts, q = c(0, 1), tree = gut_tree)
-#> Computing phylogenetic Hill numbers of "q0" and "q1".
+#> Computing "neutral" and "phylogenetic" Hill numbers of "q0" and "q1".
 #> ℹ 24 taxa across 12 samples.
-#> <hilldiv3 result: phylogenetic>
-#> 24 rows x 3 cols
+#> <hilldiv3 result: neutral, phylogenetic>
+#> 48 rows x 4 cols
 #> 
-#>    q sample    value
-#> 1  0 ctrl01 3.757442
-#> 2  1 ctrl01 2.156361
-#> 3  0 ctrl02 3.757442
-#> 4  1 ctrl02 2.105705
-#> 5  0 ctrl03 3.757442
-#> 6  1 ctrl03 2.035022
-#> 7  0 ctrl04 3.750466
-#> 8  1 ctrl04 2.263603
-#> 9  0 ctrl05 3.757442
-#> 10 1 ctrl05 1.881365
-#> 11 0 ctrl06 3.757442
-#> 12 1 ctrl06 2.159882
-#> 13 0  trt01 3.757442
-#> 14 1  trt01 2.135261
-#> 15 0  trt02 3.757442
-#> 16 1  trt02 1.649469
-#> 17 0  trt03 3.757442
-#> 18 1  trt03 2.212881
-#> 19 0  trt04 3.742870
-#> 20 1  trt04 1.853561
-#> 21 0  trt05 3.750466
-#> 22 1  trt05 1.906460
-#> 23 0  trt06 3.754523
-#> 24 1  trt06 1.996142
+#>    q sample         type     value
+#> 1  0 ctrl01      neutral 24.000000
+#> 2  1 ctrl01      neutral 12.329592
+#> 3  0 ctrl02      neutral 24.000000
+#> 4  1 ctrl02      neutral 14.784342
+#> 5  0 ctrl03      neutral 24.000000
+#> 6  1 ctrl03      neutral 11.832847
+#> 7  0 ctrl04      neutral 23.000000
+#> 8  1 ctrl04      neutral 11.266414
+#> 9  0 ctrl05      neutral 24.000000
+#> 10 1 ctrl05      neutral 10.035886
+#> 11 0 ctrl06      neutral 24.000000
+#> 12 1 ctrl06      neutral 13.277945
+#> 13 0  trt01      neutral 24.000000
+#> 14 1  trt01      neutral 11.888942
+#> 15 0  trt02      neutral 24.000000
+#> 16 1  trt02      neutral  8.350790
+#> 17 0  trt03      neutral 24.000000
+#> 18 1  trt03      neutral 15.681517
+#> 19 0  trt04      neutral 23.000000
+#> 20 1  trt04      neutral 11.671685
+#> 21 0  trt05      neutral 23.000000
+#> 22 1  trt05      neutral  9.043005
+#> 23 0  trt06      neutral 23.000000
+#> 24 1  trt06      neutral 10.901319
+#> 25 0 ctrl01 phylogenetic  3.757442
+#> 26 1 ctrl01 phylogenetic  2.156361
+#> 27 0 ctrl02 phylogenetic  3.757442
+#> 28 1 ctrl02 phylogenetic  2.105705
+#> 29 0 ctrl03 phylogenetic  3.757442
+#> 30 1 ctrl03 phylogenetic  2.035022
+#> 31 0 ctrl04 phylogenetic  3.750466
+#> 32 1 ctrl04 phylogenetic  2.263603
+#> 33 0 ctrl05 phylogenetic  3.757442
+#> 34 1 ctrl05 phylogenetic  1.881365
+#> 35 0 ctrl06 phylogenetic  3.757442
+#> 36 1 ctrl06 phylogenetic  2.159882
+#> 37 0  trt01 phylogenetic  3.757442
+#> 38 1  trt01 phylogenetic  2.135261
+#> 39 0  trt02 phylogenetic  3.757442
+#> 40 1  trt02 phylogenetic  1.649469
+#> 41 0  trt03 phylogenetic  3.757442
+#> 42 1  trt03 phylogenetic  2.212881
+#> 43 0  trt04 phylogenetic  3.742870
+#> 44 1  trt04 phylogenetic  1.853561
+#> 45 0  trt05 phylogenetic  3.750466
+#> 46 1  trt05 phylogenetic  1.906460
+#> 47 0  trt06 phylogenetic  3.754523
+#> 48 1  trt06 phylogenetic  1.996142
 ```

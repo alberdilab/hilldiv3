@@ -77,7 +77,7 @@ diversity):
 ``` r
 
 hilldiv(counts)
-#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> Computing "neutral" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: neutral>
 #> 12 rows x 3 cols
@@ -98,14 +98,48 @@ hilldiv(counts)
 ```
 
 Higher `q` down-weights rare taxa, so `qD` decreases as `q` grows unless
-the sample is perfectly even. Add a tree or a distance matrix to switch
-flavour:
+the sample is perfectly even. Add a tree or a distance matrix to layer
+on more flavours: a `tree` adds phylogenetic diversity alongside
+neutral, and supplying both a `tree` and a `dist` returns all three
+types at once (a `type` column tells them apart). Restrict the output
+with `type =`.
 
 ``` r
 
 tree <- ape::read.tree(text = "((t1:1,t2:1):1,t3:2);")
-hilldiv(counts, tree = tree)              # phylogenetic
-#> Computing phylogenetic Hill numbers of "q0", "q1", and "q2".
+hilldiv(counts, tree = tree)                   # neutral + phylogenetic
+#> Computing "neutral" and "phylogenetic" Hill numbers of "q0", "q1", and "q2".
+#> ℹ 3 taxa across 4 samples.
+#> <hilldiv3 result: neutral, phylogenetic>
+#> 24 rows x 4 cols
+#> 
+#>    q sample         type    value
+#> 1  0     s1      neutral 2.000000
+#> 2  1     s1      neutral 1.889882
+#> 3  2     s1      neutral 1.800000
+#> 4  0     s2      neutral 3.000000
+#> 5  1     s2      neutral 2.137309
+#> 6  2     s2      neutral 1.753623
+#> 7  0     s3      neutral 2.000000
+#> 8  1     s3      neutral 1.979626
+#> 9  2     s3      neutral 1.960000
+#> 10 0     s4      neutral 3.000000
+#> 11 1     s4      neutral 2.693484
+#> 12 2     s4      neutral 2.528090
+#> 13 0     s1 phylogenetic 2.000000
+#> 14 1     s1 phylogenetic 1.889882
+#> 15 2     s1 phylogenetic 1.800000
+#> 16 0     s2 phylogenetic 2.500000
+#> 17 1     s2 phylogenetic 1.702490
+#> 18 2     s2 phylogenetic 1.423529
+#> 19 0     s3 phylogenetic 1.500000
+#> 20 1     s3 phylogenetic 1.406992
+#> 21 2     s3 phylogenetic 1.324324
+#> 22 0     s4 phylogenetic 2.500000
+#> 23 1     s4 phylogenetic 2.318405
+#> 24 2     s4 phylogenetic 2.227723
+hilldiv(counts, tree = tree, type = "phylogenetic")   # phylogenetic only
+#> Computing "phylogenetic" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 3 taxa across 4 samples.
 #> <hilldiv3 result: phylogenetic>
 #> 12 rows x 3 cols

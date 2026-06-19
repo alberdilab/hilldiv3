@@ -26,7 +26,7 @@ An integer matrix with 24 rows (MAGs, `mag01`..`mag24`) and 12 columns
 
 ``` r
 hilldiv(gut_counts, q = c(0, 1, 2))
-#> Computing neutral Hill numbers of "q0", "q1", and "q2".
+#> Computing "neutral" Hill numbers of "q0", "q1", and "q2".
 #> ℹ 24 taxa across 12 samples.
 #> <hilldiv3 result: neutral>
 #> 36 rows x 3 cols

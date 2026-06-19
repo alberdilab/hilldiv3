@@ -78,36 +78,60 @@ labels match the rows of <a href="gut_counts.html">gut_counts</a>.</p>
     <div class="section level2">
     <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
     <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="fu"><a href="hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span><span class="op">)</span>, tree <span class="op">=</span> <span class="va">gut_tree</span><span class="op">)</span></span></span>
-<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing phylogenetic Hill numbers of <span style="color: #0000BB;">"q0"</span> and <span style="color: #0000BB;">"q1"</span>.</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Computing <span style="color: #0000BB;">"neutral"</span> and <span style="color: #0000BB;">"phylogenetic"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span> and <span style="color: #0000BB;">"q1"</span>.</span>
 <span class="r-msg co"><span class="r-pr">#&gt;</span> <span style="color: #00BBBB;">ℹ</span> 24 taxa across 12 samples.</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hilldiv3 result: phylogenetic&gt;</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24 rows x 3 cols</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> &lt;hilldiv3 result: neutral, phylogenetic&gt;</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48 rows x 4 cols</span>
 <span class="r-out co"><span class="r-pr">#&gt;</span> </span>
-<span class="r-out co"><span class="r-pr">#&gt;</span>    q sample    value</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0 ctrl01 3.757442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1 ctrl01 2.156361</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0 ctrl02 3.757442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1 ctrl02 2.105705</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0 ctrl03 3.757442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1 ctrl03 2.035022</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0 ctrl04 3.750466</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1 ctrl04 2.263603</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0 ctrl05 3.757442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1 ctrl05 1.881365</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0 ctrl06 3.757442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1 ctrl06 2.159882</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0  trt01 3.757442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1  trt01 2.135261</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0  trt02 3.757442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1  trt02 1.649469</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0  trt03 3.757442</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1  trt03 2.212881</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0  trt04 3.742870</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1  trt04 1.853561</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 21 0  trt05 3.750466</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 22 1  trt05 1.906460</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 23 0  trt06 3.754523</span>
-<span class="r-out co"><span class="r-pr">#&gt;</span> 24 1  trt06 1.996142</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span>    q sample         type     value</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 1  0 ctrl01      neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 2  1 ctrl01      neutral 12.329592</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 3  0 ctrl02      neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 4  1 ctrl02      neutral 14.784342</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 5  0 ctrl03      neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 6  1 ctrl03      neutral 11.832847</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 7  0 ctrl04      neutral 23.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 8  1 ctrl04      neutral 11.266414</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 9  0 ctrl05      neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 10 1 ctrl05      neutral 10.035886</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 11 0 ctrl06      neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 12 1 ctrl06      neutral 13.277945</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 13 0  trt01      neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 14 1  trt01      neutral 11.888942</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 15 0  trt02      neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 16 1  trt02      neutral  8.350790</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 17 0  trt03      neutral 24.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 18 1  trt03      neutral 15.681517</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 19 0  trt04      neutral 23.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 20 1  trt04      neutral 11.671685</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 21 0  trt05      neutral 23.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 22 1  trt05      neutral  9.043005</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 23 0  trt06      neutral 23.000000</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 24 1  trt06      neutral 10.901319</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 25 0 ctrl01 phylogenetic  3.757442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 26 1 ctrl01 phylogenetic  2.156361</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 27 0 ctrl02 phylogenetic  3.757442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 28 1 ctrl02 phylogenetic  2.105705</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 29 0 ctrl03 phylogenetic  3.757442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 30 1 ctrl03 phylogenetic  2.035022</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 31 0 ctrl04 phylogenetic  3.750466</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 32 1 ctrl04 phylogenetic  2.263603</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 33 0 ctrl05 phylogenetic  3.757442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 34 1 ctrl05 phylogenetic  1.881365</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 35 0 ctrl06 phylogenetic  3.757442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 36 1 ctrl06 phylogenetic  2.159882</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 37 0  trt01 phylogenetic  3.757442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 38 1  trt01 phylogenetic  2.135261</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 39 0  trt02 phylogenetic  3.757442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 40 1  trt02 phylogenetic  1.649469</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 41 0  trt03 phylogenetic  3.757442</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 42 1  trt03 phylogenetic  2.212881</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 43 0  trt04 phylogenetic  3.742870</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 44 1  trt04 phylogenetic  1.853561</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 45 0  trt05 phylogenetic  3.750466</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 46 1  trt05 phylogenetic  1.906460</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 47 0  trt06 phylogenetic  3.754523</span>
+<span class="r-out co"><span class="r-pr">#&gt;</span> 48 1  trt06 phylogenetic  1.996142</span>
 </code></pre></div>
     </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
