@@ -71,3 +71,89 @@ test_that("bundled gut data runs through the functional type", {
   d <- traits2dist(gut_traits)
   expect_silent(suppressMessages(hilldiv(gut_counts, q = 1, dist = d)))
 })
+
+test_that("identical assemblages give beta = 1 (Jost 2007)", {
+  # Two identical assemblages share all their diversity, so the multiplicative
+  # beta is 1 at every order regardless of the within-sample distribution.
+  counts <- matrix(c(5, 3, 2, 5, 3, 2), nrow = 3,
+                   dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
+  part <- suppressMessages(hillpart(counts, q = c(0, 1, 2), out = "matrix"))
+  expect_equal(unname(part[, "beta"]), c(1, 1, 1))
+})
+
+test_that("completely distinct equal-weight assemblages give beta = N (Jost 2007)", {
+  # N assemblages with no shared taxa and matched within-sample evenness have
+  # beta = N at every order -- Jost's (2007) result that beta is independent of
+  # alpha and ranges in [1, N].
+  counts <- matrix(c(5, 5, 0, 0, 0, 0, 5, 5), nrow = 4,
+                   dimnames = list(c("t1", "t2", "t3", "t4"), c("s1", "s2")))
+  N <- ncol(counts)
+  part <- suppressMessages(hillpart(counts, q = c(0, 1, 2), out = "matrix"))
+  expect_equal(unname(part[, "beta"]), rep(N, 3))
+})
+
+test_that("q0 turnover equals classic Sorensen/Jaccard dissimilarity (Chiu et al. 2014)", {
+  # For two presence/absence assemblages the q = 0 Sorensen-type turnover (V)
+  # and Jaccard-type turnover (S) reduce to the classic incidence indices
+  # (b + c) / (2a + b + c) and (b + c) / (a + b + c).
+  pa <- matrix(c(1, 0, 1, 0, 1, 1, 0, 1, 0, 1), nrow = 5, byrow = TRUE,
+               dimnames = list(paste0("t", 1:5), c("s1", "s2")))
+  a <- sum(pa[, 1] > 0 & pa[, 2] > 0)
+  b <- sum(pa[, 1] > 0 & pa[, 2] == 0)
+  cc <- sum(pa[, 1] == 0 & pa[, 2] > 0)
+  diss <- suppressMessages(hilldiss(pa, q = c(0, 1, 2), out = "matrix"))
+  expect_equal(unname(diss["q0", "V"]), (b + cc) / (2 * a + b + cc)) # Sorensen
+  expect_equal(unname(diss["q0", "S"]), (b + cc) / (a + b + cc))     # Jaccard
+})
+
+test_that("similarity is the complement of dissimilarity (Chiu et al. 2014)", {
+  pa <- matrix(c(1, 0, 1, 0, 1, 1, 0, 1, 0, 1), nrow = 5, byrow = TRUE,
+               dimnames = list(paste0("t", 1:5), c("s1", "s2")))
+  diss <- suppressMessages(hilldiss(pa, q = c(0, 1, 2), out = "matrix"))
+  sim <- suppressMessages(hillsim(pa, q = c(0, 1, 2), out = "matrix"))
+  expect_equal(unname(sim), unname(1 - diss))
+})
+
+test_that("phylogenetic gamma prunes empty branches (partial Faith's PD)", {
+  # Taxa absent from every sample must not contribute branch length: gamma PD at
+  # q0 is Faith's PD of the occupied subtree, not the whole tree.
+  tree <- ape::read.tree(text = "((t1:1,t2:1):1,(t3:1,t4:2):1.5);")
+  counts <- matrix(c(3, 1, 2, 4, 0, 0, 0, 0), nrow = 4, byrow = TRUE,
+                   dimnames = list(c("t1", "t2", "t3", "t4"), c("s1", "s2")))
+  part <- suppressMessages(hillpart(counts, q = 0, tree = tree, out = "matrix"))
+  # Occupied branches: t1 (1), t2 (1) and their shared internal edge (1) = 3;
+  # the (t3, t4) clade contributes nothing.
+  expect_equal(unname(part["q0", "gamma"]), 3)
+  expect_lt(unname(part["q0", "gamma"]), sum(tree$edge.length))
+})
+
+test_that("functional q2 equals Rao's quadratic entropy form (Chiu & Chao 2014)", {
+  # With tau = max(d), the order-2 functional Hill number has the closed form
+  # 1 / (1 - Q / tau), where Q = sum_ij d_ij p_i p_j is Rao's quadratic entropy.
+  counts <- matrix(c(5, 3, 2), nrow = 3,
+                   dimnames = list(c("t1", "t2", "t3"), "s1"))
+  dist <- matrix(c(0, 1, 0.5, 1, 0, 0.8, 0.5, 0.8, 0), nrow = 3,
+                 dimnames = list(c("t1", "t2", "t3"), c("t1", "t2", "t3")))
+  p <- as.vector(counts) / sum(counts)
+  rao <- as.numeric(t(p) %*% dist %*% p)
+  tau <- max(dist)
+  got <- suppressMessages(
+    hilldiv(counts, dist = dist, type = "functional", q = 2, out = "matrix"))
+  expect_equal(unname(got[, "q2"]), 1 / (1 - rao / tau))
+})
+
+test_that("functional diversity with maximally distinct taxa reduces to neutral", {
+  # When every pair is maximally distinct (d = tau), the similarity matrix is
+  # the identity and functional Hill numbers collapse to the neutral ones.
+  counts <- matrix(c(5, 0, 3, 2, 8, 1), nrow = 3,
+                   dimnames = list(c("t1", "t2", "t3"), c("s1", "s2")))
+  dist <- matrix(1, 3, 3)
+  diag(dist) <- 0
+  dimnames(dist) <- list(c("t1", "t2", "t3"), c("t1", "t2", "t3"))
+  func <- suppressMessages(
+    hilldiv(counts, dist = dist, type = "functional", q = c(0, 1, 2),
+            out = "matrix"))
+  neutral <- suppressMessages(
+    hilldiv(counts, type = "neutral", q = c(0, 1, 2), out = "matrix"))
+  expect_equal(func, neutral)
+})
