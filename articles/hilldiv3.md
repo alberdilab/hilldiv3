@@ -60,7 +60,7 @@ counts
 
 Data frames, tibbles, `phyloseq` objects and `TreeSummarizedExperiment`
 objects work too — see [Preparing your
-data](https://alberdilab.github.io/hilldiv3/articles/preparing-data.md).
+data](https://alberdilab.github.io/hilldiv3/articles/preparing-data.html).
 
 The package also ships a small **simulated** gut-microbiome example —
 `gut_counts` (a MAG count table), `gut_tree` (a phylogeny) and
@@ -214,20 +214,20 @@ hilldiss(counts, q = 1)
 The website carries in-depth articles:
 
 - [**Diversity
-  types**](https://alberdilab.github.io/hilldiv3/articles/diversity-types.md)
+  types**](https://alberdilab.github.io/hilldiv3/articles/diversity-types.html)
   — neutral, phylogenetic and functional measurement.
 - [**Partitioning and
-  (dis)similarity**](https://alberdilab.github.io/hilldiv3/articles/partitioning-and-dissimilarity.md)
+  (dis)similarity**](https://alberdilab.github.io/hilldiv3/articles/partitioning-and-dissimilarity.html)
   — alpha/beta/gamma, the S/C/U/V metrics, and pairwise dissimilarity
   for ordination.
 - [**Profiles, evenness and
-  redundancy**](https://alberdilab.github.io/hilldiv3/articles/profiles-evenness-redundancy.md)
+  redundancy**](https://alberdilab.github.io/hilldiv3/articles/profiles-evenness-redundancy.html)
   —
   [`hillprof()`](https://alberdilab.github.io/hilldiv3/reference/hillprof.md),
   [`hilleven()`](https://alberdilab.github.io/hilldiv3/reference/hilleven.md),
   [`hillred()`](https://alberdilab.github.io/hilldiv3/reference/hillred.md).
 - [**Preparing your
-  data**](https://alberdilab.github.io/hilldiv3/articles/preparing-data.md)
+  data**](https://alberdilab.github.io/hilldiv3/articles/preparing-data.html)
   — input formats, `phyloseq`/`TreeSummarizedExperiment`,
   [`tss()`](https://alberdilab.github.io/hilldiv3/reference/tss.md),
   [`traits2dist()`](https://alberdilab.github.io/hilldiv3/reference/traits2dist.md)
