@@ -108,7 +108,7 @@ hillpart(counts)
 ```
 
 `hilldiss()` and `hillsim()` turn beta into bounded dissimilarity / similarity
-metrics (Sorensen-, Jaccard-, and Unifrac-type), and `hillpair()` returns a
+metrics (Sorensen-, Jaccard-, and UniFrac-type), and `hillpair()` returns a
 `dist` object of pairwise dissimilarities ready for ordination:
 
 ```{r}

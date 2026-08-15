@@ -1,3 +1,29 @@
+## Resubmission
+
+This is a resubmission. In response to the CRAN reviewer's comments:
+
+* The redundant "Tools for" at the start of the 'Description' field has
+  been removed.
+
+* All acronyms in the 'Description' field are now written out on first
+  use: operational taxonomic units (OTUs), amplicon sequence variants
+  (ASVs), metagenome-assembled genomes (MAGs) and Faith's phylogenetic
+  diversity (PD).
+
+* Regarding suggested packages not available from a mainstream
+  repository: the only non-CRAN packages in 'Suggests' are the three
+  Bioconductor packages used by optional input adapters ('phyloseq',
+  'SummarizedExperiment', 'TreeSummarizedExperiment'). These are
+  available from the standard Bioconductor software repository, which
+  the incoming checks already treat as a mainstream repository, so the
+  previous 'Additional_repositories' entry matched no dependency and was
+  reported as an unused entry ("?  ?  <URL>") in the availability table.
+  The field has therefore been removed, and the three packages are
+  instead named in the 'Description' field together with the
+  Bioconductor URL. Every use of them is guarded with
+  `rlang::check_installed()` / `requireNamespace()`, so the package
+  builds, checks and runs without them.
+
 ## R CMD check results
 
 0 errors | 0 warnings | 1 note
@@ -9,22 +35,12 @@
 * The check reports a NOTE for "New submission". This is the first
   submission of 'hilldiv3' to CRAN.
 
-* The same NOTE flags possibly misspelled words in DESCRIPTION
-  ('ASV', 'OTU', 'Rao', 'Sorensen', 'Unifrac', 'Jost', 'Chao', 'Chiu',
-  'Alberdi', 'et', 'al'). These are domain terms, author surnames and
-  the abbreviation "et al." in the cited references; they are spelled
-  correctly.
-
-## Suggested packages on Bioconductor
-
-* Three suggested packages used by optional input adapters
-  ('phyloseq', 'SummarizedExperiment', 'TreeSummarizedExperiment')
-  are distributed via Bioconductor. They are listed in 'Suggests' and
-  every use is guarded with `rlang::check_installed()` /
-  `requireNamespace()`, so the package builds, checks and runs without
-  them. The Bioconductor repository is declared in
-  'Additional_repositories'. The "Additional_repositories" availability
-  line in the incoming-feasibility NOTE refers to this.
+* The same NOTE may flag possibly misspelled words in DESCRIPTION
+  ('ASVs', 'MAGs', 'OTUs', 'Rao', 'Sorensen', 'UniFrac', 'Jost', 'Chao',
+  'Chiu', 'Alberdi', 'et', 'al', and the package names 'phyloseq',
+  'SummarizedExperiment', 'TreeSummarizedExperiment'). These are domain
+  terms, package names, author surnames and the abbreviation "et al." in
+  the cited references; they are spelled correctly.
 
 ## Downstream dependencies
 

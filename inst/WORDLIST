@@ -1,8 +1,10 @@
 ASV
 ASVs
+Alberdi
 BLAS
 CMD
 Chao
+Chiu
 Codecov
 Coleoptera
 Diptera
@@ -23,11 +25,16 @@ ORCID
 OTU
 OTUs
 PCoA
+PD
 PLoS
+Rao
 Renyi
 Resour
 Soc
-Unifrac
+Sorensen
+SummarizedExperiment
+TreeSummarizedExperiment
+UniFrac
 aerobe
 amplicon
 cdot
@@ -42,6 +49,7 @@ metabarcoding
 metacommunity
 metagenome
 metagenomics
+phyloseq
 qD
 rstb
 tibble
