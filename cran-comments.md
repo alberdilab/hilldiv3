@@ -1,6 +1,11 @@
 ## Resubmission
 
-This is a resubmission. In response to the CRAN reviewer's comments:
+This is a resubmission. The previous source archive was built more than a
+month before it was uploaded, which caused the incoming-feasibility NOTE
+"This build time stamp is over a month old." The archive for this submission
+has been rebuilt immediately before upload.
+
+In response to the earlier CRAN reviewer's comments:
 
 * The redundant "Tools for" at the start of the 'Description' field has
   been removed.

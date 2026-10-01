@@ -1,6 +1,6 @@
 Package: hilldiv3
 Title: Integral Analysis of Diversity Based on Hill Numbers
-Version: 3.0.0
+Version: 3.0.1
 Authors@R:
     person("Antton", "Alberdi", , "antton.alberdi@sund.ku.dk", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2875-6446"))

@@ -26,6 +26,12 @@ their traits are), covering measurement, partitioning, (dis)similarity,
 profiles, evenness and redundancy. You call the same functions for all three —
 the diversity type is chosen by whether you supply a tree or a distance matrix.
 
+`hilldiv3` is aimed at ecologists and microbiologists analysing DNA-based
+community data (metabarcoding, amplicon and shotgun metagenomics), and more
+generally anyone who needs comparable alpha, beta and gamma diversity across
+taxonomic, phylogenetic and functional dimensions — including nested
+multi-scale designs such as individuals within sites within regions.
+
 ## Installation
 
 ```r
@@ -91,6 +97,42 @@ full redesign that keeps the familiar function names (`hilldiv()`,
   data (`gut_counts`, `gut_tree`, `gut_traits`).
 
 See [`NEWS.md`](NEWS.md) for the full changelog.
+
+## Testing
+
+The diversity engine is covered by a `testthat` suite, including golden-value
+tests against independent references (`vegan`, hand-computed values and
+analytical identities such as Faith's PD and exact telescoping of nested
+partitions). Run it with:
+
+```r
+devtools::test()
+```
+
+`R CMD check` runs on Linux, macOS and Windows on every push via GitHub
+Actions.
+
+## Getting help and contributing
+
+* Questions and bug reports: open an
+  [issue](https://github.com/alberdilab/hilldiv3/issues).
+* Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) for how
+  to report problems, propose features and submit pull requests, and for the
+  support we aim to provide.
+
+Please note that the hilldiv3 project is released with a
+[Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this
+project, you agree to abide by its terms.
+
+## Citation
+
+If you use `hilldiv3`, please cite it using the metadata in
+[`CITATION.cff`](CITATION.cff) (GitHub's "Cite this repository" button), and
+the methodological guide:
+
+* Alberdi, A. & Gilbert, M.T.P. (2019). A guide to the application of Hill
+  numbers to DNA-based diversity analyses. *Mol. Ecol. Resour.*, 19, 804-817.
+  <https://doi.org/10.1111/1755-0998.13014>
 
 ## References
 

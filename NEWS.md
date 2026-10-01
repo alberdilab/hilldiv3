@@ -1,5 +1,8 @@
-# hilldiv3 (development version)
+# hilldiv3 3.0.1
 
+* Added contributing guidelines (`CONTRIBUTING.md`), a code of conduct, issue
+  templates, citation metadata (`CITATION.cff`) and the full GPL-3 licence
+  text, and a Journal of Open Source Software paper (`paper/`).
 * **Breaking:** the `out = "matrix"` form of the per-sample functions
   (`hilldiv()`, `hillprof()`, `hilleven()`) now returns samples in rows and
   diversity orders (`q0`, `q1`, ...) in columns, instead of the previous
@@ -14,7 +17,7 @@
   non-numeric column raises a clear error asking the user to fix the input.
 * Verbose output now reports the number of taxa and samples being analysed.
 
-## hilldiv3 3.0.0
+# hilldiv3 3.0.0
 
 Complete redesign of the package built on a tested, isolated compute engine.
 

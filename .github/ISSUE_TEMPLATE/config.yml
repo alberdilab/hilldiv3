@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation
+    url: https://alberdilab.github.io/hilldiv3/
+    about: Vignettes, articles and function reference.

@@ -16,3 +16,7 @@
 ^inst/benchmarks$
 ^cran-comments\.md$
 ^CRAN-SUBMISSION$
+^CODE_OF_CONDUCT\.md$
+^CONTRIBUTING\.md$
+^CITATION\.cff$
+^paper$
