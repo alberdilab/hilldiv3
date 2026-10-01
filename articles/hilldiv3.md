@@ -190,7 +190,7 @@ hillpart(counts)
 and
 [`hillsim()`](https://alberdilab.github.io/hilldiv3/reference/hillsim.md)
 turn beta into bounded dissimilarity / similarity metrics (Sorensen-,
-Jaccard-, and Unifrac-type), and
+Jaccard-, and UniFrac-type), and
 [`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md)
 returns a `dist` object of pairwise dissimilarities ready for
 ordination:

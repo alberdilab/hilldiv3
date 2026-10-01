@@ -1,7 +1,10 @@
 # Changelog
 
-## hilldiv3 (development version)
+## hilldiv3 3.0.1
 
+- Added contributing guidelines (`CONTRIBUTING.md`), a code of conduct,
+  issue templates, citation metadata (`CITATION.cff`) and the full GPL-3
+  licence text, and a Journal of Open Source Software paper (`paper/`).
 - **Breaking:** the `out = "matrix"` form of the per-sample functions
   ([`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md),
   [`hillprof()`](https://alberdilab.github.io/hilldiv3/reference/hillprof.md),
@@ -26,7 +29,7 @@
 - Verbose output now reports the number of taxa and samples being
   analysed.
 
-### hilldiv3 3.0.0
+## hilldiv3 3.0.0
 
 Complete redesign of the package built on a tested, isolated compute
 engine.

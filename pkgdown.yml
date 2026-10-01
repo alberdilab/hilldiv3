@@ -1,5 +1,5 @@
 pandoc: 3.8.3
-pkgdown: 2.2.0
+pkgdown: 2.2.1
 pkgdown_sha: ~
 articles:
   articles/diversity-types: diversity-types.html
@@ -10,7 +10,7 @@ articles:
   articles/profiles-evenness-redundancy: profiles-evenness-redundancy.html
   articles/use-case-bacterial-mags: use-case-bacterial-mags.html
   articles/use-case-bat-diet: use-case-bat-diet.html
-last_built: 2026-06-29T09:24Z
+last_built: 2026-10-01T04:13Z
 urls:
   reference: https://alberdilab.github.io/hilldiv3/reference
   article: https://alberdilab.github.io/hilldiv3/articles

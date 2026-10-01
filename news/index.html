@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -53,24 +53,26 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="development version" id="hilldiv3-development-version">hilldiv3 (development version)<a class="anchor" aria-label="anchor" href="#hilldiv3-development-version"></a></h2>
-<ul><li>
+<h2 class="pkg-version" data-toc-text="3.0.1" id="hilldiv3-301">hilldiv3 3.0.1<a class="anchor" aria-label="anchor" href="#hilldiv3-301"></a></h2>
+<ul><li>Added contributing guidelines (<code>CONTRIBUTING.md</code>), a code of conduct, issue templates, citation metadata (<code>CITATION.cff</code>) and the full GPL-3 licence text, and a Journal of Open Source Software paper (<code>paper/</code>).</li>
+<li>
 <strong>Breaking:</strong> the <code>out = "matrix"</code> form of the per-sample functions (<code><a href="../reference/hilldiv.html">hilldiv()</a></code>, <code><a href="../reference/hillprof.html">hillprof()</a></code>, <code><a href="../reference/hilleven.html">hilleven()</a></code>) now returns samples in rows and diversity orders (<code>q0</code>, <code>q1</code>, …) in columns, instead of the previous orders-in-rows/samples-in-columns layout. This matches the usual observations-in-rows convention and joins cleanly with per-sample metadata. Code that indexed these matrices by <code>["q0", ]</code> should switch to <code>[, "q0"]</code> (or transpose). The component/metric matrices from <code><a href="../reference/hillpart.html">hillpart()</a></code>, <code><a href="../reference/hilldiss.html">hilldiss()</a></code> and <code><a href="../reference/hillred.html">hillred()</a></code> are unchanged.</li>
 <li>
 <code><a href="../reference/hilldiv.html">hilldiv()</a></code> and friends now accept count tables whose first column holds taxa names: a leading non-numeric column is automatically promoted to row names (instead of failing with “Count data must be numeric”). Any other non-numeric column raises a clear error asking the user to fix the input.</li>
 <li>Verbose output now reports the number of taxa and samples being analysed.</li>
-</ul><div class="section level3">
-<h3 id="hilldiv3-development-version-1">hilldiv3 3.0.0<a class="anchor" aria-label="anchor" href="#hilldiv3-development-version-1"></a></h3>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.0.0" id="hilldiv3-300">hilldiv3 3.0.0<a class="anchor" aria-label="anchor" href="#hilldiv3-300"></a></h2>
 <p>Complete redesign of the package built on a tested, isolated compute engine.</p>
 <div class="section level4">
-<h4 id="architecture-development-version">Architecture<a class="anchor" aria-label="anchor" href="#architecture-development-version"></a></h4>
+<h4 id="architecture-3-0-0">Architecture<a class="anchor" aria-label="anchor" href="#architecture-3-0-0"></a></h4>
 <ul><li>Math separated into an internal, unit-tested engine (<code>hill_alpha()</code>, <code>hill_partition()</code>, <code>hill_beta_to_dissim()</code>); the user-facing <code>hill*</code> functions are thin wrappers around it.</li>
 <li>Single validation/alignment layer (<code>prep_data()</code>) that checks names with <code><a href="https://rdrr.io/r/base/sets.html" class="external-link">setequal()</a></code> and <strong>reorders</strong> data to match the tree/distance matrix, fixing the silent-misalignment behaviour of hilldiv2.</li>
 <li>New <code>as_hill_input()</code> adapter accepting matrices, data frames, tibbles, <code>phyloseq</code> and <code>TreeSummarizedExperiment</code> objects.</li>
 <li>Fast <code>ape</code>-based post-order tree traversal replaces <code>geiger::tips()</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="new-features-development-version">New features<a class="anchor" aria-label="anchor" href="#new-features-development-version"></a></h4>
+<h4 id="new-features-3-0-0">New features<a class="anchor" aria-label="anchor" href="#new-features-3-0-0"></a></h4>
 <ul><li>
 <code><a href="../reference/hillprof.html">hillprof()</a></code> — diversity profiles across a sweep of q values.</li>
 <li>
@@ -87,20 +89,19 @@
 <strong><code>reference</code> argument on <code><a href="../reference/hilldiv.html">hilldiv()</a></code></strong> — <code>reference = c("pool", "sample")</code> selects the reference tree depth for <em>phylogenetic</em> Hill numbers. <code>"pool"</code> (default) reads every sample at one common depth <code>T = mean(T_j)</code> so values are mutually comparable (hilldiv2’s <code>multi</code> behaviour); <code>"sample"</code> reads each sample at its own depth <code>T_j</code>. The two coincide on ultrametric trees. The option is deliberately absent from <code><a href="../reference/hillpart.html">hillpart()</a></code>, where <code>T</code> is fixed at the Chiu et al. (2014) mean per-sample depth — the unique value for which <code>gamma / alpha</code> is a valid decomposition with <code>beta</code> in <code>[1, N]</code>.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="bug-fixes-development-version">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h4>
+<h4 id="bug-fixes-3-0-0">Bug fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-3-0-0"></a></h4>
 <ul><li>
 <strong>Phylogenetic <code><a href="../reference/hilldiv.html">hilldiv()</a></code> alpha corrected.</strong> The per-sample phylogenetic Hill number previously raised branch length <code>L_i</code> to the power <code>q</code> along with abundance (<code>(L_i a_i / T)^q</code>), which matched no standard quantity and disagreed with the partition engine. Branch length is now a linear weight (<code>(L_i / T) a_i^q</code>, Chao et al. 2010), so <code>q = 0</code> recovers Faith’s PD / T and the per-sample value matches <code><a href="../reference/hillpart.html">hillpart()</a></code> alpha at a single sample. <strong>This changes phylogenetic <code><a href="../reference/hilldiv.html">hilldiv()</a></code> and <code><a href="../reference/hillprof.html">hillprof()</a></code> outputs</strong> relative to earlier 3.0.0 development snapshots.</li>
 </ul></div>
 <div class="section level4">
-<h4 id="infrastructure-development-version">Infrastructure<a class="anchor" aria-label="anchor" href="#infrastructure-development-version"></a></h4>
+<h4 id="infrastructure-3-0-0">Infrastructure<a class="anchor" aria-label="anchor" href="#infrastructure-3-0-0"></a></h4>
 <ul><li>Added test-coverage (Codecov) and lint (lintr) GitHub Actions workflows.</li>
 <li>Added golden-value tests cross-checking the engine against <code>vegan</code> and hand-computed constants, plus edge cases (single taxon, empty sample, q = 1).</li>
 </ul></div>
 <div class="section level4">
-<h4 id="compatibility-development-version">Compatibility<a class="anchor" aria-label="anchor" href="#compatibility-development-version"></a></h4>
+<h4 id="compatibility-3-0-0">Compatibility<a class="anchor" aria-label="anchor" href="#compatibility-3-0-0"></a></h4>
 <ul><li>The <code><a href="../reference/hilldiv.html">hilldiv()</a></code>, <code><a href="../reference/hillpart.html">hillpart()</a></code>, <code><a href="../reference/hilldiss.html">hilldiss()</a></code>, <code><a href="../reference/hillsim.html">hillsim()</a></code>, <code><a href="../reference/hillpair.html">hillpair()</a></code>, <code><a href="../reference/hillred.html">hillred()</a></code>, <code><a href="../reference/tss.html">tss()</a></code> and <code><a href="../reference/traits2dist.html">traits2dist()</a></code> names from hilldiv2 are preserved. The default return shape is now a tidy <code>data.frame</code>; use <code>out = "matrix"</code> for the hilldiv2-style matrix.</li>
 </ul></div>
-</div>
 </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
@@ -111,7 +112,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer></div>

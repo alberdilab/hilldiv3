@@ -11,8 +11,8 @@
 <script src="deps/bootstrap-5.3.8/bootstrap.bundle.min.js"></script><link href="deps/font-awesome-6.5.2/css/all.min.css" rel="stylesheet">
 <link href="deps/font-awesome-6.5.2/css/v4-shims.min.css" rel="stylesheet">
 <script src="deps/headroom-0.11.0/headroom.min.js"></script><script src="deps/headroom-0.11.0/jQuery.headroom.min.js"></script><script src="deps/bootstrap-toc-1.0.1/bootstrap-toc.min.js"></script><script src="deps/clipboard.js-2.0.11/clipboard.min.js"></script><script src="deps/search-1.0.0/autocomplete.jquery.min.js"></script><script src="deps/search-1.0.0/fuse.min.js"></script><script src="deps/search-1.0.0/mark.min.js"></script><!-- pkgdown --><script src="pkgdown.js"></script><meta property="og:title" content="Integral Analysis of Diversity Based on Hill Numbers">
-<meta name="description" content="Tools for analysing the diversity of biological communities (e.g. OTU/ASV/MAG tables) based on Hill numbers. hilldiv3 provides a unified framework for neutral, phylogenetic and functional diversity measurement, diversity partitioning, (dis)similarity measurement, diversity profiles, evenness and redundancy. The statistical framework encompasses richness, Shannon and Simpson diversity, Faiths PD, Raos quadratic entropy and Sorensen/Unifrac-type dissimilarities, all grounded in a single Hill-number framework. Methods are described in Jost (2007) &lt;doi:10.1890/06-1736.1&gt;, Chao et al. (2010) &lt;doi:10.1098/rstb.2010.0272&gt;, Chiu et al. (2014) &lt;doi:10.1890/12-0960.1&gt; and reviewed in Alberdi &amp; Gilbert (2019) &lt;doi:10.1111/1755-0998.13014&gt;.">
-<meta property="og:description" content="Tools for analysing the diversity of biological communities (e.g. OTU/ASV/MAG tables) based on Hill numbers. hilldiv3 provides a unified framework for neutral, phylogenetic and functional diversity measurement, diversity partitioning, (dis)similarity measurement, diversity profiles, evenness and redundancy. The statistical framework encompasses richness, Shannon and Simpson diversity, Faiths PD, Raos quadratic entropy and Sorensen/Unifrac-type dissimilarities, all grounded in a single Hill-number framework. Methods are described in Jost (2007) &lt;doi:10.1890/06-1736.1&gt;, Chao et al. (2010) &lt;doi:10.1098/rstb.2010.0272&gt;, Chiu et al. (2014) &lt;doi:10.1890/12-0960.1&gt; and reviewed in Alberdi &amp; Gilbert (2019) &lt;doi:10.1111/1755-0998.13014&gt;.">
+<meta name="description" content="Measures and compares the diversity of biological communities (e.g. tables of operational taxonomic units (OTUs), amplicon sequence variants (ASVs) or metagenome-assembled genomes (MAGs)) based on Hill numbers, in a unified framework for neutral, phylogenetic and functional diversity measurement, diversity partitioning, (dis)similarity measurement, diversity profiles, evenness and redundancy. The statistical framework encompasses richness, Shannon and Simpson diversity, Faiths phylogenetic diversity (PD), Raos quadratic entropy and Sorensen- and UniFrac-type dissimilarities, all grounded in a single Hill-number framework. Methods are described in Jost (2007) &lt;doi:10.1890/06-1736.1&gt;, Chao et al. (2010) &lt;doi:10.1098/rstb.2010.0272&gt;, Chiu et al. (2014) &lt;doi:10.1890/12-0960.1&gt; and reviewed in Alberdi &amp; Gilbert (2019) &lt;doi:10.1111/1755-0998.13014&gt;. Optional import adapters interoperate with the Bioconductor packages phyloseq, SummarizedExperiment and TreeSummarizedExperiment, which are available from &lt;https://bioconductor.org&gt;.">
+<meta property="og:description" content="Measures and compares the diversity of biological communities (e.g. tables of operational taxonomic units (OTUs), amplicon sequence variants (ASVs) or metagenome-assembled genomes (MAGs)) based on Hill numbers, in a unified framework for neutral, phylogenetic and functional diversity measurement, diversity partitioning, (dis)similarity measurement, diversity profiles, evenness and redundancy. The statistical framework encompasses richness, Shannon and Simpson diversity, Faiths phylogenetic diversity (PD), Raos quadratic entropy and Sorensen- and UniFrac-type dissimilarities, all grounded in a single Hill-number framework. Methods are described in Jost (2007) &lt;doi:10.1890/06-1736.1&gt;, Chao et al. (2010) &lt;doi:10.1098/rstb.2010.0272&gt;, Chiu et al. (2014) &lt;doi:10.1890/12-0960.1&gt; and reviewed in Alberdi &amp; Gilbert (2019) &lt;doi:10.1111/1755-0998.13014&gt;. Optional import adapters interoperate with the Bioconductor packages phyloseq, SummarizedExperiment and TreeSummarizedExperiment, which are available from &lt;https://bioconductor.org&gt;.">
 </head>
 <body>
     <a href="#main" class="visually-hidden-focusable">Skip to contents</a>
@@ -22,7 +22,7 @@
 
     <a class="navbar-brand me-2" href="index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -79,6 +79,7 @@
 
 <p><code>hilldiv3</code> measures and compares the diversity of biological communities — OTU, ASV or MAG count tables — using <strong>Hill numbers</strong>. Hill numbers are a single, intuitive family of diversity metrics: each one is an <em>effective number of taxa</em> (“how many equally-abundant taxa would give this much diversity”), and one parameter, the <em>diversity order</em> <code>q</code>, slides smoothly between counting all taxa equally (richness), weighting them by abundance (Shannon) and focusing on the common ones (Simpson). Because everything is expressed in the same currency, results are directly comparable across samples, studies and methods.</p>
 <p>From that one foundation, <code>hilldiv3</code> provides a unified toolkit for <strong>neutral</strong> diversity (abundances only), <strong>phylogenetic</strong> diversity (accounting for how related taxa are) and <strong>functional</strong> diversity (accounting for how different their traits are), covering measurement, partitioning, (dis)similarity, profiles, evenness and redundancy. You call the same functions for all three — the diversity type is chosen by whether you supply a tree or a distance matrix.</p>
+<p><code>hilldiv3</code> is aimed at ecologists and microbiologists analysing DNA-based community data (metabarcoding, amplicon and shotgun metagenomics), and more generally anyone who needs comparable alpha, beta and gamma diversity across taxonomic, phylogenetic and functional dimensions — including nested multi-scale designs such as individuals within sites within regions.</p>
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
@@ -137,6 +138,32 @@
 <p>See <a href="NEWS.html"><code>NEWS.md</code></a> for the full changelog.</p>
 </div>
 <div class="section level2">
+<h2 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a>
+</h2>
+<p>The diversity engine is covered by a <code>testthat</code> suite, including golden-value tests against independent references (<code>vegan</code>, hand-computed values and analytical identities such as Faith’s PD and exact telescoping of nested partitions). Run it with:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<p><code>R CMD check</code> runs on Linux, macOS and Windows on every push via GitHub Actions.</p>
+</div>
+<div class="section level2">
+<h2 id="getting-help-and-contributing">Getting help and contributing<a class="anchor" aria-label="anchor" href="#getting-help-and-contributing"></a>
+</h2>
+<ul>
+<li>Questions and bug reports: open an <a href="https://github.com/alberdilab/hilldiv3/issues" class="external-link">issue</a>.</li>
+<li>Contributions are welcome — see <a href="CONTRIBUTING.html"><code>CONTRIBUTING.md</code></a> for how to report problems, propose features and submit pull requests, and for the support we aim to provide.</li>
+</ul>
+<p>Please note that the hilldiv3 project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+</div>
+<div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
+</h2>
+<p>If you use <code>hilldiv3</code>, please cite it using the metadata in <a href="CITATION.cff"><code>CITATION.cff</code></a> (GitHub’s “Cite this repository” button), and the methodological guide:</p>
+<ul>
+<li>Alberdi, A. &amp; Gilbert, M.T.P. (2019). A guide to the application of Hill numbers to DNA-based diversity analyses. <em>Mol. Ecol. Resour.</em>, 19, 804-817. <a href="https://doi.org/10.1111/1755-0998.13014" class="external-link uri">https://doi.org/10.1111/1755-0998.13014</a>
+</li>
+</ul>
+</div>
+<div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <ul>
@@ -159,10 +186,18 @@
 <div class="license">
 <h2 data-toc-skip>License</h2>
 <ul class="list-unstyled">
-<li><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></li>
+<li><a href="LICENSE.html">Full license</a></li>
+<li><small><a href="https://www.r-project.org/Licenses/GPL-3" class="external-link">GPL-3</a></small></li>
 </ul>
 </div>
 
+<div class="community">
+<h2 data-toc-skip>Community</h2>
+<ul class="list-unstyled">
+<li><a href="CONTRIBUTING.html">Contributing guide</a></li>
+<li><a href="CODE_OF_CONDUCT.html">Code of conduct</a></li>
+</ul>
+</div>
 
 <div class="citation">
 <h2 data-toc-skip>Citation</h2>
@@ -200,7 +235,7 @@
 </div>
 
 <div class="pkgdown-footer-right">
-  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.0.</p>
+  <p>Site built with <a href="https://pkgdown.r-lib.org/" class="external-link">pkgdown</a> 2.2.1.</p>
 </div>
 
     </footer>
