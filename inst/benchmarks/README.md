@@ -13,10 +13,12 @@ aggregated one-row-per-package-operation view. The pkgdown article
 `vignettes/articles/performance.Rmd` reads those files and renders the
 benchmark tables and boxplots.
 
-Install the optional comparison packages before the final publication run:
+Install the optional comparison packages and `pkgload` before the final
+publication run. `pkgload` makes the script benchmark the code in this checkout,
+which may be newer than the version on CRAN:
 
 ```r
-install.packages(c("bench", "hillR", "entropart", "vegan", "BAT"))
+install.packages(c("bench", "hillR", "entropart", "vegan", "BAT", "pkgload", "remotes"))
 remotes::install_github("anttonalberdi/hilldiv2")
 ```
 

@@ -4,7 +4,8 @@
 [![R-CMD-check](https://github.com/alberdilab/hilldiv3/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/alberdilab/hilldiv3/actions/workflows/R-CMD-check.yaml)
 [![Codecov test coverage](https://codecov.io/gh/alberdilab/hilldiv3/graph/badge.svg)](https://app.codecov.io/gh/alberdilab/hilldiv3)
 [![lint](https://github.com/alberdilab/hilldiv3/actions/workflows/lint.yaml/badge.svg)](https://github.com/alberdilab/hilldiv3/actions/workflows/lint.yaml)
-[![CRAN status](https://www.r-pkg.org/badges/version/hilldiv3)](https://CRAN.R-project.org/package=hilldiv3)
+[![CRAN version](https://www.r-pkg.org/badges/version/hilldiv3)](https://CRAN.R-project.org/package=hilldiv3)
+[![CRAN checks](https://badges.cranchecks.info/summary/hilldiv3.svg)](https://cran.r-project.org/web/checks/check_results_hilldiv3.html)
 [![CRAN downloads](https://cranlogs.r-pkg.org/badges/grand-total/hilldiv3)](https://CRAN.R-project.org/package=hilldiv3)
 [![Lifecycle: stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 [![License: GPL v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
@@ -33,6 +34,15 @@ taxonomic, phylogenetic and functional dimensions — including nested
 multi-scale designs such as individuals within sites within regions.
 
 ## Installation
+
+Install the released version from CRAN:
+
+```r
+install.packages("hilldiv3")
+```
+
+To install the version in this repository, which may contain changes not yet
+available on CRAN:
 
 ```r
 # install.packages("devtools")

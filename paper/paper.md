@@ -189,8 +189,10 @@ with `print` and `plot` methods, or as plain matrices with `out = "matrix"`.
 
 # Research impact statement
 
-`hilldiv3` continues a lineage that is already in research use. Its
-predecessor `hilldiv` was distributed through CRAN from October 2019 until it
+`hilldiv3` is [available on CRAN](https://CRAN.R-project.org/package=hilldiv3),
+where version 3.0.0 was first published on 6 October 2026. It continues a
+lineage that is already in research use. Its predecessor `hilldiv` was
+distributed through CRAN from October 2019 until it
 was archived in March 2025, and was downloaded about 24,900 times from the
 RStudio CRAN mirror. The accompanying
 guide, @Alberdi2019, has been cited 273 times (OpenAlex, October 2026).
@@ -201,7 +203,7 @@ results where the two agree.
 **TODO (author):** add concrete, verifiable evidence of `hilldiv3`'s own use,
 for example: studies or preprints that used it (with DOIs); groups or projects
 that have adopted it (e.g. Earth Hologenome Initiative analyses); pipelines
-that integrate it; and CRAN availability once accepted. JOSS does not accept
+that integrate it. JOSS does not accept
 statements of intended future use as evidence.
 
 # AI usage disclosure

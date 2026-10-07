@@ -1,3 +1,8 @@
+## Initial CRAN release (3.0.0)
+
+These are the submission notes for version 3.0.0, published on CRAN on
+6 October 2026. They should be updated for a later submission.
+
 ## Resubmission
 
 This is a resubmission. The previous source archive was built more than a

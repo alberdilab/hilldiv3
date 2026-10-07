@@ -31,7 +31,12 @@ use case 1 simulates its own data in `data-bat-diet.R`. Both data sets are
 
 ## Reproduce
 
-From the package root, with `hilldiv3` and `ggplot2` installed:
+Install `hilldiv3` from CRAN and `ggplot2`, then run the scripts from the
+package root:
+
+```r
+install.packages(c("hilldiv3", "ggplot2"))
+```
 
 ```sh
 Rscript inst/manuscript/use-case-1-bat-diet.R
