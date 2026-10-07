@@ -143,9 +143,9 @@ hillred(gut_counts, q = c(1, 2), tree = gut_tree)
 #> <hilldiv3 result: phylogenetic>
 #> 2 rows x 5 cols
 #> 
-#>   q redundancy        a        b        c
-#> 1 1  0.9022283 21.93297 1.533208 2.187965
-#> 2 2  0.9098232  4.17549 1.166743 1.665108
+#>   q redundancy         a        b        c
+#> 1 1  0.9022283 21.932974 1.533208 2.187965
+#> 2 2  0.9098232  4.175493 1.166743 1.665108
 ```
 
 The returned table has the `redundancy` summary plus the fitted `a`,

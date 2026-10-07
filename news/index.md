@@ -31,6 +31,10 @@
 
 ## hilldiv3 3.0.0
 
+CRAN release: 2026-10-06
+
+First published on CRAN on 6 October 2026.
+
 Complete redesign of the package built on a tested, isolated compute
 engine.
 

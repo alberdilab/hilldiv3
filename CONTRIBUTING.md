@@ -63,7 +63,7 @@ issue before writing code, so we can agree on the design first.
     - Add a bullet to the top section of `NEWS.md` describing the
       change.
 4.  Check that everything passes locally: `devtools::check()` and
-    `lintr::lint_package()`.
+    [`lintr::lint_package()`](https://lintr.r-lib.org/reference/lint.html).
 5.  Open a pull request against `main` and describe what changed and
     why. Continuous integration runs `R CMD check` on Linux, macOS and
     Windows, the linter and test coverage.

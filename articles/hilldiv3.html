@@ -79,7 +79,7 @@
       <h1>Getting started with hilldiv3</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/alberdilab/hilldiv3/blob/v3.0.1/vignettes/hilldiv3.Rmd" class="external-link"><code>vignettes/hilldiv3.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alberdilab/hilldiv3/blob/main/vignettes/hilldiv3.Rmd" class="external-link"><code>vignettes/hilldiv3.Rmd</code></a></small>
       <div class="d-none name"><code>hilldiv3.Rmd</code></div>
     </div>
 
@@ -87,6 +87,16 @@
     
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/alberdilab/hilldiv3" class="external-link">hilldiv3</a></span><span class="op">)</span></span></code></pre></div>
+<div class="section level2">
+<h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
+</h2>
+<p>Install <code>hilldiv3</code> from CRAN:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hilldiv3"</span><span class="op">)</span></span></code></pre></div>
+<p>For the version in the GitHub repository, which may have changes not
+yet on CRAN, use
+<code>devtools::install_github("alberdilab/hilldiv3")</code>.</p>
+</div>
 <div class="section level2">
 <h2 id="what-hilldiv3-does">What hilldiv3 does<a class="anchor" aria-label="anchor" href="#what-hilldiv3-does"></a>
 </h2>
@@ -143,7 +153,7 @@ have it validated against your inputs.</p>
 <p>Every function takes a <strong>count table</strong> with taxa
 (OTUs/ASVs/MAGs) in rows and samples in columns. A matrix is the
 simplest form:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">5</span>,</span>
 <span>     <span class="fl">2</span>, <span class="fl">8</span>, <span class="fl">1</span>,</span>
@@ -174,7 +184,7 @@ diversity <em>within</em> each community, traditionally called
 <strong>alpha diversity</strong>. By default it computes orders
 <code>q = 0</code> (richness), <code>q = 1</code> (Shannon diversity)
 and <code>q = 2</code> (Simpson diversity):</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
 <span><span class="co">#&gt; <span style="color: #00BBBB;">ℹ</span> 3 taxa across 4 samples.</span></span>
@@ -201,7 +211,7 @@ Add a tree or a distance matrix to layer on more flavours: a
 supplying both a <code>tree</code> and a <code>dist</code> returns all
 three types at once (a <code>type</code> column tells them apart).
 Restrict the output with <code>type =</code>.</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tree</span> <span class="op">&lt;-</span> <span class="fu">ape</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/ape/man/read.tree.html" class="external-link">read.tree</a></span><span class="op">(</span>text <span class="op">=</span> <span class="st">"((t1:1,t2:1):1,t3:2);"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">counts</span>, tree <span class="op">=</span> <span class="va">tree</span><span class="op">)</span>                   <span class="co"># neutral + phylogenetic</span></span>
 <span><span class="co">#&gt; Computing <span style="color: #0000BB;">"neutral"</span> and <span style="color: #0000BB;">"phylogenetic"</span> Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and <span style="color: #0000BB;">"q2"</span>.</span></span>
@@ -261,7 +271,7 @@ Restrict the output with <code>type =</code>.</p>
 <strong>alpha</strong> (within-sample), <strong>gamma</strong> (pooled)
 and <strong>beta</strong> (<code>gamma / alpha</code>, the number of
 effectively distinct communities):</p>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Partitioning neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
@@ -282,7 +292,7 @@ effectively distinct communities):</p>
 bounded dissimilarity / similarity metrics (Sorensen-, Jaccard-, and
 UniFrac-type), and <code><a href="../reference/hillpair.html">hillpair()</a></code> returns a <code>dist</code>
 object of pairwise dissimilarities ready for ordination:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiss.html">hilldiss</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; dissimilarity from neutral Hill numbers of <span style="color: #0000BB;">"q1"</span>.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>

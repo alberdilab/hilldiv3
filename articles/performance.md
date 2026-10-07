@@ -102,12 +102,13 @@ and per-iteration tables are written next to the benchmark script:
 
 ## Reproducing the benchmark
 
-Install the comparison packages, then run the benchmark script from the
-package root:
+Install the comparison packages and `pkgload`, then run the benchmark
+script from the package root. `pkgload` loads the local `hilldiv3`
+checkout, which may be newer than the version on CRAN:
 
 ``` r
 
-install.packages(c("bench", "hillR", "entropart", "vegan", "BAT"))
+install.packages(c("bench", "hillR", "entropart", "vegan", "BAT", "pkgload", "remotes"))
 remotes::install_github("anttonalberdi/hilldiv2")
 
 Sys.setenv(

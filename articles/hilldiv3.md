@@ -5,6 +5,18 @@
 library(hilldiv3)
 ```
 
+## Installation
+
+Install `hilldiv3` from CRAN:
+
+``` r
+
+install.packages("hilldiv3")
+```
+
+For the version in the GitHub repository, which may have changes not yet
+on CRAN, use `devtools::install_github("alberdilab/hilldiv3")`.
+
 ## What hilldiv3 does
 
 `hilldiv3` measures and compares the diversity of biological communities

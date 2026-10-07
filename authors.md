@@ -8,7 +8,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/alberdilab/hilldiv3/blob/v3.0.1/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/alberdilab/hilldiv3/blob/main/DESCRIPTION)
 
 Alberdi A (2026). *hilldiv3: Integral Analysis of Diversity Based on
 Hill Numbers*. R package version 3.0.1,

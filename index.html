@@ -83,14 +83,18 @@
 <div class="section level2">
 <h2 id="installation">Installation<a class="anchor" aria-label="anchor" href="#installation"></a>
 </h2>
+<p>Install the released version from CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="st">"hilldiv3"</span><span class="op">)</span></span></code></pre></div>
+<p>To install the version in this repository, which may contain changes not yet available on CRAN:</p>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># install.packages("devtools")</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"alberdilab/hilldiv3"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level2">
 <h2 id="quick-start">Quick start<a class="anchor" aria-label="anchor" href="#quick-start"></a>
 </h2>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://github.com/alberdilab/hilldiv3" class="external-link">hilldiv3</a></span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Bundled simulated gut-microbiome MAG data.</span></span>
@@ -141,7 +145,7 @@
 <h2 id="testing">Testing<a class="anchor" aria-label="anchor" href="#testing"></a>
 </h2>
 <p>The diversity engine is covered by a <code>testthat</code> suite, including golden-value tests against independent references (<code>vegan</code>, hand-computed values and analytical identities such as Faith’s PD and exact telescoping of nested partitions). Run it with:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">test</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p><code>R CMD check</code> runs on Linux, macOS and Windows on every push via GitHub Actions.</p>
 </div>
@@ -178,6 +182,7 @@
   </main><aside class="col-md-3"><div class="links">
 <h2 data-toc-skip>Links</h2>
 <ul class="list-unstyled">
+<li><a href="https://cloud.r-project.org/package=hilldiv3" class="external-link">View on CRAN</a></li>
 <li><a href="https://github.com/alberdilab/hilldiv3/" class="external-link">Browse source code</a></li>
 <li><a href="https://github.com/alberdilab/hilldiv3/issues" class="external-link">Report a bug</a></li>
 </ul>
@@ -219,7 +224,8 @@
 <li><a href="https://github.com/alberdilab/hilldiv3/actions/workflows/R-CMD-check.yaml" class="external-link"><img src="https://github.com/alberdilab/hilldiv3/actions/workflows/R-CMD-check.yaml/badge.svg" alt="R-CMD-check"></a></li>
 <li><a href="https://app.codecov.io/gh/alberdilab/hilldiv3" class="external-link"><img src="https://codecov.io/gh/alberdilab/hilldiv3/graph/badge.svg" alt="Codecov test coverage"></a></li>
 <li><a href="https://github.com/alberdilab/hilldiv3/actions/workflows/lint.yaml" class="external-link"><img src="https://github.com/alberdilab/hilldiv3/actions/workflows/lint.yaml/badge.svg" alt="lint"></a></li>
-<li><a href="https://CRAN.R-project.org/package=hilldiv3" class="external-link"><img src="https://www.r-pkg.org/badges/version/hilldiv3" alt="CRAN status"></a></li>
+<li><a href="https://CRAN.R-project.org/package=hilldiv3" class="external-link"><img src="https://www.r-pkg.org/badges/version/hilldiv3" alt="CRAN version"></a></li>
+<li><a href="https://cran.r-project.org/web/checks/check_results_hilldiv3.html" class="external-link"><img src="https://badges.cranchecks.info/summary/hilldiv3.svg" alt="CRAN checks"></a></li>
 <li><a href="https://CRAN.R-project.org/package=hilldiv3" class="external-link"><img src="https://cranlogs.r-pkg.org/badges/grand-total/hilldiv3" alt="CRAN downloads"></a></li>
 <li><a href="https://lifecycle.r-lib.org/articles/stages.html#stable" class="external-link"><img src="https://img.shields.io/badge/lifecycle-stable-brightgreen.svg" alt="Lifecycle: stable"></a></li>
 <li><a href="https://www.gnu.org/licenses/gpl-3.0" class="external-link"><img src="https://img.shields.io/badge/License-GPLv3-blue.svg" alt="License: GPL v3"></a></li>

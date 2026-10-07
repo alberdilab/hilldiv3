@@ -27,6 +27,16 @@ within sites within regions.
 
 ## Installation
 
+Install the released version from CRAN:
+
+``` r
+
+install.packages("hilldiv3")
+```
+
+To install the version in this repository, which may contain changes not
+yet available on CRAN:
+
 ``` r
 
 # install.packages("devtools")

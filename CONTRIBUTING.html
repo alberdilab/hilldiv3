@@ -49,7 +49,7 @@
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>Contributing to hilldiv3</h1>
-      <small class="dont-index">Source: <a href="https://github.com/alberdilab/hilldiv3/blob/v3.0.1/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alberdilab/hilldiv3/blob/main/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a></small>
     </div>
 
 <div id="contributing-to-hilldiv3" class="section level1">
@@ -84,7 +84,7 @@
 <li>Document exported functions with roxygen2 and run <code>devtools::document()</code>.</li>
 <li>Add a bullet to the top section of <code>NEWS.md</code> describing the change.</li>
 </ul></li>
-<li>Check that everything passes locally: <code>devtools::check()</code> and <code>lintr::lint_package()</code>.</li>
+<li>Check that everything passes locally: <code>devtools::check()</code> and <code><a href="https://lintr.r-lib.org/reference/lint.html" class="external-link">lintr::lint_package()</a></code>.</li>
 <li>Open a pull request against <code>main</code> and describe what changed and why. Continuous integration runs <code>R CMD check</code> on Linux, macOS and Windows, the linter and test coverage.</li>
 </ol><p>Small fixes (typos, broken links, clarifications) can be submitted directly as a pull request without opening an issue first.</p>
 </div>

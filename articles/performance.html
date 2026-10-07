@@ -79,7 +79,7 @@
       <h1>Performance benchmarks</h1>
             
       
-      <small class="dont-index">Source: <a href="https://github.com/alberdilab/hilldiv3/blob/v3.0.1/vignettes/articles/performance.Rmd" class="external-link"><code>vignettes/articles/performance.Rmd</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/alberdilab/hilldiv3/blob/main/vignettes/articles/performance.Rmd" class="external-link"><code>vignettes/articles/performance.Rmd</code></a></small>
       <div class="d-none name"><code>performance.Rmd</code></div>
     </div>
 
@@ -337,10 +337,12 @@ relative to <code>hilldiv3</code> for each package-operation.</li>
 <div class="section level2">
 <h2 id="reproducing-the-benchmark">Reproducing the benchmark<a class="anchor" aria-label="anchor" href="#reproducing-the-benchmark"></a>
 </h2>
-<p>Install the comparison packages, then run the benchmark script from
-the package root:</p>
+<p>Install the comparison packages and <code>pkgload</code>, then run
+the benchmark script from the package root. <code>pkgload</code> loads
+the local <code>hilldiv3</code> checkout, which may be newer than the
+version on CRAN:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bench"</span>, <span class="st">"hillR"</span>, <span class="st">"entropart"</span>, <span class="st">"vegan"</span>, <span class="st">"BAT"</span><span class="op">)</span><span class="op">)</span></span>
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/install.packages.html" class="external-link">install.packages</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bench"</span>, <span class="st">"hillR"</span>, <span class="st">"entropart"</span>, <span class="st">"vegan"</span>, <span class="st">"BAT"</span>, <span class="st">"pkgload"</span>, <span class="st">"remotes"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="fu">remotes</span><span class="fu">::</span><span class="fu">install_github</span><span class="op">(</span><span class="st">"anttonalberdi/hilldiv2"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Sys.setenv.html" class="external-link">Sys.setenv</a></span><span class="op">(</span></span>
