@@ -232,6 +232,30 @@ Or a tidy long table, convenient for `ggplot2` or `dplyr`:
 head(hillpair(counts, q = 1, metric = "C", out = "tibble"))
 ```
 
+## Which taxa account for dissimilarity?
+
+`hillcontrib()` ranks taxa by their contribution to the same bounded
+dissimilarity reported by `hillpair()` and `hilldiss()`. For each comparison,
+the `contribution` column sums to the selected metric; `share` is the fraction
+of that metric assigned to the taxon. Set `by = "collective"` to examine the
+turnover among all samples or among named groups of samples.
+
+```{r hillcontrib}
+hillcontrib(counts, q = 1, metric = "C")
+hillcontrib(counts, q = 1, metric = "C", by = "collective",
+            groups = list(first = c("s1", "s2"), second = c("s3", "s4")))
+```
+
+You can also combine taxa with `sets = list(my_set = c("t1", "t2"))`, as in
+`hillshare()`. Named sets may cover only some taxa or overlap, so their rows
+need not sum to the total dissimilarity. With a tree, shared branch turnover is
+distributed among descendant taxa according to their own abundance variation;
+this is an explicit allocation rule for phylogenetic dissimilarity.
+
+For functional diversity, the partitioning engine uses raw counts. Unequal
+sample totals can therefore contribute to the functional dissimilarity and
+its taxon attribution even when relative composition is unchanged.
+
 ### Larger datasets
 
 `hillpair()` computes every pair through the same partitioning engine, so cost

@@ -54,6 +54,7 @@ reference:
       - hilldiss
       - hillsim
       - hillpair
+      - hillcontrib
   - title: Redundancy
     desc: How much phylogenetic/functional structure is duplicated across taxa.
     contents:

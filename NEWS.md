@@ -1,3 +1,14 @@
+# hilldiv3 3.1.0.9000 (unreleased)
+
+* Added `hillcontrib()` to rank taxa or named sets by their additive
+  contributions to pairwise or collective Hill dissimilarity. It supports
+  neutral, phylogenetic and functional diversity and all four dissimilarity
+  metrics. Collective comparisons can be run for named groups of samples.
+* Functional partitioning now handles an all-zero distance matrix through the
+  shared functional-similarity kernel.
+* Expanded the gut microbiome vignette with MAG power-sum shares and an
+  illustrated example of MAG contributions to dissimilarity.
+
 # hilldiv3 3.1.0
 
 * Added `hillshare()` to allocate neutral, phylogenetic and functional Hill

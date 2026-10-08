@@ -197,6 +197,65 @@ turnover on one common beta scale is a core strength of the Hill-number
 framework as implemented here, and here it isolates a change that is
 phylogenetic but not functional.
 
+## Which MAGs account for the dissimilarity?
+
+The beta results tell us that samples differ; `hillcontrib()` shows which MAGs
+account for a particular dissimilarity. Here we compare one
+control and one treatment sample at `q = 2`, which gives abundant MAGs more
+weight. The rows are ordered from largest to smallest contribution.
+
+```{r contrib-pair}
+pair_counts <- gut_counts[, c("ctrl01", "trt01")]
+pair_contrib <- hillcontrib(pair_counts, q = 2, metric = "C")
+head(pair_contrib[, c("set", "contribution", "share", "rank")], 5)
+
+# With one row per MAG, the contributions add up to the pair's dissimilarity.
+c(attributed = sum(pair_contrib$contribution),
+  pairwise = as.numeric(hillpair(pair_counts, q = 2, metric = "C")))
+```
+
+The figure shows the eight largest shares. Colour indicates which sample has
+the higher *relative abundance* of each MAG.
+
+```{r contrib-plot, fig.width = 7.5, fig.height = 4.3, fig.alt = "Horizontal bars show the eight MAGs contributing most to dissimilarity between ctrl01 and trt01. mag05 contributes 38 percent and mag14 contributes 23 percent. Bar colours indicate the sample with higher relative abundance."}
+top_contrib <- head(pair_contrib, 8)
+pair_relative <- sweep(pair_counts, 2, colSums(pair_counts), "/")
+top_contrib$higher_in <- ifelse(
+  pair_relative[top_contrib$set, "ctrl01"] >
+    pair_relative[top_contrib$set, "trt01"], "ctrl01", "trt01")
+
+ggplot(top_contrib, aes(reorder(set, share), share, fill = higher_in)) +
+  geom_col(width = 0.72) +
+  coord_flip() +
+  scale_y_continuous(labels = function(x) paste0(round(100 * x), "%"),
+                     expand = expansion(mult = c(0, 0.03))) +
+  scale_fill_manual(values = c(ctrl01 = pal[["control"]],
+                               trt01 = pal[["treatment"]]),
+                    labels = c(ctrl01 = "Control (ctrl01)",
+                               trt01 = "Treatment (trt01)"),
+                    name = "Higher relative abundance") +
+  labs(x = NULL, y = "Share of pairwise dissimilarity (q = 2, C)")
+```
+
+`mag05` and `mag14` rank highest: `mag05` has 725 counts in `ctrl01` but 35 in
+`trt01`, while `mag14` has 29 and 690, respectively. Their shares are about
+38% and 23% of this pair's total dissimilarity; the eight shown account for
+about 91% together.
+
+We can also examine **collective turnover within each group**. This compares
+the six control samples with one another and, separately, the six treatment
+samples with one another; it does not compare the two groups against each
+other.
+
+```{r contrib-groups}
+sample_groups <- split(names(group), group)
+group_contrib <- hillcontrib(gut_counts, q = 2, metric = "C",
+                            by = "collective", groups = sample_groups)
+top_three <- do.call(rbind, lapply(split(group_contrib, group_contrib$group),
+                                   function(x) head(x, 3)))
+top_three[, c("group", "set", "contribution", "share")]
+```
+
 ## Ordination in three spaces
 
 `hillpair()` accepts the same `tree =` / `dist =` switch, so one workflow
@@ -262,7 +321,8 @@ complete three-flavour analysis through one interface: trait-to-distance
 conversion (`traits2dist()`); neutral, phylogenetic and functional alpha
 diversity (`hilldiv()`); MAG and clade power-sum shares (`hillshare()`);
 between-group partitioning for each flavour
-(`hillpart()`); ordinations in neutral, phylogenetic and functional space
+(`hillpart()`); MAG contributions to pairwise and within-group dissimilarity
+(`hillcontrib()`); ordinations in neutral, phylogenetic and functional space
 (`hillpair()`); and functional redundancy (`hillred()`). The unified,
 type-switching interface is what lets a single study separate a change that is
 taxonomic and phylogenetic from one that is functional — here revealing a

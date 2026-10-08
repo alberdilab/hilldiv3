@@ -68,6 +68,10 @@ sets <- list(C = rownames(gut_counts)[3],
 hillshare(gut_counts, q = c(0, 1, 2), tree = gut_tree, sets = sets)
 hillshare(gut_counts, q = c(0, 1, 2), dist = dist, sets = sets)
 
+# Rank taxa by their contribution to pairwise or collective dissimilarity.
+head(hillcontrib(gut_counts, q = 1, metric = "C"))
+head(hillcontrib(gut_counts, q = 1, metric = "C", by = "collective"))
+
 # Core diversity results are tidy by default and plot directly.
 plot(hillprof(gut_counts))             # diversity profile
 hilldiv(gut_counts, out = "matrix")    # matrix: samples x q orders
@@ -105,13 +109,14 @@ full redesign that keeps the familiar function names (`hilldiv()`,
   reuses it across all sample pairs.
 * **Tidy by default**: the core diversity and comparison functions return a
   long-format `data.frame` with `print()`/`plot()`/`autoplot()` methods; pass
-  `out = "matrix"` for a plain matrix. `hillshare()` returns a data frame of
-  taxon and set shares.
+  `out = "matrix"` for a plain matrix. `hillshare()` and `hillcontrib()` return
+  data frames of taxon and set shares or contributions.
 * An explicit `type = c("auto", "neutral", "phylogenetic", "functional")`
   argument that asserts and validates the diversity type (auto-detected by
   default).
 * New functions `hillprof()` (diversity profiles), `hilleven()` (evenness)
-  and `hillshare()` (taxon and set shares), hierarchical multi-scale
+  `hillshare()` (taxon and set shares) and `hillcontrib()` (taxon turnover
+  contributions), hierarchical multi-scale
   partitioning in `hillpart()`, plus bundled example data (`gut_counts`,
   `gut_tree`, `gut_traits`).
 

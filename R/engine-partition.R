@@ -58,10 +58,8 @@ part_prep <- function(p, type = "neutral", tree = NULL, dist = NULL,
         cli::cli_abort("A {.arg dist} matrix is required for functional
                         partitioning.")
       }
-      dij <- as.matrix(dist)
-      if (is.null(tau)) tau <- max(dij)
-      dij[dij > tau] <- tau
-      list(type = "functional", p = p, aik = (1 - dij / tau) %*% p)
+      sim <- .functional_similarity(dist, tau)
+      list(type = "functional", p = p, aik = sim %*% p)
     },
     cli::cli_abort("Unknown diversity type {.val {type}}.")
   )
