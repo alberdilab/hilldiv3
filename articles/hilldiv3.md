@@ -171,6 +171,49 @@ hilldiv(counts, tree = tree, type = "phylogenetic")   # phylogenetic only
 #> 12 2     s4 2.227723
 ```
 
+## Which taxa carry the Hill power sum?
+
+[`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md)
+assigns each taxon a share of the Hill **power sum** at each order `q`.
+Give it named sets to add the shares of several taxa. With a tree or
+functional distances, it applies the corresponding phylogenetic or
+functional calculation. The default allocation is `"qpower"`; these
+shares are **not** percentages of the effective Hill number returned by
+[`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md).
+
+``` r
+
+sets <- list(t1 = "t1", t1_and_t2 = c("t1", "t2"))
+fdist <- as.matrix(stats::dist(c(t1 = 0, t2 = 0.5, t3 = 1)))
+hillshare(counts[, "s2"], q = c(0, 1, 2),
+          tree = tree, dist = fdist, sets = sets)
+#>    q  sample         type       set      share allocation
+#> 1  0 sample1      neutral        t1 0.33333333     qpower
+#> 2  0 sample1      neutral t1_and_t2 0.66666667     qpower
+#> 3  1 sample1      neutral        t1 0.18181818     qpower
+#> 4  1 sample1      neutral t1_and_t2 0.90909091     qpower
+#> 5  2 sample1      neutral        t1 0.05797101     qpower
+#> 6  2 sample1      neutral t1_and_t2 0.98550725     qpower
+#> 7  0 sample1 phylogenetic        t1 0.30000000     qpower
+#> 8  0 sample1 phylogenetic t1_and_t2 0.60000000     qpower
+#> 9  1 sample1 phylogenetic        t1 0.18181818     qpower
+#> 10 1 sample1 phylogenetic t1_and_t2 0.90909091     qpower
+#> 11 2 sample1 phylogenetic        t1 0.05813149     qpower
+#> 12 2 sample1 phylogenetic t1_and_t2 0.98823529     qpower
+#> 13 0 sample1   functional        t1 0.24234694     qpower
+#> 14 0 sample1   functional t1_and_t2 0.85459184     qpower
+#> 15 1 sample1   functional        t1 0.18181818     qpower
+#> 16 1 sample1   functional t1_and_t2 0.90909091     qpower
+#> 17 2 sample1   functional        t1 0.12903226     qpower
+#> 18 2 sample1   functional t1_and_t2 0.94623656     qpower
+```
+
+Each row gives a share between zero and one for one sample, diversity
+type, order and set. With `sets = NULL`, every taxon gets its own row
+and their shares sum to one within each combination. Named sets may
+overlap. At `q = 1`, functional shares equal relative abundances, even
+though functional Hill diversity still depends on the distances.
+
 ## Partitioning and dissimilarity
 
 [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
@@ -228,6 +271,11 @@ The website carries in-depth articles:
 - [**Diversity
   types**](https://alberdilab.github.io/hilldiv3/articles/diversity-types.html)
   — neutral, phylogenetic and functional measurement.
+- [**Taxon and set
+  shares**](https://alberdilab.github.io/hilldiv3/articles/taxon-and-set-shares.html)
+  — how
+  [`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md)
+  allocates each Hill power sum to taxa and groups of taxa.
 - [**Partitioning and
   (dis)similarity**](https://alberdilab.github.io/hilldiv3/articles/partitioning-and-dissimilarity.html)
   — alpha/beta/gamma, the S/C/U/V metrics, and pairwise dissimilarity

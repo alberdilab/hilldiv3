@@ -39,7 +39,9 @@ alone. The examples below use `type =` to isolate each type in turn; the
 This article walks through all three with
 [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md),
 the alpha-diversity workhorse. The same `tree` / `dist` logic applies to
-every other `hill*` function (which return one type at a time).
+[`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md),
+which allocates the Hill power sum to taxa or sets; its shares are
+distinct from the effective Hill numbers calculated here.
 
 ``` r
 

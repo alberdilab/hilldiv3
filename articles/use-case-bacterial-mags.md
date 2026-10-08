@@ -146,6 +146,50 @@ nothing. The effect is not in *how much* diversity each gut holds, but
 in *which* lineages hold it — a compositional change that only
 between-sample analysis can see.
 
+## Which MAGs carry the power sum?
+
+[`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md)
+shows how much of the Hill power sum is assigned to one MAG or a set of
+MAGs in each sample. Here we inspect `mag01` and the first phylogenetic
+clade in one control sample. Supplying both the tree and functional
+distances returns neutral, phylogenetic and functional shares together.
+
+``` r
+
+clade_A <- paste0("mag", sprintf("%02d", 1:12))
+shares <- hillshare(gut_counts[, "ctrl01"], q = c(0, 1, 2),
+                    tree = gut_tree, dist = fdist,
+                    sets = list(mag01 = "mag01", clade_A = clade_A))
+shares$share <- round(shares$share, 3)
+shares
+#>    q  sample         type     set share allocation
+#> 1  0 sample1      neutral   mag01 0.042     qpower
+#> 2  0 sample1      neutral clade_A 0.500     qpower
+#> 3  1 sample1      neutral   mag01 0.075     qpower
+#> 4  1 sample1      neutral clade_A 0.846     qpower
+#> 5  2 sample1      neutral   mag01 0.045     qpower
+#> 6  2 sample1      neutral clade_A 0.967     qpower
+#> 7  0 sample1 phylogenetic   mag01 0.079     qpower
+#> 8  0 sample1 phylogenetic clade_A 0.500     qpower
+#> 9  1 sample1 phylogenetic   mag01 0.075     qpower
+#> 10 1 sample1 phylogenetic clade_A 0.846     qpower
+#> 11 2 sample1 phylogenetic   mag01 0.037     qpower
+#> 12 2 sample1 phylogenetic clade_A 0.968     qpower
+#> 13 0 sample1   functional   mag01 0.070     qpower
+#> 14 0 sample1   functional clade_A 0.844     qpower
+#> 15 1 sample1   functional   mag01 0.075     qpower
+#> 16 1 sample1   functional clade_A 0.846     qpower
+#> 17 2 sample1   functional   mag01 0.078     qpower
+#> 18 2 sample1   functional clade_A 0.851     qpower
+```
+
+Each share is between zero and one within its sample, type and order.
+The `clade_A` share adds the allocations of its 12 MAGs, including
+`mag01`; the two rows therefore overlap and should not be added
+together. These are shares of the underlying power sum, **not**
+percentages of the effective numbers shown above. The functional
+allocation accounts for trait similarity among MAGs.
+
 ## Where does the community turn over — and where doesn’t it?
 
 [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
@@ -270,6 +314,8 @@ trait-to-distance conversion
 ([`traits2dist()`](https://alberdilab.github.io/hilldiv3/reference/traits2dist.md));
 neutral, phylogenetic and functional alpha diversity
 ([`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md));
+MAG and clade power-sum shares
+([`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md));
 between-group partitioning for each flavour
 ([`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md));
 ordinations in neutral, phylogenetic and functional space

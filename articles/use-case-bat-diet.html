@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/diversity-types.html">Diversity types (neutral, phylogenetic, functional)</a></li>
+    <li><a class="dropdown-item" href="../articles/taxon-and-set-shares.html">Taxon and set shares</a></li>
     <li><a class="dropdown-item" href="../articles/partitioning-and-dissimilarity.html">Partitioning and (dis)similarity</a></li>
     <li><a class="dropdown-item" href="../articles/profiles-evenness-redundancy.html">Profiles, evenness and redundancy</a></li>
     <li><a class="dropdown-item" href="../articles/preparing-data.html">Preparing your data</a></li>
@@ -206,13 +207,62 @@ across the insect phylogeny</em> — the generalists span more of the prey
 tree of life even where their taxon counts are similar.</p>
 </div>
 <div class="section level2">
+<h2 id="which-prey-carry-the-power-sum">Which prey carry the power sum?<a class="anchor" aria-label="anchor" href="#which-prey-carry-the-power-sum"></a>
+</h2>
+<p><code><a href="../reference/hillshare.html">hillshare()</a></code> assigns a share of the Hill power sum to an
+individual prey ASV or a set of ASVs. We compare <code>asv003</code>,
+the most abundant prey in the first forest bat, with the Lepidoptera
+(moth) set. In these simulated data,
+<code>asv001</code>–<code>asv018</code> are moths; the intersection
+retains those detected in at least one sample.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">moths</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sets.html" class="external-link">intersect</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">bat_counts</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"asv%03d"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">18</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">prey_share</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillshare.html">hillshare</a></span><span class="op">(</span><span class="va">bat_counts</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"bat01"</span>, <span class="st">"bat16"</span><span class="op">)</span><span class="op">]</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                        tree <span class="op">=</span> <span class="va">bat_tree</span>,</span>
+<span>                        sets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>asv003 <span class="op">=</span> <span class="st">"asv003"</span>, Lepidoptera <span class="op">=</span> <span class="va">moths</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">prey_share</span><span class="op">$</span><span class="va">share</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">prey_share</span><span class="op">$</span><span class="va">share</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">prey_share</span></span>
+<span><span class="co">#&gt;    q sample         type         set share allocation</span></span>
+<span><span class="co">#&gt; 1  0  bat01      neutral      asv003 0.059     qpower</span></span>
+<span><span class="co">#&gt; 2  0  bat01      neutral Lepidoptera 0.941     qpower</span></span>
+<span><span class="co">#&gt; 3  1  bat01      neutral      asv003 0.400     qpower</span></span>
+<span><span class="co">#&gt; 4  1  bat01      neutral Lepidoptera 0.995     qpower</span></span>
+<span><span class="co">#&gt; 5  2  bat01      neutral      asv003 0.736     qpower</span></span>
+<span><span class="co">#&gt; 6  2  bat01      neutral Lepidoptera 1.000     qpower</span></span>
+<span><span class="co">#&gt; 7  0  bat16      neutral      asv003 0.000     qpower</span></span>
+<span><span class="co">#&gt; 8  0  bat16      neutral Lepidoptera 0.080     qpower</span></span>
+<span><span class="co">#&gt; 9  1  bat16      neutral      asv003 0.000     qpower</span></span>
+<span><span class="co">#&gt; 10 1  bat16      neutral Lepidoptera 0.093     qpower</span></span>
+<span><span class="co">#&gt; 11 2  bat16      neutral      asv003 0.000     qpower</span></span>
+<span><span class="co">#&gt; 12 2  bat16      neutral Lepidoptera 0.117     qpower</span></span>
+<span><span class="co">#&gt; 13 0  bat01 phylogenetic      asv003 0.040     qpower</span></span>
+<span><span class="co">#&gt; 14 0  bat01 phylogenetic Lepidoptera 0.631     qpower</span></span>
+<span><span class="co">#&gt; 15 1  bat01 phylogenetic      asv003 0.400     qpower</span></span>
+<span><span class="co">#&gt; 16 1  bat01 phylogenetic Lepidoptera 0.995     qpower</span></span>
+<span><span class="co">#&gt; 17 2  bat01 phylogenetic      asv003 0.728     qpower</span></span>
+<span><span class="co">#&gt; 18 2  bat01 phylogenetic Lepidoptera 1.000     qpower</span></span>
+<span><span class="co">#&gt; 19 0  bat16 phylogenetic      asv003 0.000     qpower</span></span>
+<span><span class="co">#&gt; 20 0  bat16 phylogenetic Lepidoptera 0.316     qpower</span></span>
+<span><span class="co">#&gt; 21 1  bat16 phylogenetic      asv003 0.000     qpower</span></span>
+<span><span class="co">#&gt; 22 1  bat16 phylogenetic Lepidoptera 0.093     qpower</span></span>
+<span><span class="co">#&gt; 23 2  bat16 phylogenetic      asv003 0.000     qpower</span></span>
+<span><span class="co">#&gt; 24 2  bat16 phylogenetic Lepidoptera 0.013     qpower</span></span></code></pre></div>
+<p>The share of <code>asv003</code> in the forest bat rises sharply with
+<code>q</code>, reflecting its dominance among the reads. The moth set
+contains this ASV, so its share overlaps with the <code>asv003</code>
+row. Phylogenetic shares also account for the lengths of branches shared
+among prey. These values describe allocation of a power sum within each
+bat; they are not percentages of the effective diversity numbers above
+or a test of habitat enrichment.</p>
+</div>
+<div class="section level2">
 <h2 id="diversity-profiles-make-the-dominance-structure-explicit">Diversity profiles make the dominance structure explicit<a class="anchor" aria-label="anchor" href="#diversity-profiles-make-the-dominance-structure-explicit"></a>
 </h2>
 <p>Reading diversity at a single <code>q</code> can mislead; a
 <strong>diversity profile</strong>, <code><a href="../reference/hillprof.html">hillprof()</a></code>, traces
 <code>qD</code> continuously and exposes the whole evenness structure in
 one curve.</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">prof</span> <span class="op">&lt;-</span> <span class="fu">as_df</span><span class="op">(</span><span class="fu"><a href="../reference/hillprof.html">hillprof</a></span><span class="op">(</span><span class="va">bat_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">3</span>, by <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">prof</span><span class="op">$</span><span class="va">habitat</span> <span class="op">&lt;-</span> <span class="fu">hab</span><span class="op">(</span><span class="va">prof</span><span class="op">$</span><span class="va">sample</span><span class="op">)</span></span>
 <span><span class="va">prof_mean</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">value</span> <span class="op">~</span> <span class="va">q</span> <span class="op">+</span> <span class="va">habitat</span>, <span class="va">prof</span>, <span class="va">mean</span><span class="op">)</span></span>
@@ -227,7 +277,7 @@ one curve.</p>
 signature of a few dominant prey — while the farmland profiles decline
 gently from a higher richness, the signature of a more even diet.
 <code><a href="../reference/hilleven.html">hilleven()</a></code> condenses this into a single number:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">even</span> <span class="op">&lt;-</span> <span class="fu">as_df</span><span class="op">(</span><span class="fu"><a href="../reference/hilleven.html">hilleven</a></span><span class="op">(</span><span class="va">bat_counts</span>, q <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">even</span><span class="op">$</span><span class="va">habitat</span> <span class="op">&lt;-</span> <span class="fu">hab</span><span class="op">(</span><span class="va">even</span><span class="op">$</span><span class="va">sample</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/stats/aggregate.html" class="external-link">aggregate</a></span><span class="op">(</span><span class="va">value</span> <span class="op">~</span> <span class="va">habitat</span>, <span class="va">even</span>, <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html" class="external-link">mean</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span></span>
@@ -249,7 +299,7 @@ answer: does diet vary mostly <em>between individual bats</em>,
 into one beta <strong>per hierarchical level</strong>. Each beta is the
 turnover <em>gained</em> at that scale, and the chain telescopes exactly
 (<code>gamma = alpha_finest × ∏ beta</code>).</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">hier_n</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">bat_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
 <span>                   hierarchy <span class="op">=</span> <span class="op">~</span> <span class="va">habitat</span> <span class="op">/</span> <span class="va">roost</span>, metadata <span class="op">=</span> <span class="va">bat_metadata</span><span class="op">)</span></span>
 <span><span class="va">hier_p</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">bat_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, tree <span class="op">=</span> <span class="va">bat_tree</span>,</span>
@@ -271,7 +321,7 @@ turnover <em>gained</em> at that scale, and the chain telescopes exactly
 <span><span class="co">#&gt; 10 2   roost       6  1.484669 1.025403</span></span>
 <span><span class="co">#&gt; 11 2 habitat       2  1.496183 1.007755</span></span>
 <span><span class="co">#&gt; 12 2   total       1  2.387101 1.595461</span></span></code></pre></div>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">beta_n</span> <span class="op">&lt;-</span> <span class="fu">as_df</span><span class="op">(</span><span class="va">hier_n</span><span class="op">)</span>; <span class="va">beta_p</span> <span class="op">&lt;-</span> <span class="fu">as_df</span><span class="op">(</span><span class="va">hier_p</span><span class="op">)</span></span>
 <span><span class="va">beta_n</span> <span class="op">&lt;-</span> <span class="va">beta_n</span><span class="op">[</span><span class="va">beta_n</span><span class="op">$</span><span class="va">scale</span> <span class="op">!=</span> <span class="st">"sample"</span>, <span class="op">]</span>; <span class="va">beta_n</span><span class="op">$</span><span class="va">flavour</span> <span class="op">&lt;-</span> <span class="st">"Neutral"</span></span>
 <span><span class="va">beta_p</span> <span class="op">&lt;-</span> <span class="va">beta_p</span><span class="op">[</span><span class="va">beta_p</span><span class="op">$</span><span class="va">scale</span> <span class="op">!=</span> <span class="st">"sample"</span>, <span class="op">]</span>; <span class="va">beta_p</span><span class="op">$</span><span class="va">flavour</span> <span class="op">&lt;-</span> <span class="st">"Phylogenetic"</span></span>
@@ -305,7 +355,8 @@ three diversity types from one engine — is unique to
 </h2>
 <p>From a single ASV table and a prey tree, <code>hilldiv3</code>
 delivered: per-sample neutral and phylogenetic Hill numbers
-(<code><a href="../reference/hilldiv.html">hilldiv()</a></code>), full diversity profiles
+(<code><a href="../reference/hilldiv.html">hilldiv()</a></code>), prey and group shares
+(<code><a href="../reference/hillshare.html">hillshare()</a></code>), full diversity profiles
 (<code><a href="../reference/hillprof.html">hillprof()</a></code>) and evenness (<code><a href="../reference/hilleven.html">hilleven()</a></code>), and a
 scale-resolved nested partition of turnover under both flavours
 (<code><a href="../reference/hillpart.html">hillpart()</a></code> with a <code>hierarchy</code> formula) — a

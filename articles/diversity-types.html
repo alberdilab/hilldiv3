@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/diversity-types.html">Diversity types (neutral, phylogenetic, functional)</a></li>
+    <li><a class="dropdown-item" href="../articles/taxon-and-set-shares.html">Taxon and set shares</a></li>
     <li><a class="dropdown-item" href="../articles/partitioning-and-dissimilarity.html">Partitioning and (dis)similarity</a></li>
     <li><a class="dropdown-item" href="../articles/profiles-evenness-redundancy.html">Profiles, evenness and redundancy</a></li>
     <li><a class="dropdown-item" href="../articles/preparing-data.html">Preparing your data</a></li>
@@ -154,8 +155,9 @@ examples below use <code>type =</code> to isolate each type in turn; the
 call.</p>
 <p>This article walks through all three with <code><a href="../reference/hilldiv.html">hilldiv()</a></code>, the
 alpha-diversity workhorse. The same <code>tree</code> /
-<code>dist</code> logic applies to every other <code>hill*</code>
-function (which return one type at a time).</p>
+<code>dist</code> logic applies to <code><a href="../reference/hillshare.html">hillshare()</a></code>, which
+allocates the Hill power sum to taxa or sets; its shares are distinct
+from the effective Hill numbers calculated here.</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">counts</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">matrix</a></span><span class="op">(</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">10</span>, <span class="fl">0</span>, <span class="fl">5</span>,</span>

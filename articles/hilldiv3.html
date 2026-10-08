@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/diversity-types.html">Diversity types (neutral, phylogenetic, functional)</a></li>
+    <li><a class="dropdown-item" href="../articles/taxon-and-set-shares.html">Taxon and set shares</a></li>
     <li><a class="dropdown-item" href="../articles/partitioning-and-dissimilarity.html">Partitioning and (dis)similarity</a></li>
     <li><a class="dropdown-item" href="../articles/profiles-evenness-redundancy.html">Profiles, evenness and redundancy</a></li>
     <li><a class="dropdown-item" href="../articles/preparing-data.html">Preparing your data</a></li>
@@ -265,13 +266,54 @@ Restrict the output with <code>type =</code>.</p>
 <span><span class="co">#&gt; 12 2     s4 2.227723</span></span></code></pre></div>
 </div>
 <div class="section level2">
+<h2 id="which-taxa-carry-the-hill-power-sum">Which taxa carry the Hill power sum?<a class="anchor" aria-label="anchor" href="#which-taxa-carry-the-hill-power-sum"></a>
+</h2>
+<p><code><a href="../reference/hillshare.html">hillshare()</a></code> assigns each taxon a share of the Hill
+<strong>power sum</strong> at each order <code>q</code>. Give it named
+sets to add the shares of several taxa. With a tree or functional
+distances, it applies the corresponding phylogenetic or functional
+calculation. The default allocation is <code>"qpower"</code>; these
+shares are <strong>not</strong> percentages of the effective Hill number
+returned by <code><a href="../reference/hilldiv.html">hilldiv()</a></code>.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sets</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>t1 <span class="op">=</span> <span class="st">"t1"</span>, t1_and_t2 <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"t1"</span>, <span class="st">"t2"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">fdist</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html" class="external-link">as.matrix</a></span><span class="op">(</span><span class="fu">stats</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>t1 <span class="op">=</span> <span class="fl">0</span>, t2 <span class="op">=</span> <span class="fl">0.5</span>, t3 <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="../reference/hillshare.html">hillshare</a></span><span class="op">(</span><span class="va">counts</span><span class="op">[</span>, <span class="st">"s2"</span><span class="op">]</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>          tree <span class="op">=</span> <span class="va">tree</span>, dist <span class="op">=</span> <span class="va">fdist</span>, sets <span class="op">=</span> <span class="va">sets</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    q  sample         type       set      share allocation</span></span>
+<span><span class="co">#&gt; 1  0 sample1      neutral        t1 0.33333333     qpower</span></span>
+<span><span class="co">#&gt; 2  0 sample1      neutral t1_and_t2 0.66666667     qpower</span></span>
+<span><span class="co">#&gt; 3  1 sample1      neutral        t1 0.18181818     qpower</span></span>
+<span><span class="co">#&gt; 4  1 sample1      neutral t1_and_t2 0.90909091     qpower</span></span>
+<span><span class="co">#&gt; 5  2 sample1      neutral        t1 0.05797101     qpower</span></span>
+<span><span class="co">#&gt; 6  2 sample1      neutral t1_and_t2 0.98550725     qpower</span></span>
+<span><span class="co">#&gt; 7  0 sample1 phylogenetic        t1 0.30000000     qpower</span></span>
+<span><span class="co">#&gt; 8  0 sample1 phylogenetic t1_and_t2 0.60000000     qpower</span></span>
+<span><span class="co">#&gt; 9  1 sample1 phylogenetic        t1 0.18181818     qpower</span></span>
+<span><span class="co">#&gt; 10 1 sample1 phylogenetic t1_and_t2 0.90909091     qpower</span></span>
+<span><span class="co">#&gt; 11 2 sample1 phylogenetic        t1 0.05813149     qpower</span></span>
+<span><span class="co">#&gt; 12 2 sample1 phylogenetic t1_and_t2 0.98823529     qpower</span></span>
+<span><span class="co">#&gt; 13 0 sample1   functional        t1 0.24234694     qpower</span></span>
+<span><span class="co">#&gt; 14 0 sample1   functional t1_and_t2 0.85459184     qpower</span></span>
+<span><span class="co">#&gt; 15 1 sample1   functional        t1 0.18181818     qpower</span></span>
+<span><span class="co">#&gt; 16 1 sample1   functional t1_and_t2 0.90909091     qpower</span></span>
+<span><span class="co">#&gt; 17 2 sample1   functional        t1 0.12903226     qpower</span></span>
+<span><span class="co">#&gt; 18 2 sample1   functional t1_and_t2 0.94623656     qpower</span></span></code></pre></div>
+<p>Each row gives a share between zero and one for one sample, diversity
+type, order and set. With <code>sets = NULL</code>, every taxon gets its
+own row and their shares sum to one within each combination. Named sets
+may overlap. At <code>q = 1</code>, functional shares equal relative
+abundances, even though functional Hill diversity still depends on the
+distances.</p>
+</div>
+<div class="section level2">
 <h2 id="partitioning-and-dissimilarity">Partitioning and dissimilarity<a class="anchor" aria-label="anchor" href="#partitioning-and-dissimilarity"></a>
 </h2>
 <p><code><a href="../reference/hillpart.html">hillpart()</a></code> splits diversity across samples into
 <strong>alpha</strong> (within-sample), <strong>gamma</strong> (pooled)
 and <strong>beta</strong> (<code>gamma / alpha</code>, the number of
 effectively distinct communities):</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Partitioning neutral Hill numbers of <span style="color: #0000BB;">"q0"</span>, <span style="color: #0000BB;">"q1"</span>, and</span></span>
 <span><span class="co">#&gt; <span style="color: #0000BB;">"q2"</span>.</span></span>
@@ -292,7 +334,7 @@ effectively distinct communities):</p>
 bounded dissimilarity / similarity metrics (Sorensen-, Jaccard-, and
 UniFrac-type), and <code><a href="../reference/hillpair.html">hillpair()</a></code> returns a <code>dist</code>
 object of pairwise dissimilarities ready for ordination:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/hilldiss.html">hilldiss</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="co">#&gt; dissimilarity from neutral Hill numbers of <span style="color: #0000BB;">"q1"</span>.</span></span>
 <span><span class="co">#&gt; &lt;hilldiv3 result: neutral&gt;</span></span>
@@ -313,6 +355,10 @@ object of pairwise dissimilarities ready for ordination:</p>
 <a href="https://alberdilab.github.io/hilldiv3/articles/diversity-types.html"><strong>Diversity
 types</strong></a> — neutral, phylogenetic and functional
 measurement.</li>
+<li>
+<a href="https://alberdilab.github.io/hilldiv3/articles/taxon-and-set-shares.html"><strong>Taxon
+and set shares</strong></a> — how <code><a href="../reference/hillshare.html">hillshare()</a></code> allocates
+each Hill power sum to taxa and groups of taxa.</li>
 <li>
 <a href="https://alberdilab.github.io/hilldiv3/articles/partitioning-and-dissimilarity.html"><strong>Partitioning
 and (dis)similarity</strong></a> — alpha/beta/gamma, the S/C/U/V

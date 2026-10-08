@@ -7,6 +7,8 @@ derived diagnostics.
 
 - [`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md)
   : Hill numbers computation
+- [`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md)
+  : Allocate Hill power-sum weight to taxa or sets
 - [`hillprof()`](https://alberdilab.github.io/hilldiv3/reference/hillprof.md)
   : Diversity profile across a range of orders
 - [`plot(`*`<hill_profile>`*`)`](https://alberdilab.github.io/hilldiv3/reference/plot.hill_profile.md)

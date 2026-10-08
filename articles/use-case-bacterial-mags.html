@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.0.1</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -34,6 +34,7 @@
   <button class="nav-link dropdown-toggle" type="button" id="dropdown-articles" data-bs-toggle="dropdown" aria-expanded="false" aria-haspopup="true">Articles</button>
   <ul class="dropdown-menu" aria-labelledby="dropdown-articles">
 <li><a class="dropdown-item" href="../articles/diversity-types.html">Diversity types (neutral, phylogenetic, functional)</a></li>
+    <li><a class="dropdown-item" href="../articles/taxon-and-set-shares.html">Taxon and set shares</a></li>
     <li><a class="dropdown-item" href="../articles/partitioning-and-dissimilarity.html">Partitioning and (dis)similarity</a></li>
     <li><a class="dropdown-item" href="../articles/profiles-evenness-redundancy.html">Profiles, evenness and redundancy</a></li>
     <li><a class="dropdown-item" href="../articles/preparing-data.html">Preparing your data</a></li>
@@ -216,12 +217,53 @@ holds, but in <em>which</em> lineages hold it — a compositional change
 that only between-sample analysis can see.</p>
 </div>
 <div class="section level2">
+<h2 id="which-mags-carry-the-power-sum">Which MAGs carry the power sum?<a class="anchor" aria-label="anchor" href="#which-mags-carry-the-power-sum"></a>
+</h2>
+<p><code><a href="../reference/hillshare.html">hillshare()</a></code> shows how much of the Hill power sum is
+assigned to one MAG or a set of MAGs in each sample. Here we inspect
+<code>mag01</code> and the first phylogenetic clade in one control
+sample. Supplying both the tree and functional distances returns
+neutral, phylogenetic and functional shares together.</p>
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">clade_A</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="st">"mag"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sprintf.html" class="external-link">sprintf</a></span><span class="op">(</span><span class="st">"%02d"</span>, <span class="fl">1</span><span class="op">:</span><span class="fl">12</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">shares</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillshare.html">hillshare</a></span><span class="op">(</span><span class="va">gut_counts</span><span class="op">[</span>, <span class="st">"ctrl01"</span><span class="op">]</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>,</span>
+<span>                    tree <span class="op">=</span> <span class="va">gut_tree</span>, dist <span class="op">=</span> <span class="va">fdist</span>,</span>
+<span>                    sets <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>mag01 <span class="op">=</span> <span class="st">"mag01"</span>, clade_A <span class="op">=</span> <span class="va">clade_A</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">shares</span><span class="op">$</span><span class="va">share</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">shares</span><span class="op">$</span><span class="va">share</span>, <span class="fl">3</span><span class="op">)</span></span>
+<span><span class="va">shares</span></span>
+<span><span class="co">#&gt;    q  sample         type     set share allocation</span></span>
+<span><span class="co">#&gt; 1  0 sample1      neutral   mag01 0.042     qpower</span></span>
+<span><span class="co">#&gt; 2  0 sample1      neutral clade_A 0.500     qpower</span></span>
+<span><span class="co">#&gt; 3  1 sample1      neutral   mag01 0.075     qpower</span></span>
+<span><span class="co">#&gt; 4  1 sample1      neutral clade_A 0.846     qpower</span></span>
+<span><span class="co">#&gt; 5  2 sample1      neutral   mag01 0.045     qpower</span></span>
+<span><span class="co">#&gt; 6  2 sample1      neutral clade_A 0.967     qpower</span></span>
+<span><span class="co">#&gt; 7  0 sample1 phylogenetic   mag01 0.079     qpower</span></span>
+<span><span class="co">#&gt; 8  0 sample1 phylogenetic clade_A 0.500     qpower</span></span>
+<span><span class="co">#&gt; 9  1 sample1 phylogenetic   mag01 0.075     qpower</span></span>
+<span><span class="co">#&gt; 10 1 sample1 phylogenetic clade_A 0.846     qpower</span></span>
+<span><span class="co">#&gt; 11 2 sample1 phylogenetic   mag01 0.037     qpower</span></span>
+<span><span class="co">#&gt; 12 2 sample1 phylogenetic clade_A 0.968     qpower</span></span>
+<span><span class="co">#&gt; 13 0 sample1   functional   mag01 0.070     qpower</span></span>
+<span><span class="co">#&gt; 14 0 sample1   functional clade_A 0.844     qpower</span></span>
+<span><span class="co">#&gt; 15 1 sample1   functional   mag01 0.075     qpower</span></span>
+<span><span class="co">#&gt; 16 1 sample1   functional clade_A 0.846     qpower</span></span>
+<span><span class="co">#&gt; 17 2 sample1   functional   mag01 0.078     qpower</span></span>
+<span><span class="co">#&gt; 18 2 sample1   functional clade_A 0.851     qpower</span></span></code></pre></div>
+<p>Each share is between zero and one within its sample, type and order.
+The <code>clade_A</code> share adds the allocations of its 12 MAGs,
+including <code>mag01</code>; the two rows therefore overlap and should
+not be added together. These are shares of the underlying power sum,
+<strong>not</strong> percentages of the effective numbers shown above.
+The functional allocation accounts for trait similarity among MAGs.</p>
+</div>
+<div class="section level2">
 <h2 id="where-does-the-community-turn-over-and-where-doesnt-it">Where does the community turn over — and where doesn’t it?<a class="anchor" aria-label="anchor" href="#where-does-the-community-turn-over-and-where-doesnt-it"></a>
 </h2>
 <p><code><a href="../reference/hillpart.html">hillpart()</a></code> partitions diversity between the two groups
 and reports beta, the effective number of distinct communities. Running
 it for each flavour shows <em>which</em> axis the treatment shifts:</p>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">part</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">type</span>, <span class="va">...</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">m</span> <span class="op">&lt;-</span> <span class="fu">as_df</span><span class="op">(</span><span class="fu"><a href="../reference/hillpart.html">hillpart</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, hierarchy <span class="op">=</span> <span class="op">~</span> <span class="va">group</span>,</span>
 <span>                      metadata <span class="op">=</span> <span class="va">metadata</span>, <span class="va">...</span><span class="op">)</span><span class="op">)</span></span>
@@ -260,7 +302,7 @@ not functional.</p>
 <code>dist =</code> switch, so one workflow produces ordinations in
 <em>neutral</em>, <em>phylogenetic</em> and <em>functional</em>
 space:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ord_one</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">d</span>, <span class="va">lab</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cmdscale.html" class="external-link">cmdscale</a></span><span class="op">(</span><span class="va">d</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span>  <span class="va">o</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">pc</span>, mag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pc</span><span class="op">)</span><span class="op">)</span></span>
@@ -300,7 +342,7 @@ functional diversity (number of distinct trait profiles) across samples.
 A curve that plateaus well below the spread of neutral diversity means
 many genomes share functions — so the community can replace genomes
 without losing function.</p>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">red</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillred.html">hillred</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
 <span><span class="fu">as_df</span><span class="op">(</span><span class="va">red</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"q"</span>, <span class="st">"redundancy"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;   q redundancy</span></span>
@@ -324,13 +366,14 @@ the beta and ordination analyses revealed.</p>
 <code>hilldiv3</code> produced a complete three-flavour analysis through
 one interface: trait-to-distance conversion
 (<code><a href="../reference/traits2dist.html">traits2dist()</a></code>); neutral, phylogenetic and functional alpha
-diversity (<code><a href="../reference/hilldiv.html">hilldiv()</a></code>); between-group partitioning for each
-flavour (<code><a href="../reference/hillpart.html">hillpart()</a></code>); ordinations in neutral, phylogenetic
-and functional space (<code><a href="../reference/hillpair.html">hillpair()</a></code>); and functional
-redundancy (<code><a href="../reference/hillred.html">hillred()</a></code>). The unified, type-switching
-interface is what lets a single study separate a change that is
-taxonomic and phylogenetic from one that is functional — here revealing
-a community reorganised in identity but conserved in function.</p>
+diversity (<code><a href="../reference/hilldiv.html">hilldiv()</a></code>); MAG and clade power-sum shares
+(<code><a href="../reference/hillshare.html">hillshare()</a></code>); between-group partitioning for each flavour
+(<code><a href="../reference/hillpart.html">hillpart()</a></code>); ordinations in neutral, phylogenetic and
+functional space (<code><a href="../reference/hillpair.html">hillpair()</a></code>); and functional redundancy
+(<code><a href="../reference/hillred.html">hillred()</a></code>). The unified, type-switching interface is what
+lets a single study separate a change that is taxonomic and phylogenetic
+from one that is functional — here revealing a community reorganised in
+identity but conserved in function.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>

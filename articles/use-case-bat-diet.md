@@ -138,6 +138,58 @@ consistently *broader across the insect phylogeny* — the generalists
 span more of the prey tree of life even where their taxon counts are
 similar.
 
+## Which prey carry the power sum?
+
+[`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md)
+assigns a share of the Hill power sum to an individual prey ASV or a set
+of ASVs. We compare `asv003`, the most abundant prey in the first forest
+bat, with the Lepidoptera (moth) set. In these simulated data,
+`asv001`–`asv018` are moths; the intersection retains those detected in
+at least one sample.
+
+``` r
+
+moths <- intersect(rownames(bat_counts), sprintf("asv%03d", 1:18))
+prey_share <- hillshare(bat_counts[, c("bat01", "bat16")], q = c(0, 1, 2),
+                        tree = bat_tree,
+                        sets = list(asv003 = "asv003", Lepidoptera = moths))
+prey_share$share <- round(prey_share$share, 3)
+prey_share
+#>    q sample         type         set share allocation
+#> 1  0  bat01      neutral      asv003 0.059     qpower
+#> 2  0  bat01      neutral Lepidoptera 0.941     qpower
+#> 3  1  bat01      neutral      asv003 0.400     qpower
+#> 4  1  bat01      neutral Lepidoptera 0.995     qpower
+#> 5  2  bat01      neutral      asv003 0.736     qpower
+#> 6  2  bat01      neutral Lepidoptera 1.000     qpower
+#> 7  0  bat16      neutral      asv003 0.000     qpower
+#> 8  0  bat16      neutral Lepidoptera 0.080     qpower
+#> 9  1  bat16      neutral      asv003 0.000     qpower
+#> 10 1  bat16      neutral Lepidoptera 0.093     qpower
+#> 11 2  bat16      neutral      asv003 0.000     qpower
+#> 12 2  bat16      neutral Lepidoptera 0.117     qpower
+#> 13 0  bat01 phylogenetic      asv003 0.040     qpower
+#> 14 0  bat01 phylogenetic Lepidoptera 0.631     qpower
+#> 15 1  bat01 phylogenetic      asv003 0.400     qpower
+#> 16 1  bat01 phylogenetic Lepidoptera 0.995     qpower
+#> 17 2  bat01 phylogenetic      asv003 0.728     qpower
+#> 18 2  bat01 phylogenetic Lepidoptera 1.000     qpower
+#> 19 0  bat16 phylogenetic      asv003 0.000     qpower
+#> 20 0  bat16 phylogenetic Lepidoptera 0.316     qpower
+#> 21 1  bat16 phylogenetic      asv003 0.000     qpower
+#> 22 1  bat16 phylogenetic Lepidoptera 0.093     qpower
+#> 23 2  bat16 phylogenetic      asv003 0.000     qpower
+#> 24 2  bat16 phylogenetic Lepidoptera 0.013     qpower
+```
+
+The share of `asv003` in the forest bat rises sharply with `q`,
+reflecting its dominance among the reads. The moth set contains this
+ASV, so its share overlaps with the `asv003` row. Phylogenetic shares
+also account for the lengths of branches shared among prey. These values
+describe allocation of a power sum within each bat; they are not
+percentages of the effective diversity numbers above or a test of
+habitat enrichment.
+
 ## Diversity profiles make the dominance structure explicit
 
 Reading diversity at a single `q` can mislead; a **diversity profile**,
@@ -254,6 +306,8 @@ from one engine — is unique to `hilldiv3`.
 From a single ASV table and a prey tree, `hilldiv3` delivered:
 per-sample neutral and phylogenetic Hill numbers
 ([`hilldiv()`](https://alberdilab.github.io/hilldiv3/reference/hilldiv.md)),
+prey and group shares
+([`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md)),
 full diversity profiles
 ([`hillprof()`](https://alberdilab.github.io/hilldiv3/reference/hillprof.md))
 and evenness

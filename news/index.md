@@ -1,7 +1,15 @@
 # Changelog
 
-## hilldiv3 3.0.1
+## hilldiv3 3.1.0
 
+- Added
+  [`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md)
+  to allocate neutral, phylogenetic and functional Hill power-sum weight
+  to individual taxa or named sets. Its first allocation method is
+  `"qpower"`; empty samples have undefined (`NA`) shares.
+- Functional Hill numbers now handle all-zero distance matrices and
+  empty samples consistently: identical taxa have diversity 1, and empty
+  samples have diversity 0.
 - Added contributing guidelines (`CONTRIBUTING.md`), a code of conduct,
   issue templates, citation metadata (`CITATION.cff`) and the full GPL-3
   licence text, and a Journal of Open Source Software paper (`paper/`).

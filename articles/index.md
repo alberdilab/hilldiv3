@@ -14,6 +14,8 @@
   data](https://alberdilab.github.io/hilldiv3/articles/preparing-data.md):
 - [Profiles, evenness and
   redundancy](https://alberdilab.github.io/hilldiv3/articles/profiles-evenness-redundancy.md):
+- [Taxon and set shares of Hill power
+  sums](https://alberdilab.github.io/hilldiv3/articles/taxon-and-set-shares.md):
 - [Case 2: Three faces of diversity in a gut
   microbiome](https://alberdilab.github.io/hilldiv3/articles/use-case-bacterial-mags.md):
 - [Case 1: Dietary niches of insectivorous
