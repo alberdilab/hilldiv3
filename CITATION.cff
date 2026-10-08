@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use hilldiv3, please cite it as below."
 type: software
 title: "hilldiv3: Integral Analysis of Diversity Based on Hill Numbers"
-version: 3.0.1
+version: 3.1.0
 license: GPL-3.0-only
 repository-code: "https://github.com/alberdilab/hilldiv3"
 url: "https://alberdilab.github.io/hilldiv3/"

@@ -62,7 +62,13 @@ dist <- traits2dist(gut_traits)
 hilldiv(gut_counts, dist = dist)                   # neutral + functional
 hilldiv(gut_counts, tree = gut_tree, dist = dist)  # all three types at once
 
-# Results are tidy by default and plot directly.
+# Attribute Hill power-sum weight to a MAG and a set of MAGs.
+sets <- list(C = rownames(gut_counts)[3],
+             ABC = rownames(gut_counts)[1:3])
+hillshare(gut_counts, q = c(0, 1, 2), tree = gut_tree, sets = sets)
+hillshare(gut_counts, q = c(0, 1, 2), dist = dist, sets = sets)
+
+# Core diversity results are tidy by default and plot directly.
 plot(hillprof(gut_counts))             # diversity profile
 hilldiv(gut_counts, out = "matrix")    # matrix: samples x q orders
 ```
@@ -74,8 +80,9 @@ Full documentation lives on the package website:
 
 * **Get started** — `vignette("hilldiv3")`, a gentle introduction for anyone
   using Hill numbers for the first time.
-* **Articles** — step-by-step guides to diversity types, partitioning &
-  (dis)similarity, profiles/evenness/redundancy, and preparing your data.
+* **Articles** — step-by-step guides to diversity types, taxon and set shares,
+  partitioning & (dis)similarity, profiles/evenness/redundancy, and preparing
+  your data.
 * **Examples** — complete worked analyses (bat diets, gut microbiomes).
 * **Reference** — every exported function, grouped by task.
 
@@ -96,15 +103,17 @@ full redesign that keeps the familiar function names (`hilldiv()`,
 * Faster phylogenetic computation using an `ape` post-order traversal in place
   of `geiger::tips()`; `hillpair()` computes the shared structure once and
   reuses it across all sample pairs.
-* **Tidy by default**: every `hill*` function returns a long-format
-  `data.frame` with `print()`/`plot()`/`autoplot()` methods; pass
-  `out = "matrix"` for a plain matrix.
+* **Tidy by default**: the core diversity and comparison functions return a
+  long-format `data.frame` with `print()`/`plot()`/`autoplot()` methods; pass
+  `out = "matrix"` for a plain matrix. `hillshare()` returns a data frame of
+  taxon and set shares.
 * An explicit `type = c("auto", "neutral", "phylogenetic", "functional")`
   argument that asserts and validates the diversity type (auto-detected by
   default).
-* New functions `hillprof()` (diversity profiles) and `hilleven()` (evenness),
-  hierarchical multi-scale partitioning in `hillpart()`, plus bundled example
-  data (`gut_counts`, `gut_tree`, `gut_traits`).
+* New functions `hillprof()` (diversity profiles), `hilleven()` (evenness)
+  and `hillshare()` (taxon and set shares), hierarchical multi-scale
+  partitioning in `hillpart()`, plus bundled example data (`gut_counts`,
+  `gut_tree`, `gut_traits`).
 
 See [`NEWS.md`](NEWS.md) for the full changelog.
 

@@ -1,6 +1,6 @@
 Package: hilldiv3
 Title: Integral Analysis of Diversity Based on Hill Numbers
-Version: 3.0.1
+Version: 3.1.0
 Authors@R:
     person("Antton", "Alberdi", , "antton.alberdi@sund.ku.dk", role = c("aut", "cre"),
            comment = c(ORCID = "0000-0002-2875-6446"))
@@ -9,7 +9,8 @@ Description: Measures and compares the diversity of biological communities
     variants (ASVs) or metagenome-assembled genomes (MAGs)) based on Hill
     numbers, in a unified framework for neutral, phylogenetic and functional
     diversity measurement, diversity partitioning, (dis)similarity
-    measurement, diversity profiles, evenness and redundancy. The
+    measurement, diversity profiles, evenness, redundancy and attribution of
+    Hill power-sum weight to taxa and sets. The
     statistical framework encompasses richness, Shannon and Simpson
     diversity, Faith's phylogenetic diversity (PD), Rao's quadratic entropy
     and Sorensen- and UniFrac-type dissimilarities, all grounded in a single

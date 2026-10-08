@@ -115,6 +115,30 @@ numbers show that the farmland diet is also consistently *broader across the
 insect phylogeny* — the generalists span more of the prey tree of life even
 where their taxon counts are similar.
 
+## Which prey carry the power sum?
+
+`hillshare()` assigns a share of the Hill power sum to an individual prey ASV
+or a set of ASVs. We compare `asv003`, the most abundant prey in the first
+forest bat, with the Lepidoptera (moth) set. In these simulated data,
+`asv001`–`asv018` are moths; the intersection retains those detected in at
+least one sample.
+
+```{r shares}
+moths <- intersect(rownames(bat_counts), sprintf("asv%03d", 1:18))
+prey_share <- hillshare(bat_counts[, c("bat01", "bat16")], q = c(0, 1, 2),
+                        tree = bat_tree,
+                        sets = list(asv003 = "asv003", Lepidoptera = moths))
+prey_share$share <- round(prey_share$share, 3)
+prey_share
+```
+
+The share of `asv003` in the forest bat rises sharply with `q`, reflecting
+its dominance among the reads. The moth set contains this ASV, so its share
+overlaps with the `asv003` row. Phylogenetic shares also account for the
+lengths of branches shared among prey. These values describe allocation of a
+power sum within each bat; they are not percentages of the effective diversity
+numbers above or a test of habitat enrichment.
+
 ## Diversity profiles make the dominance structure explicit
 
 Reading diversity at a single `q` can mislead; a **diversity profile**,
@@ -195,7 +219,8 @@ diversity types from one engine — is unique to `hilldiv3`.
 ## Summary
 
 From a single ASV table and a prey tree, `hilldiv3` delivered: per-sample
-neutral and phylogenetic Hill numbers (`hilldiv()`), full diversity profiles
+neutral and phylogenetic Hill numbers (`hilldiv()`), prey and group shares
+(`hillshare()`), full diversity profiles
 (`hillprof()`) and evenness (`hilleven()`), and a scale-resolved nested
 partition of turnover under both flavours (`hillpart()` with a `hierarchy`
 formula) — a complete dietary-diversity analysis through one consistent

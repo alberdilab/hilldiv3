@@ -100,14 +100,12 @@ hill_alpha_phylo <- function(p, q, tree, reference = "pool") {
 }
 
 hill_alpha_func <- function(p, q, dist, tau) {
-  dij <- as.matrix(dist)
-  if (is.null(tau)) tau <- max(dij)
-  dij[dij > tau] <- tau
-  sim <- 1 - dij / tau
+  sim <- .functional_similarity(dist, tau)
 
   res <- matrix(0, nrow = length(q), ncol = ncol(p))
   for (j in seq_len(ncol(p))) {
     vec <- p[, j]
+    if (sum(vec) == 0) next
     a <- as.vector(sim %*% vec)
     keep <- a != 0
     a <- a[keep]
@@ -122,6 +120,26 @@ hill_alpha_func <- function(p, q, dist, tau) {
     }
   }
   .shape_alpha(res, q, colnames(p))
+}
+
+# Shared similarity kernel for functional Hill numbers and their taxon shares.
+.functional_similarity <- function(dist, tau = NULL) {
+  dij <- as.matrix(dist)
+  if (any(!is.finite(dij)) || any(dij < 0)) {
+    cli::cli_abort("{.arg dist} must contain finite, nonnegative distances.")
+  }
+  if (is.null(tau)) tau <- max(dij)
+  if (!is.numeric(tau) || length(tau) != 1L || is.na(tau) ||
+      !is.finite(tau) || tau < 0) {
+    cli::cli_abort("{.arg tau} must be one finite, nonnegative number.")
+  }
+  if (tau == 0) {
+    if (any(dij > 0)) {
+      cli::cli_abort("{.arg tau} must be positive when distances are positive.")
+    }
+    return(matrix(1, nrow(dij), ncol(dij), dimnames = dimnames(dij)))
+  }
+  1 - pmin(dij, tau) / tau
 }
 
 # Attach dimnames to an alpha result matrix.

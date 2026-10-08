@@ -108,6 +108,27 @@ hilldiv(counts, tree = tree)                   # neutral + phylogenetic
 hilldiv(counts, tree = tree, type = "phylogenetic")   # phylogenetic only
 ```
 
+## Which taxa carry the Hill power sum?
+
+`hillshare()` assigns each taxon a share of the Hill **power sum** at each
+order `q`. Give it named sets to add the shares of several taxa. With a tree or
+functional distances, it applies the corresponding phylogenetic or functional
+calculation. The default allocation is `"qpower"`; these shares are **not**
+percentages of the effective Hill number returned by `hilldiv()`.
+
+```{r}
+sets <- list(t1 = "t1", t1_and_t2 = c("t1", "t2"))
+fdist <- as.matrix(stats::dist(c(t1 = 0, t2 = 0.5, t3 = 1)))
+hillshare(counts[, "s2"], q = c(0, 1, 2),
+          tree = tree, dist = fdist, sets = sets)
+```
+
+Each row gives a share between zero and one for one sample, diversity type,
+order and set. With `sets = NULL`, every taxon gets its own row and their shares
+sum to one within each combination. Named sets may overlap. At `q = 1`,
+functional shares equal relative abundances, even though functional Hill
+diversity still depends on the distances.
+
 ## Partitioning and dissimilarity
 
 `hillpart()` splits diversity across samples into **alpha** (within-sample),
@@ -132,6 +153,8 @@ The website carries in-depth articles:
 
 * [**Diversity types**](https://alberdilab.github.io/hilldiv3/articles/diversity-types.html) — neutral, phylogenetic and
   functional measurement.
+* [**Taxon and set shares**](https://alberdilab.github.io/hilldiv3/articles/taxon-and-set-shares.html) —
+  how `hillshare()` allocates each Hill power sum to taxa and groups of taxa.
 * [**Partitioning and (dis)similarity**](https://alberdilab.github.io/hilldiv3/articles/partitioning-and-dissimilarity.html) —
   alpha/beta/gamma, the S/C/U/V metrics, and pairwise dissimilarity for
   ordination.

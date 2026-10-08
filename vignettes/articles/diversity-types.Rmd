@@ -46,8 +46,9 @@ When more than one type is returned they are stacked in a single tibble with a
 shows them all from one call.
 
 This article walks through all three with `hilldiv()`, the alpha-diversity
-workhorse. The same `tree` / `dist` logic applies to every other `hill*`
-function (which return one type at a time).
+workhorse. The same `tree` / `dist` logic applies to `hillshare()`, which
+allocates the Hill power sum to taxa or sets; its shares are distinct from the
+effective Hill numbers calculated here.
 
 ```{r data}
 counts <- matrix(

@@ -115,6 +115,28 @@ the intervention looks like it did nothing. The effect is not in *how much*
 diversity each gut holds, but in *which* lineages hold it — a compositional
 change that only between-sample analysis can see.
 
+## Which MAGs carry the power sum?
+
+`hillshare()` shows how much of the Hill power sum is assigned to one MAG or a
+set of MAGs in each sample. Here we inspect `mag01` and the first phylogenetic
+clade in one control sample. Supplying both the tree and functional distances
+returns neutral, phylogenetic and functional shares together.
+
+```{r shares}
+clade_A <- paste0("mag", sprintf("%02d", 1:12))
+shares <- hillshare(gut_counts[, "ctrl01"], q = c(0, 1, 2),
+                    tree = gut_tree, dist = fdist,
+                    sets = list(mag01 = "mag01", clade_A = clade_A))
+shares$share <- round(shares$share, 3)
+shares
+```
+
+Each share is between zero and one within its sample, type and order. The
+`clade_A` share adds the allocations of its 12 MAGs, including `mag01`; the two
+rows therefore overlap and should not be added together. These are shares of
+the underlying power sum, **not** percentages of the effective numbers shown
+above. The functional allocation accounts for trait similarity among MAGs.
+
 ## Where does the community turn over — and where doesn't it?
 
 `hillpart()` partitions diversity between the two groups and reports beta, the
@@ -215,7 +237,8 @@ lost with clade A is recovered from its mirror in clade B. The redundancy that
 From one MAG table plus a genome tree and a trait table, `hilldiv3` produced a
 complete three-flavour analysis through one interface: trait-to-distance
 conversion (`traits2dist()`); neutral, phylogenetic and functional alpha
-diversity (`hilldiv()`); between-group partitioning for each flavour
+diversity (`hilldiv()`); MAG and clade power-sum shares (`hillshare()`);
+between-group partitioning for each flavour
 (`hillpart()`); ordinations in neutral, phylogenetic and functional space
 (`hillpair()`); and functional redundancy (`hillred()`). The unified,
 type-switching interface is what lets a single study separate a change that is
