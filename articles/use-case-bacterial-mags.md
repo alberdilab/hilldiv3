@@ -160,8 +160,9 @@ clade_A <- paste0("mag", sprintf("%02d", 1:12))
 shares <- hillshare(gut_counts[, "ctrl01"], q = c(0, 1, 2),
                     tree = gut_tree, dist = fdist,
                     sets = list(mag01 = "mag01", clade_A = clade_A))
-shares$share <- round(shares$share, 3)
-shares
+shown <- shares
+shown$share <- round(shown$share, 3)
+shown
 #>    q  sample         type     set share allocation
 #> 1  0 sample1      neutral   mag01 0.042     qpower
 #> 2  0 sample1      neutral clade_A 0.500     qpower
@@ -183,12 +184,40 @@ shares
 #> 18 2 sample1   functional clade_A 0.851     qpower
 ```
 
+``` r
+
+plot_shares <- shares
+plot_shares$set <- factor(plot_shares$set, levels = c("mag01", "clade_A"))
+plot_shares$type <- factor(plot_shares$type,
+                           levels = c("neutral", "phylogenetic", "functional"))
+ggplot(plot_shares, aes(factor(q), share, fill = type)) +
+  geom_col(position = position_dodge(width = 0.8), width = 0.72) +
+  facet_wrap(~ set, scales = "free_y",
+             labeller = labeller(set = c(mag01 = "MAG 01",
+                                         clade_A = "Clade A (12 MAGs)"))) +
+  scale_fill_manual(values = c(neutral = "#4E79A7",
+                               phylogenetic = "#59A14F",
+                               functional = "#E15759"),
+                    breaks = c("neutral", "phylogenetic", "functional"),
+                    labels = c("Neutral", "Phylogenetic", "Functional"),
+                    name = NULL) +
+  labs(x = "Diversity order (q)", y = "Share of Hill power sum",
+       caption = "Vertical scales differ between panels to show the MAG trend.")
+```
+
+![Grouped bars show the shares of mag01 and clade A in control sample
+ctrl01 at q 0, 1 and 2, for neutral, phylogenetic and functional
+diversity. The two panels use different vertical
+scales.](use-case-bacterial-mags_files/figure-html/shares-plot-1.png)
+
 Each share is between zero and one within its sample, type and order.
 The `clade_A` share adds the allocations of its 12 MAGs, including
 `mag01`; the two rows therefore overlap and should not be added
 together. These are shares of the underlying power sum, **not**
 percentages of the effective numbers shown above. The functional
-allocation accounts for trait similarity among MAGs.
+allocation accounts for trait similarity among MAGs. In this sample,
+neutral and phylogenetic shares of clade A rise with `q`, while its
+functional share changes little.
 
 ## Where does the community turn over — and where doesn’t it?
 
