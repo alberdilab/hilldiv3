@@ -57,7 +57,10 @@
 <h2 class="pkg-version" data-toc-text="3.1.0" id="hilldiv3-310">hilldiv3 3.1.0<a class="anchor" aria-label="anchor" href="#hilldiv3-310"></a></h2>
 <ul><li>Added <code><a href="../reference/hillshare.html">hillshare()</a></code> to allocate neutral, phylogenetic and functional Hill power-sum weight to individual taxa or named sets. Its first allocation method is <code>"qpower"</code>; empty samples have undefined (<code>NA</code>) shares.</li>
 <li>Functional Hill numbers now handle all-zero distance matrices and empty samples consistently: identical taxa have diversity 1, and empty samples have diversity 0.</li>
-<li>Added contributing guidelines (<code>CONTRIBUTING.md</code>), a code of conduct, issue templates, citation metadata (<code>CITATION.cff</code>) and the full GPL-3 licence text, and a Journal of Open Source Software paper (<code>paper/</code>).</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.0.1" id="hilldiv3-301">hilldiv3 3.0.1<a class="anchor" aria-label="anchor" href="#hilldiv3-301"></a></h2>
+<ul><li>Added contributing guidelines (<code>CONTRIBUTING.md</code>), a code of conduct, issue templates, citation metadata (<code>CITATION.cff</code>) and the full GPL-3 licence text, and a Journal of Open Source Software paper (<code>paper/</code>).</li>
 <li>
 <strong>Breaking:</strong> the <code>out = "matrix"</code> form of the per-sample functions (<code><a href="../reference/hilldiv.html">hilldiv()</a></code>, <code><a href="../reference/hillprof.html">hillprof()</a></code>, <code><a href="../reference/hilleven.html">hilleven()</a></code>) now returns samples in rows and diversity orders (<code>q0</code>, <code>q1</code>, …) in columns, instead of the previous orders-in-rows/samples-in-columns layout. This matches the usual observations-in-rows convention and joins cleanly with per-sample metadata. Code that indexed these matrices by <code>["q0", ]</code> should switch to <code>[, "q0"]</code> (or transpose). The component/metric matrices from <code><a href="../reference/hillpart.html">hillpart()</a></code>, <code><a href="../reference/hilldiss.html">hilldiss()</a></code> and <code><a href="../reference/hillred.html">hillred()</a></code> are unchanged.</li>
 <li>
