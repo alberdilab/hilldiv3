@@ -145,7 +145,9 @@ hillshare <- function(data, q = c(0, 1, 2), tree = NULL, dist = NULL,
   if (!is.list(sets) || length(sets) == 0L ||
       is.null(names(sets)) || anyNA(names(sets)) ||
       any(names(sets) == "") || anyDuplicated(names(sets))) {
-    cli::cli_abort("{.arg sets} must be a nonempty named list with unique names.")
+    cli::cli_abort(
+      "{.arg sets} must be a nonempty named list with unique names."
+    )
   }
   for (nm in names(sets)) {
     members <- sets[[nm]]
