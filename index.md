@@ -63,6 +63,10 @@ sets <- list(C = rownames(gut_counts)[3],
 hillshare(gut_counts, q = c(0, 1, 2), tree = gut_tree, sets = sets)
 hillshare(gut_counts, q = c(0, 1, 2), dist = dist, sets = sets)
 
+# Rank taxa by their contribution to pairwise or collective dissimilarity.
+head(hillcontrib(gut_counts, q = 1, metric = "C"))
+head(hillcontrib(gut_counts, q = 1, metric = "C", by = "collective"))
+
 # Core diversity results are tidy by default and plot directly.
 plot(hillprof(gut_counts))             # diversity profile
 hilldiv(gut_counts, out = "matrix")    # matrix: samples x q orders
@@ -117,7 +121,9 @@ while changing how they work underneath:
   [`print()`](https://rdrr.io/r/base/print.html)/[`plot()`](https://rdrr.io/r/graphics/plot.default.html)/`autoplot()`
   methods; pass `out = "matrix"` for a plain matrix.
   [`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md)
-  returns a data frame of taxon and set shares.
+  and
+  [`hillcontrib()`](https://alberdilab.github.io/hilldiv3/reference/hillcontrib.md)
+  return data frames of taxon and set shares or contributions.
 - An explicit
   `type = c("auto", "neutral", "phylogenetic", "functional")` argument
   that asserts and validates the diversity type (auto-detected by
@@ -126,9 +132,12 @@ while changing how they work underneath:
   [`hillprof()`](https://alberdilab.github.io/hilldiv3/reference/hillprof.md)
   (diversity profiles),
   [`hilleven()`](https://alberdilab.github.io/hilldiv3/reference/hilleven.md)
-  (evenness) and
+  (evenness)
   [`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md)
-  (taxon and set shares), hierarchical multi-scale partitioning in
+  (taxon and set shares) and
+  [`hillcontrib()`](https://alberdilab.github.io/hilldiv3/reference/hillcontrib.md)
+  (taxon turnover contributions), hierarchical multi-scale partitioning
+  in
   [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md),
   plus bundled example data (`gut_counts`, `gut_tree`, `gut_traits`).
 

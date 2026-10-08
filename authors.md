@@ -11,13 +11,13 @@ Source:
 [`DESCRIPTION`](https://github.com/alberdilab/hilldiv3/blob/main/DESCRIPTION)
 
 Alberdi A (2026). *hilldiv3: Integral Analysis of Diversity Based on
-Hill Numbers*. R package version 3.1.0,
+Hill Numbers*. R package version 3.1.0.9000,
 <https://github.com/alberdilab/hilldiv3>.
 
     @Manual{,
       title = {hilldiv3: Integral Analysis of Diversity Based on Hill Numbers},
       author = {Antton Alberdi},
       year = {2026},
-      note = {R package version 3.1.0},
+      note = {R package version 3.1.0.9000},
       url = {https://github.com/alberdilab/hilldiv3},
     }

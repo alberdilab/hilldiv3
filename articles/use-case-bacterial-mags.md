@@ -262,6 +262,91 @@ one common beta scale is a core strength of the Hill-number framework as
 implemented here, and here it isolates a change that is phylogenetic but
 not functional.
 
+## Which MAGs account for the dissimilarity?
+
+The beta results tell us that samples differ;
+[`hillcontrib()`](https://alberdilab.github.io/hilldiv3/reference/hillcontrib.md)
+shows which MAGs account for a particular dissimilarity. Here we compare
+one control and one treatment sample at `q = 2`, which gives abundant
+MAGs more weight. The rows are ordered from largest to smallest
+contribution.
+
+``` r
+
+pair_counts <- gut_counts[, c("ctrl01", "trt01")]
+pair_contrib <- hillcontrib(pair_counts, q = 2, metric = "C")
+head(pair_contrib[, c("set", "contribution", "share", "rank")], 5)
+#>     set contribution      share rank
+#> 1 mag05   0.29972486 0.38273484    1
+#> 2 mag14   0.18242450 0.23294768    2
+#> 3 mag23   0.09216861 0.11769506    3
+#> 4 mag07   0.04400636 0.05619409    4
+#> 5 mag18   0.04384198 0.05598419    5
+
+# With one row per MAG, the contributions add up to the pair's dissimilarity.
+c(attributed = sum(pair_contrib$contribution),
+  pairwise = as.numeric(hillpair(pair_counts, q = 2, metric = "C")))
+#> attributed   pairwise 
+#>  0.7831136  0.7831136
+```
+
+The figure shows the eight largest shares. Colour indicates which sample
+has the higher *relative abundance* of each MAG.
+
+``` r
+
+top_contrib <- head(pair_contrib, 8)
+pair_relative <- sweep(pair_counts, 2, colSums(pair_counts), "/")
+top_contrib$higher_in <- ifelse(
+  pair_relative[top_contrib$set, "ctrl01"] >
+    pair_relative[top_contrib$set, "trt01"], "ctrl01", "trt01")
+
+ggplot(top_contrib, aes(reorder(set, share), share, fill = higher_in)) +
+  geom_col(width = 0.72) +
+  coord_flip() +
+  scale_y_continuous(labels = function(x) paste0(round(100 * x), "%"),
+                     expand = expansion(mult = c(0, 0.03))) +
+  scale_fill_manual(values = c(ctrl01 = pal[["control"]],
+                               trt01 = pal[["treatment"]]),
+                    labels = c(ctrl01 = "Control (ctrl01)",
+                               trt01 = "Treatment (trt01)"),
+                    name = "Higher relative abundance") +
+  labs(x = NULL, y = "Share of pairwise dissimilarity (q = 2, C)")
+```
+
+![Horizontal bars show the eight MAGs contributing most to dissimilarity
+between ctrl01 and trt01. mag05 contributes 38 percent and mag14
+contributes 23 percent. Bar colours indicate the sample with higher
+relative
+abundance.](use-case-bacterial-mags_files/figure-html/contrib-plot-1.png)
+
+`mag05` and `mag14` rank highest: `mag05` has 725 counts in `ctrl01` but
+35 in `trt01`, while `mag14` has 29 and 690, respectively. Their shares
+are about 38% and 23% of this pair’s total dissimilarity; the eight
+shown account for about 91% together.
+
+We can also examine **collective turnover within each group**. This
+compares the six control samples with one another and, separately, the
+six treatment samples with one another; it does not compare the two
+groups against each other.
+
+``` r
+
+sample_groups <- split(names(group), group)
+group_contrib <- hillcontrib(gut_counts, q = 2, metric = "C",
+                            by = "collective", groups = sample_groups)
+top_three <- do.call(rbind, lapply(split(group_contrib, group_contrib$group),
+                                   function(x) head(x, 3)))
+top_three[, c("group", "set", "contribution", "share")]
+#>                  group   set contribution     share
+#> control.1      control mag12   0.10110789 0.3104164
+#> control.2      control mag05   0.09652995 0.2963615
+#> control.3      control mag02   0.06068756 0.1863199
+#> treatment.25 treatment mag19   0.15466253 0.3405158
+#> treatment.26 treatment mag23   0.14308196 0.3150192
+#> treatment.27 treatment mag14   0.04910499 0.1081130
+```
+
 ## Ordination in three spaces
 
 [`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md)
@@ -347,6 +432,8 @@ MAG and clade power-sum shares
 ([`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md));
 between-group partitioning for each flavour
 ([`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md));
+MAG contributions to pairwise and within-group dissimilarity
+([`hillcontrib()`](https://alberdilab.github.io/hilldiv3/reference/hillcontrib.md));
 ordinations in neutral, phylogenetic and functional space
 ([`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md));
 and functional redundancy

@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -457,6 +457,58 @@ list</strong> of <code>dist</code> objects (e.g. <code>q0S</code>,
 <span><span class="co">#&gt; 4    s2     s3 1      C 0.08924381</span></span>
 <span><span class="co">#&gt; 5    s2     s4 1      C 0.29281463</span></span>
 <span><span class="co">#&gt; 6    s3     s4 1      C 0.33948330</span></span></code></pre></div>
+</div>
+<div class="section level2">
+<h2 id="which-taxa-account-for-dissimilarity">Which taxa account for dissimilarity?<a class="anchor" aria-label="anchor" href="#which-taxa-account-for-dissimilarity"></a>
+</h2>
+<p><code><a href="../reference/hillcontrib.html">hillcontrib()</a></code> ranks taxa by their contribution to the
+same bounded dissimilarity reported by <code><a href="../reference/hillpair.html">hillpair()</a></code> and
+<code><a href="../reference/hilldiss.html">hilldiss()</a></code>. For each comparison, the
+<code>contribution</code> column sums to the selected metric;
+<code>share</code> is the fraction of that metric assigned to the taxon.
+Set <code>by = "collective"</code> to examine the turnover among all
+samples or among named groups of samples.</p>
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="../reference/hillcontrib.html">hillcontrib</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span>
+<span><span class="co">#&gt;    first second group q    type metric set contribution       share rank</span></span>
+<span><span class="co">#&gt; 1     s1     s2  &lt;NA&gt; 1 neutral      C  t2 0.3636363636 0.695309574    1</span></span>
+<span><span class="co">#&gt; 2     s1     s2  &lt;NA&gt; 1 neutral      C  t1 0.1062323151 0.203126951    2</span></span>
+<span><span class="co">#&gt; 3     s1     s2  &lt;NA&gt; 1 neutral      C  t3 0.0531161576 0.101563475    3</span></span>
+<span><span class="co">#&gt; 4     s1     s3  &lt;NA&gt; 1 neutral      C  t2 0.2857142857 0.606355548    1</span></span>
+<span><span class="co">#&gt; 5     s1     s3  &lt;NA&gt; 1 neutral      C  t3 0.1666666667 0.353707403    2</span></span>
+<span><span class="co">#&gt; 6     s1     s3  &lt;NA&gt; 1 neutral      C  t1 0.0188183079 0.039937049    3</span></span>
+<span><span class="co">#&gt; 7     s1     s4  &lt;NA&gt; 1 neutral      C  t2 0.0666666667 0.673257663    1</span></span>
+<span><span class="co">#&gt; 8     s1     s4  &lt;NA&gt; 1 neutral      C  t1 0.0243018651 0.245421254    2</span></span>
+<span><span class="co">#&gt; 9     s1     s4  &lt;NA&gt; 1 neutral      C  t3 0.0080524973 0.081321083    3</span></span>
+<span><span class="co">#&gt; 10    s2     s3  &lt;NA&gt; 1 neutral      C  t3 0.0454545455 0.509329954    1</span></span>
+<span><span class="co">#&gt; 11    s2     s3  &lt;NA&gt; 1 neutral      C  t1 0.0370279144 0.414907370    2</span></span>
+<span><span class="co">#&gt; 12    s2     s3  &lt;NA&gt; 1 neutral      C  t2 0.0067613499 0.075762676    3</span></span>
+<span><span class="co">#&gt; 13    s2     s4  &lt;NA&gt; 1 neutral      C  t2 0.1626372003 0.555427164    1</span></span>
+<span><span class="co">#&gt; 14    s2     s4  &lt;NA&gt; 1 neutral      C  t3 0.0999340079 0.341287617    2</span></span>
+<span><span class="co">#&gt; 15    s2     s4  &lt;NA&gt; 1 neutral      C  t1 0.0302434233 0.103285219    3</span></span>
+<span><span class="co">#&gt; 16    s3     s4  &lt;NA&gt; 1 neutral      C  t3 0.2333333333 0.687319037    1</span></span>
+<span><span class="co">#&gt; 17    s3     s4  &lt;NA&gt; 1 neutral      C  t2 0.1057945504 0.311634036    2</span></span>
+<span><span class="co">#&gt; 18    s3     s4  &lt;NA&gt; 1 neutral      C  t1 0.0003554141 0.001046926    3</span></span>
+<span><span class="fu"><a href="../reference/hillcontrib.html">hillcontrib</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span>, by <span class="op">=</span> <span class="st">"collective"</span>,</span>
+<span>            groups <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html" class="external-link">list</a></span><span class="op">(</span>first <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"s1"</span>, <span class="st">"s2"</span><span class="op">)</span>, second <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"s3"</span>, <span class="st">"s4"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt;   first second  group q    type metric set contribution       share rank</span></span>
+<span><span class="co">#&gt; 1  &lt;NA&gt;   &lt;NA&gt;  first 1 neutral      C  t2 0.3636363636 0.695309574    1</span></span>
+<span><span class="co">#&gt; 2  &lt;NA&gt;   &lt;NA&gt;  first 1 neutral      C  t1 0.1062323151 0.203126951    2</span></span>
+<span><span class="co">#&gt; 3  &lt;NA&gt;   &lt;NA&gt;  first 1 neutral      C  t3 0.0531161576 0.101563475    3</span></span>
+<span><span class="co">#&gt; 4  &lt;NA&gt;   &lt;NA&gt; second 1 neutral      C  t3 0.2333333333 0.687319037    1</span></span>
+<span><span class="co">#&gt; 5  &lt;NA&gt;   &lt;NA&gt; second 1 neutral      C  t2 0.1057945504 0.311634036    2</span></span>
+<span><span class="co">#&gt; 6  &lt;NA&gt;   &lt;NA&gt; second 1 neutral      C  t1 0.0003554141 0.001046926    3</span></span></code></pre></div>
+<p>You can also combine taxa with
+<code>sets = list(my_set = c("t1", "t2"))</code>, as in
+<code><a href="../reference/hillshare.html">hillshare()</a></code>. Named sets may cover only some taxa or
+overlap, so their rows need not sum to the total dissimilarity. With a
+tree, shared branch turnover is distributed among descendant taxa
+according to their own abundance variation; this is an explicit
+allocation rule for phylogenetic dissimilarity.</p>
+<p>For functional diversity, the partitioning engine uses raw counts.
+Unequal sample totals can therefore contribute to the functional
+dissimilarity and its taxon attribution even when relative composition
+is unchanged.</p>
 <div class="section level3">
 <h3 id="larger-datasets">Larger datasets<a class="anchor" aria-label="anchor" href="#larger-datasets"></a>
 </h3>
@@ -465,7 +517,7 @@ partitioning engine, so cost grows with the number of pairs. For many
 samples, run pairs in parallel by setting <code>parallel = TRUE</code>
 with a <code>future</code> plan and the <code>furrr</code> package
 installed:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://future.futureverse.org" class="external-link">future</a></span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://future.futureverse.org/reference/plan.html" class="external-link">plan</a></span><span class="op">(</span><span class="va">multisession</span><span class="op">)</span></span>
 <span><span class="fu"><a href="../reference/hillpair.html">hillpair</a></span><span class="op">(</span><span class="va">counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span>, parallel <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
@@ -532,7 +584,7 @@ comparable to its own neutral and phylogenetic betas. A
 conventions exactly — the same <code>tau = max(d_ij)</code> threshold
 and the same functional Hill number <code>qD</code> — so its functional
 partition matches <code>hilldiv3</code> to machine precision.</p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">traits</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span>body_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">5</span>, <span class="fl">9</span><span class="op">)</span>, row.names <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">counts</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">d</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/dist.html" class="external-link">dist</a></span><span class="op">(</span><span class="va">traits</span><span class="op">)</span></span>
 <span></span>

@@ -348,6 +348,66 @@ head(hillpair(counts, q = 1, metric = "C", out = "tibble"))
 #> 6    s3     s4 1      C 0.33948330
 ```
 
+## Which taxa account for dissimilarity?
+
+[`hillcontrib()`](https://alberdilab.github.io/hilldiv3/reference/hillcontrib.md)
+ranks taxa by their contribution to the same bounded dissimilarity
+reported by
+[`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md)
+and
+[`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md).
+For each comparison, the `contribution` column sums to the selected
+metric; `share` is the fraction of that metric assigned to the taxon.
+Set `by = "collective"` to examine the turnover among all samples or
+among named groups of samples.
+
+``` r
+
+hillcontrib(counts, q = 1, metric = "C")
+#>    first second group q    type metric set contribution       share rank
+#> 1     s1     s2  <NA> 1 neutral      C  t2 0.3636363636 0.695309574    1
+#> 2     s1     s2  <NA> 1 neutral      C  t1 0.1062323151 0.203126951    2
+#> 3     s1     s2  <NA> 1 neutral      C  t3 0.0531161576 0.101563475    3
+#> 4     s1     s3  <NA> 1 neutral      C  t2 0.2857142857 0.606355548    1
+#> 5     s1     s3  <NA> 1 neutral      C  t3 0.1666666667 0.353707403    2
+#> 6     s1     s3  <NA> 1 neutral      C  t1 0.0188183079 0.039937049    3
+#> 7     s1     s4  <NA> 1 neutral      C  t2 0.0666666667 0.673257663    1
+#> 8     s1     s4  <NA> 1 neutral      C  t1 0.0243018651 0.245421254    2
+#> 9     s1     s4  <NA> 1 neutral      C  t3 0.0080524973 0.081321083    3
+#> 10    s2     s3  <NA> 1 neutral      C  t3 0.0454545455 0.509329954    1
+#> 11    s2     s3  <NA> 1 neutral      C  t1 0.0370279144 0.414907370    2
+#> 12    s2     s3  <NA> 1 neutral      C  t2 0.0067613499 0.075762676    3
+#> 13    s2     s4  <NA> 1 neutral      C  t2 0.1626372003 0.555427164    1
+#> 14    s2     s4  <NA> 1 neutral      C  t3 0.0999340079 0.341287617    2
+#> 15    s2     s4  <NA> 1 neutral      C  t1 0.0302434233 0.103285219    3
+#> 16    s3     s4  <NA> 1 neutral      C  t3 0.2333333333 0.687319037    1
+#> 17    s3     s4  <NA> 1 neutral      C  t2 0.1057945504 0.311634036    2
+#> 18    s3     s4  <NA> 1 neutral      C  t1 0.0003554141 0.001046926    3
+hillcontrib(counts, q = 1, metric = "C", by = "collective",
+            groups = list(first = c("s1", "s2"), second = c("s3", "s4")))
+#>   first second  group q    type metric set contribution       share rank
+#> 1  <NA>   <NA>  first 1 neutral      C  t2 0.3636363636 0.695309574    1
+#> 2  <NA>   <NA>  first 1 neutral      C  t1 0.1062323151 0.203126951    2
+#> 3  <NA>   <NA>  first 1 neutral      C  t3 0.0531161576 0.101563475    3
+#> 4  <NA>   <NA> second 1 neutral      C  t3 0.2333333333 0.687319037    1
+#> 5  <NA>   <NA> second 1 neutral      C  t2 0.1057945504 0.311634036    2
+#> 6  <NA>   <NA> second 1 neutral      C  t1 0.0003554141 0.001046926    3
+```
+
+You can also combine taxa with `sets = list(my_set = c("t1", "t2"))`, as
+in
+[`hillshare()`](https://alberdilab.github.io/hilldiv3/reference/hillshare.md).
+Named sets may cover only some taxa or overlap, so their rows need not
+sum to the total dissimilarity. With a tree, shared branch turnover is
+distributed among descendant taxa according to their own abundance
+variation; this is an explicit allocation rule for phylogenetic
+dissimilarity.
+
+For functional diversity, the partitioning engine uses raw counts.
+Unequal sample totals can therefore contribute to the functional
+dissimilarity and its taxon attribution even when relative composition
+is unchanged.
+
 ### Larger datasets
 
 [`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md)

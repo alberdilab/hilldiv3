@@ -29,6 +29,8 @@ Decompose diversity across samples and turn beta into bounded
   : Hill numbers-based similarity
 - [`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md)
   : Pairwise Hill numbers-based dissimilarity
+- [`hillcontrib()`](https://alberdilab.github.io/hilldiv3/reference/hillcontrib.md)
+  : Attribute Hill dissimilarity to taxa or sets
 
 ## Redundancy
 

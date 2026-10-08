@@ -20,7 +20,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0.9000</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -318,13 +318,82 @@ implemented here, and here it isolates a change that is phylogenetic but
 not functional.</p>
 </div>
 <div class="section level2">
+<h2 id="which-mags-account-for-the-dissimilarity">Which MAGs account for the dissimilarity?<a class="anchor" aria-label="anchor" href="#which-mags-account-for-the-dissimilarity"></a>
+</h2>
+<p>The beta results tell us that samples differ;
+<code><a href="../reference/hillcontrib.html">hillcontrib()</a></code> shows which MAGs account for a particular
+dissimilarity. Here we compare one control and one treatment sample at
+<code>q = 2</code>, which gives abundant MAGs more weight. The rows are
+ordered from largest to smallest contribution.</p>
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">pair_counts</span> <span class="op">&lt;-</span> <span class="va">gut_counts</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"ctrl01"</span>, <span class="st">"trt01"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="va">pair_contrib</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillcontrib.html">hillcontrib</a></span><span class="op">(</span><span class="va">pair_counts</span>, q <span class="op">=</span> <span class="fl">2</span>, metric <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pair_contrib</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"set"</span>, <span class="st">"contribution"</span>, <span class="st">"share"</span>, <span class="st">"rank"</span><span class="op">)</span><span class="op">]</span>, <span class="fl">5</span><span class="op">)</span></span>
+<span><span class="co">#&gt;     set contribution      share rank</span></span>
+<span><span class="co">#&gt; 1 mag05   0.29972486 0.38273484    1</span></span>
+<span><span class="co">#&gt; 2 mag14   0.18242450 0.23294768    2</span></span>
+<span><span class="co">#&gt; 3 mag23   0.09216861 0.11769506    3</span></span>
+<span><span class="co">#&gt; 4 mag07   0.04400636 0.05619409    4</span></span>
+<span><span class="co">#&gt; 5 mag18   0.04384198 0.05598419    5</span></span>
+<span></span>
+<span><span class="co"># With one row per MAG, the contributions add up to the pair's dissimilarity.</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>attributed <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sum.html" class="external-link">sum</a></span><span class="op">(</span><span class="va">pair_contrib</span><span class="op">$</span><span class="va">contribution</span><span class="op">)</span>,</span>
+<span>  pairwise <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/numeric.html" class="external-link">as.numeric</a></span><span class="op">(</span><span class="fu"><a href="../reference/hillpair.html">hillpair</a></span><span class="op">(</span><span class="va">pair_counts</span>, q <span class="op">=</span> <span class="fl">2</span>, metric <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="co">#&gt; attributed   pairwise </span></span>
+<span><span class="co">#&gt;  0.7831136  0.7831136</span></span></code></pre></div>
+<p>The figure shows the eight largest shares. Colour indicates which
+sample has the higher <em>relative abundance</em> of each MAG.</p>
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">top_contrib</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">pair_contrib</span>, <span class="fl">8</span><span class="op">)</span></span>
+<span><span class="va">pair_relative</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sweep.html" class="external-link">sweep</a></span><span class="op">(</span><span class="va">pair_counts</span>, <span class="fl">2</span>, <span class="fu"><a href="https://rdrr.io/r/base/colSums.html" class="external-link">colSums</a></span><span class="op">(</span><span class="va">pair_counts</span><span class="op">)</span>, <span class="st">"/"</span><span class="op">)</span></span>
+<span><span class="va">top_contrib</span><span class="op">$</span><span class="va">higher_in</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/ifelse.html" class="external-link">ifelse</a></span><span class="op">(</span></span>
+<span>  <span class="va">pair_relative</span><span class="op">[</span><span class="va">top_contrib</span><span class="op">$</span><span class="va">set</span>, <span class="st">"ctrl01"</span><span class="op">]</span> <span class="op">&gt;</span></span>
+<span>    <span class="va">pair_relative</span><span class="op">[</span><span class="va">top_contrib</span><span class="op">$</span><span class="va">set</span>, <span class="st">"trt01"</span><span class="op">]</span>, <span class="st">"ctrl01"</span>, <span class="st">"trt01"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html" class="external-link">ggplot</a></span><span class="op">(</span><span class="va">top_contrib</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html" class="external-link">aes</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html" class="external-link">reorder</a></span><span class="op">(</span><span class="va">set</span>, <span class="va">share</span><span class="op">)</span>, <span class="va">share</span>, fill <span class="op">=</span> <span class="va">higher_in</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_bar.html" class="external-link">geom_col</a></span><span class="op">(</span>width <span class="op">=</span> <span class="fl">0.72</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/coord_flip.html" class="external-link">coord_flip</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html" class="external-link">scale_y_continuous</a></span><span class="op">(</span>labels <span class="op">=</span> <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/base/paste.html" class="external-link">paste0</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="fl">100</span> <span class="op">*</span> <span class="va">x</span><span class="op">)</span>, <span class="st">"%"</span><span class="op">)</span>,</span>
+<span>                     expand <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/expansion.html" class="external-link">expansion</a></span><span class="op">(</span>mult <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">0.03</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html" class="external-link">scale_fill_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>ctrl01 <span class="op">=</span> <span class="va">pal</span><span class="op">[[</span><span class="st">"control"</span><span class="op">]</span><span class="op">]</span>,</span>
+<span>                               trt01 <span class="op">=</span> <span class="va">pal</span><span class="op">[[</span><span class="st">"treatment"</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>,</span>
+<span>                    labels <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span>ctrl01 <span class="op">=</span> <span class="st">"Control (ctrl01)"</span>,</span>
+<span>                               trt01 <span class="op">=</span> <span class="st">"Treatment (trt01)"</span><span class="op">)</span>,</span>
+<span>                    name <span class="op">=</span> <span class="st">"Higher relative abundance"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html" class="external-link">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="cn">NULL</span>, y <span class="op">=</span> <span class="st">"Share of pairwise dissimilarity (q = 2, C)"</span><span class="op">)</span></span></code></pre></div>
+<p><img src="use-case-bacterial-mags_files/figure-html/contrib-plot-1.png" class="r-plt" alt="Horizontal bars show the eight MAGs contributing most to dissimilarity between ctrl01 and trt01. mag05 contributes 38 percent and mag14 contributes 23 percent. Bar colours indicate the sample with higher relative abundance." width="1125"></p>
+<p><code>mag05</code> and <code>mag14</code> rank highest:
+<code>mag05</code> has 725 counts in <code>ctrl01</code> but 35 in
+<code>trt01</code>, while <code>mag14</code> has 29 and 690,
+respectively. Their shares are about 38% and 23% of this pair’s total
+dissimilarity; the eight shown account for about 91% together.</p>
+<p>We can also examine <strong>collective turnover within each
+group</strong>. This compares the six control samples with one another
+and, separately, the six treatment samples with one another; it does not
+compare the two groups against each other.</p>
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sample_groups</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/names.html" class="external-link">names</a></span><span class="op">(</span><span class="va">group</span><span class="op">)</span>, <span class="va">group</span><span class="op">)</span></span>
+<span><span class="va">group_contrib</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillcontrib.html">hillcontrib</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fl">2</span>, metric <span class="op">=</span> <span class="st">"C"</span>,</span>
+<span>                            by <span class="op">=</span> <span class="st">"collective"</span>, groups <span class="op">=</span> <span class="va">sample_groups</span><span class="op">)</span></span>
+<span><span class="va">top_three</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/do.call.html" class="external-link">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="fu"><a href="https://rdrr.io/r/base/lapply.html" class="external-link">lapply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/split.html" class="external-link">split</a></span><span class="op">(</span><span class="va">group_contrib</span>, <span class="va">group_contrib</span><span class="op">$</span><span class="va">group</span><span class="op">)</span>,</span>
+<span>                                   <span class="kw">function</span><span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">x</span>, <span class="fl">3</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">top_three</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"group"</span>, <span class="st">"set"</span>, <span class="st">"contribution"</span>, <span class="st">"share"</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="co">#&gt;                  group   set contribution     share</span></span>
+<span><span class="co">#&gt; control.1      control mag12   0.10110789 0.3104164</span></span>
+<span><span class="co">#&gt; control.2      control mag05   0.09652995 0.2963615</span></span>
+<span><span class="co">#&gt; control.3      control mag02   0.06068756 0.1863199</span></span>
+<span><span class="co">#&gt; treatment.25 treatment mag19   0.15466253 0.3405158</span></span>
+<span><span class="co">#&gt; treatment.26 treatment mag23   0.14308196 0.3150192</span></span>
+<span><span class="co">#&gt; treatment.27 treatment mag14   0.04910499 0.1081130</span></span></code></pre></div>
+</div>
+<div class="section level2">
 <h2 id="ordination-in-three-spaces">Ordination in three spaces<a class="anchor" aria-label="anchor" href="#ordination-in-three-spaces"></a>
 </h2>
 <p><code><a href="../reference/hillpair.html">hillpair()</a></code> accepts the same <code>tree =</code> /
 <code>dist =</code> switch, so one workflow produces ordinations in
 <em>neutral</em>, <em>phylogenetic</em> and <em>functional</em>
 space:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ord_one</span> <span class="op">&lt;-</span> <span class="kw">function</span><span class="op">(</span><span class="va">d</span>, <span class="va">lab</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">pc</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/cmdscale.html" class="external-link">cmdscale</a></span><span class="op">(</span><span class="va">d</span>, k <span class="op">=</span> <span class="fl">2</span><span class="op">)</span></span>
 <span>  <span class="va">o</span>  <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span><span class="va">pc</span>, mag <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html" class="external-link">rownames</a></span><span class="op">(</span><span class="va">pc</span><span class="op">)</span><span class="op">)</span></span>
@@ -364,7 +433,7 @@ functional diversity (number of distinct trait profiles) across samples.
 A curve that plateaus well below the spread of neutral diversity means
 many genomes share functions — so the community can replace genomes
 without losing function.</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">red</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/hillred.html">hillred</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, dist <span class="op">=</span> <span class="va">fdist</span><span class="op">)</span></span>
 <span><span class="fu">as_df</span><span class="op">(</span><span class="va">red</span><span class="op">)</span><span class="op">[</span>, <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"q"</span>, <span class="st">"redundancy"</span><span class="op">)</span><span class="op">]</span></span>
 <span><span class="co">#&gt;   q redundancy</span></span>
@@ -390,12 +459,14 @@ one interface: trait-to-distance conversion
 (<code><a href="../reference/traits2dist.html">traits2dist()</a></code>); neutral, phylogenetic and functional alpha
 diversity (<code><a href="../reference/hilldiv.html">hilldiv()</a></code>); MAG and clade power-sum shares
 (<code><a href="../reference/hillshare.html">hillshare()</a></code>); between-group partitioning for each flavour
-(<code><a href="../reference/hillpart.html">hillpart()</a></code>); ordinations in neutral, phylogenetic and
-functional space (<code><a href="../reference/hillpair.html">hillpair()</a></code>); and functional redundancy
-(<code><a href="../reference/hillred.html">hillred()</a></code>). The unified, type-switching interface is what
-lets a single study separate a change that is taxonomic and phylogenetic
-from one that is functional — here revealing a community reorganised in
-identity but conserved in function.</p>
+(<code><a href="../reference/hillpart.html">hillpart()</a></code>); MAG contributions to pairwise and
+within-group dissimilarity (<code><a href="../reference/hillcontrib.html">hillcontrib()</a></code>); ordinations in
+neutral, phylogenetic and functional space (<code><a href="../reference/hillpair.html">hillpair()</a></code>);
+and functional redundancy (<code><a href="../reference/hillred.html">hillred()</a></code>). The unified,
+type-switching interface is what lets a single study separate a change
+that is taxonomic and phylogenetic from one that is functional — here
+revealing a community reorganised in identity but conserved in
+function.</p>
 </div>
 <div class="section level2">
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
