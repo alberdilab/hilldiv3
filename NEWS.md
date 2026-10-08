@@ -6,6 +6,9 @@
 * Functional Hill numbers now handle all-zero distance matrices and empty
   samples consistently: identical taxa have diversity 1, and empty samples
   have diversity 0.
+
+# hilldiv3 3.0.1
+
 * Added contributing guidelines (`CONTRIBUTING.md`), a code of conduct, issue
   templates, citation metadata (`CITATION.cff`) and the full GPL-3 licence
   text, and a Journal of Open Source Software paper (`paper/`).
