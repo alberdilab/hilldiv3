@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="180mm" height="90mm" viewBox="0 0 180 90" font-family="Helvetica, Arial, sans-serif">
+<rect width="180" height="90" fill="#fff"/>
+<text x="2" y="5.2" font-size="2.5" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">1  Inputs</text>
+<text x="52" y="5.2" font-size="2.5" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">2  Adapter and compute engine</text>
+<text x="136" y="5.2" font-size="2.5" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">3  User-facing wrappers</text>
+<rect x="2" y="10" width="44" height="14.5" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<rect x="2" y="10" width="2.4" height="14.5" rx="0.8" fill="#66C2A5"/>
+<text x="6.2" y="14.3" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">Count table</text>
+<text x="6.2" y="17.05" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">matrix, data frame, tibble,</text>
+<text x="6.2" y="19.8" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">phyloseq, TreeSummarizedExperiment</text>
+<line x1="46" y1="17.2" x2="51.0" y2="17.2" stroke="#66C2A5" stroke-width="0.6"/>
+<path d="M52 17.2 L50.5 16.3 L50.5 18.099999999999998 Z" fill="#66C2A5"/>
+<rect x="2" y="27" width="44" height="14.5" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<rect x="2" y="27" width="2.4" height="14.5" rx="0.8" fill="#FC8D62"/>
+<text x="6.2" y="31.3" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">tree (optional)</text>
+<text x="6.2" y="34.05" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">phylo object; adds phylogenetic</text>
+<text x="6.2" y="36.8" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">diversity</text>
+<line x1="46" y1="34.2" x2="51.0" y2="34.2" stroke="#FC8D62" stroke-width="0.6"/>
+<path d="M52 34.2 L50.5 33.300000000000004 L50.5 35.1 Z" fill="#FC8D62"/>
+<rect x="2" y="44" width="44" height="14.5" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<rect x="2" y="44" width="2.4" height="14.5" rx="0.8" fill="#8DA0CB"/>
+<text x="6.2" y="48.3" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">dist (optional) + threshold τ</text>
+<text x="6.2" y="51.05" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">trait distances (see traits2dist());</text>
+<text x="6.2" y="53.8" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">adds functional diversity</text>
+<line x1="46" y1="51.2" x2="51.0" y2="51.2" stroke="#8DA0CB" stroke-width="0.6"/>
+<path d="M52 51.2 L50.5 50.300000000000004 L50.5 52.1 Z" fill="#8DA0CB"/>
+<rect x="2" y="61" width="44" height="14.5" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<rect x="2" y="61" width="2.4" height="14.5" rx="0.8" fill="#9A9A9A"/>
+<text x="6.2" y="65.3" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">hierarchy (optional)</text>
+<text x="6.2" y="68.05" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">formula, e.g. ~ region / site</text>
+<text x="6.2" y="70.8" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">(nested partition)</text>
+<line x1="46" y1="68.2" x2="51.0" y2="68.2" stroke="#555555" stroke-width="0.6"/>
+<path d="M52 68.2 L50.5 67.3 L50.5 69.10000000000001 Z" fill="#555555"/>
+<rect x="52" y="10" width="31" height="79" rx="0.8" fill="#F0F0F0" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="54" y="15" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">Input adapter</text>
+<text x="54" y="17.8" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">and validation</text>
+<text x="54" y="23.5" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">Converts every input to</text>
+<text x="54" y="26.25" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">one internal object.</text>
+<text x="54" y="29.0" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start"></text>
+<text x="54" y="31.75" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">Taxon names in counts,</text>
+<text x="54" y="34.5" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">tree and dist are</text>
+<text x="54" y="37.25" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">compared as sets;</text>
+<text x="54" y="40.0" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">counts are reordered</text>
+<text x="54" y="42.75" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">to match (a mismatch</text>
+<text x="54" y="45.5" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">is an error).</text>
+<text x="54" y="48.25" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start"></text>
+<text x="54" y="51.0" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">match_data() applies the</text>
+<text x="54" y="53.75" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">same matching by hand.</text>
+<rect x="88" y="10" width="44" height="79" rx="0.8" fill="#F0F0F0" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="90" y="15" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">Compute engine (internal)</text>
+<text x="90" y="20.2" font-size="2.2" font-weight="normal" font-style="italic" fill="#222222" text-anchor="start">Diversity type inferred from inputs</text>
+<rect x="90" y="22.2" width="40" height="5" rx="0.8" fill="#66C2A5" stroke="none" stroke-width="0.25"/>
+<text x="91.5" y="25.599999999999998" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">counts only: neutral</text>
+<rect x="90" y="28.2" width="40" height="5" rx="0.8" fill="#FC8D62" stroke="none" stroke-width="0.25"/>
+<text x="91.5" y="31.599999999999998" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">+ tree: phylogenetic</text>
+<rect x="90" y="34.2" width="40" height="5" rx="0.8" fill="#8DA0CB" stroke="none" stroke-width="0.25"/>
+<text x="91.5" y="37.6" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">+ dist, τ: functional</text>
+<rect x="90" y="41.5" width="40" height="11" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="91.5" y="45.4" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">Shared structure, once</text>
+<text x="91.5" y="48.15" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">branch abundances: one</text>
+<text x="91.5" y="50.9" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">post-order traversal</text>
+<text x="90" y="57.5" font-size="2.2" font-weight="normal" font-style="italic" fill="#222222" text-anchor="start">Engine pieces</text>
+<rect x="90" y="59.5" width="40" height="5.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="91.5" y="63.2" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">per-sample alpha</text>
+<rect x="90" y="66.5" width="40" height="5.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="91.5" y="70.2" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">alpha / gamma / beta partition</text>
+<rect x="90" y="73.5" width="40" height="5.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="91.5" y="77.2" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">nested partition</text>
+<rect x="90" y="80.5" width="40" height="5.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="91.5" y="84.2" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">beta to (dis)similarity</text>
+<line x1="83" y1="49.5" x2="87.0" y2="49.5" stroke="#555555" stroke-width="0.6"/>
+<path d="M88 49.5 L86.5 48.6 L86.5 50.4 Z" fill="#555555"/>
+<line x1="132" y1="49.5" x2="135.0" y2="49.5" stroke="#555555" stroke-width="0.6"/>
+<path d="M136 49.5 L134.5 48.6 L134.5 50.4 Z" fill="#555555"/>
+<rect x="136" y="10.0" width="42" height="6.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="137.5" y="12.7" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">hilldiv()</text>
+<text x="137.5" y="15.4" font-size="2.2" font-weight="normal" font-style="normal" fill="#555555" text-anchor="start">per-sample Hill numbers</text>
+<rect x="136" y="18.2" width="42" height="6.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="137.5" y="20.9" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">hillprof(), hilleven()</text>
+<text x="137.5" y="23.6" font-size="2.2" font-weight="normal" font-style="normal" fill="#555555" text-anchor="start">profiles across q; evenness</text>
+<rect x="136" y="26.4" width="42" height="6.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="137.5" y="29.099999999999998" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">hillpart()</text>
+<text x="137.5" y="31.799999999999997" font-size="2.2" font-weight="normal" font-style="normal" fill="#555555" text-anchor="start">alpha/beta/gamma, flat or nested</text>
+<rect x="136" y="34.599999999999994" width="42" height="6.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="137.5" y="37.3" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">hilldiss(), hillsim()</text>
+<text x="137.5" y="39.99999999999999" font-size="2.2" font-weight="normal" font-style="normal" fill="#555555" text-anchor="start">bounded (dis)similarity</text>
+<rect x="136" y="42.8" width="42" height="6.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="137.5" y="45.5" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">hillpair()</text>
+<text x="137.5" y="48.199999999999996" font-size="2.2" font-weight="normal" font-style="normal" fill="#555555" text-anchor="start">pairwise dissimilarity</text>
+<rect x="136" y="51.0" width="42" height="6.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="137.5" y="53.7" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">hillred()</text>
+<text x="137.5" y="56.4" font-size="2.2" font-weight="normal" font-style="normal" fill="#555555" text-anchor="start">redundancy</text>
+<rect x="136" y="59.199999999999996" width="42" height="6.6" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="137.5" y="61.9" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">hillshare(), hillcontrib()</text>
+<text x="137.5" y="64.6" font-size="2.2" font-weight="normal" font-style="normal" fill="#555555" text-anchor="start">share and dissimilarity by taxon</text>
+<rect x="2" y="78" width="44" height="11" rx="0.8" fill="#fff" stroke="#8A8A8A" stroke-width="0.25" stroke-dasharray="1.2 0.8"/>
+<text x="4" y="82.2" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">Helpers (optional)</text>
+<text x="4" y="85.0" font-size="2.2" font-weight="normal" font-style="normal" fill="#555555" text-anchor="start">traits2dist(): trait distances</text>
+<text x="4" y="87.6" font-size="2.2" font-weight="normal" font-style="normal" fill="#555555" text-anchor="start">tss(): total-sum scaling</text>
+<rect x="136" y="70" width="42" height="19" rx="0.8" fill="#F0F0F0" stroke="#8A8A8A" stroke-width="0.25"/>
+<text x="137.5" y="73.6" font-size="2.2" font-weight="bold" font-style="normal" fill="#222222" text-anchor="start">Outputs</text>
+<text x="137.5" y="76.6" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">tidy long data frame</text>
+<text x="137.5" y="79.35" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">  (print and plot methods)</text>
+<text x="137.5" y="82.1" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">dist object (hillpair)</text>
+<text x="137.5" y="84.85" font-size="2.2" font-weight="normal" font-style="normal" fill="#222222" text-anchor="start">matrix (out = "matrix")</text>
+<line x1="157" y1="65.8" x2="157" y2="68.6" stroke="#555555" stroke-width="0.6"/>
+<path d="M157 70 L156.1 68.5 L157.9 68.5 Z" fill="#555555"/>
+</svg>

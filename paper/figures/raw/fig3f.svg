@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='248.03pt' height='150.24pt' viewBox='0 0 248.03 150.24'>
+<g class='svglite'>
+<defs>
+  <style type='text/css'><![CDATA[
+    .svglite line, .svglite polyline, .svglite polygon, .svglite path, .svglite rect, .svglite circle {
+      fill: none;
+      stroke: #000000;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-miterlimit: 10.00;
+    }
+    .svglite text {
+      white-space: pre;
+    }
+    .svglite g.glyphgroup path {
+      fill: inherit;
+      stroke: none;
+    }
+  ]]></style>
+</defs>
+<rect width='100%' height='100%' style='stroke: none; fill: #FFFFFF;'/>
+<defs>
+  <clipPath id='cpMC4wMHwyNDguMDN8MC4wMHwxNTAuMjQ='>
+    <rect x='0.00' y='0.00' width='248.03' height='150.24' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpMC4wMHwyNDguMDN8MC4wMHwxNTAuMjQ=)'>
+<rect x='0.00' y='0.000000000000028' width='248.03' height='150.24' style='stroke-width: 0.63; stroke: #FFFFFF; fill: #FFFFFF;' />
+</g>
+<defs>
+  <clipPath id='cpNDAuMTR8MjQyLjM2fDEyLjc2fDEwMS43OQ=='>
+    <rect x='40.14' y='12.76' width='202.22' height='89.03' />
+  </clipPath>
+</defs>
+<g clip-path='url(#cpNDAuMTR8MjQyLjM2fDEyLjc2fDEwMS43OQ==)'>
+<rect x='40.14' y='12.76' width='202.22' height='89.03' style='stroke-width: 0.63; stroke: none; fill: #FFFFFF;' />
+<rect x='90.03' y='25.91' width='64.35' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #DDCC77;' />
+<rect x='154.38' y='25.91' width='55.43' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #332288;' />
+<rect x='40.14' y='25.91' width='18.70' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #BBBBBB;' />
+<rect x='74.29' y='25.91' width='15.75' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #882255;' />
+<rect x='58.83' y='25.91' width='15.45' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #88CCEE;' />
+<rect x='52.45' y='66.38' width='10.16' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #DDCC77;' />
+<rect x='62.61' y='66.38' width='6.34' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #332288;' />
+<rect x='43.94' y='66.38' width='5.46' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #88CCEE;' />
+<rect x='40.14' y='66.38' width='3.81' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #BBBBBB;' />
+<rect x='49.41' y='66.38' width='3.04' height='22.26' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #882255;' />
+<text x='212.06' y='39.19' style='font-size: 6.00px; font-family: "Helvetica";' textLength='15.05px' lengthAdjust='spacingAndGlyphs'>0.285</text>
+<text x='71.20' y='79.66' style='font-size: 6.00px; font-family: "Helvetica";' textLength='15.05px' lengthAdjust='spacingAndGlyphs'>0.048</text>
+</g>
+<g clip-path='url(#cpMC4wMHwyNDguMDN8MC4wMHwxNTAuMjQ=)'>
+<polyline points='40.14,101.79 40.14,12.76 ' style='stroke-width: 0.53; stroke: #333333; stroke-linecap: butt;' />
+<text x='37.23' y='79.66' text-anchor='end' style='font-size: 6.00px;fill: #1A1A1A; font-family: "Helvetica";' textLength='34.39px' lengthAdjust='spacingAndGlyphs'>Phylogenetic</text>
+<text x='37.23' y='39.19' text-anchor='end' style='font-size: 6.00px;fill: #1A1A1A; font-family: "Helvetica";' textLength='19.36px' lengthAdjust='spacingAndGlyphs'>Neutral</text>
+<polyline points='38.52,77.51 40.14,77.51 ' style='stroke-width: 0.53; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='38.52,37.04 40.14,37.04 ' style='stroke-width: 0.53; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='40.14,101.79 242.36,101.79 ' style='stroke-width: 0.53; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='40.14,103.41 40.14,101.79 ' style='stroke-width: 0.53; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='99.62,103.41 99.62,101.79 ' style='stroke-width: 0.53; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='159.09,103.41 159.09,101.79 ' style='stroke-width: 0.53; stroke: #333333; stroke-linecap: butt;' />
+<polyline points='218.57,103.41 218.57,101.79 ' style='stroke-width: 0.53; stroke: #333333; stroke-linecap: butt;' />
+<text x='40.14' y='109.01' text-anchor='middle' style='font-size: 6.00px;fill: #1A1A1A; font-family: "Helvetica";' textLength='8.36px' lengthAdjust='spacingAndGlyphs'>0.0</text>
+<text x='99.62' y='109.01' text-anchor='middle' style='font-size: 6.00px;fill: #1A1A1A; font-family: "Helvetica";' textLength='8.36px' lengthAdjust='spacingAndGlyphs'>0.1</text>
+<text x='159.09' y='109.01' text-anchor='middle' style='font-size: 6.00px;fill: #1A1A1A; font-family: "Helvetica";' textLength='8.36px' lengthAdjust='spacingAndGlyphs'>0.2</text>
+<text x='218.57' y='109.01' text-anchor='middle' style='font-size: 6.00px;fill: #1A1A1A; font-family: "Helvetica";' textLength='8.36px' lengthAdjust='spacingAndGlyphs'>0.3</text>
+<text x='141.25' y='116.63' text-anchor='middle' style='font-size: 6.50px; font-family: "Helvetica";' textLength='104.92px' lengthAdjust='spacingAndGlyphs'>Contribution to C dissimilarity (q = 1)</text>
+<text x='141.25' y='123.65' text-anchor='middle' style='font-size: 6.50px; font-family: "Helvetica";' textLength='61.73px' lengthAdjust='spacingAndGlyphs'>field vs grassland soil</text>
+<rect x='70.50' y='130.56' width='141.50' height='16.84' style='stroke-width: 0.63; stroke: none; fill: #FFFFFF;' />
+<rect x='70.50' y='130.56' width='6.80' height='6.80' style='stroke-width: 0.63; stroke: none; fill: #FFFFFF;' />
+<rect x='70.78' y='130.84' width='6.24' height='6.24' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #332288;' />
+<rect x='70.50' y='140.60' width='6.80' height='6.80' style='stroke-width: 0.63; stroke: none; fill: #FFFFFF;' />
+<rect x='70.78' y='140.88' width='6.24' height='6.24' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #DDCC77;' />
+<rect x='130.89' y='130.56' width='6.80' height='6.80' style='stroke-width: 0.63; stroke: none; fill: #FFFFFF;' />
+<rect x='131.17' y='130.84' width='6.24' height='6.24' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #882255;' />
+<rect x='130.89' y='140.60' width='6.80' height='6.80' style='stroke-width: 0.63; stroke: none; fill: #FFFFFF;' />
+<rect x='131.17' y='140.88' width='6.24' height='6.24' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #88CCEE;' />
+<rect x='186.93' y='130.56' width='6.80' height='6.80' style='stroke-width: 0.63; stroke: none; fill: #FFFFFF;' />
+<rect x='187.21' y='130.84' width='6.24' height='6.24' style='stroke-width: 0.43; stroke: #FFFFFF; stroke-linecap: butt; stroke-linejoin: miter; fill: #BBBBBB;' />
+<text x='80.54' y='136.11' style='font-size: 6.00px; font-family: "Helvetica";' textLength='47.11px' lengthAdjust='spacingAndGlyphs'>Pseudomonadota</text>
+<text x='80.54' y='146.15' style='font-size: 6.00px; font-family: "Helvetica";' textLength='41.06px' lengthAdjust='spacingAndGlyphs'>Actinomycetota</text>
+<text x='140.93' y='136.11' style='font-size: 6.00px; font-family: "Helvetica";' textLength='41.41px' lengthAdjust='spacingAndGlyphs'>Acidobacteriota</text>
+<text x='140.93' y='146.15' style='font-size: 6.00px; font-family: "Helvetica";' textLength='42.77px' lengthAdjust='spacingAndGlyphs'>Thermoproteota</text>
+<text x='196.97' y='136.11' style='font-size: 6.00px; font-family: "Helvetica";' textLength='15.03px' lengthAdjust='spacingAndGlyphs'>Other</text>
+</g>
+</g>
+</svg>

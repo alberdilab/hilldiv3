@@ -60,22 +60,33 @@ datasets can also take a long time with existing implementations.
 `hilldiv3` is aimed at ecologists and microbiologists analysing metabarcoding,
 amplicon and shotgun metagenomic data, and more generally at anyone who needs
 comparable alpha, beta and gamma diversity across taxonomic, phylogenetic and
-functional dimensions. One worked example from the package documentation shows
-why this matters. In a simulated gut microbiome of 24 MAGs in 12 hosts, an
-intervention swaps which of two deep clades dominates. The two clades are
-functional mirrors of each other. Alpha diversity is almost identical between
-control and treatment in all three diversity types. Between-group beta
-diversity, by contrast, grows with $q$ for neutral and phylogenetic diversity
-but stays at $\beta \approx 1$ for functional diversity (\autoref{fig:beta}):
-community membership changes while function does not. Detecting this
-decoupling requires all three diversity types on the same beta scale. A second
-example, dietary metabarcoding of bats nested within roosts and habitats, uses
-nested partitioning to show that neutral turnover is spread between individuals
-and habitats, whereas phylogenetic turnover is concentrated between habitats.
+functional dimensions. One worked example shows why this matters. We analysed 360 soil, sediment and
+wastewater samples from the Microflora Danica atlas (**TODO (author):** add citation), represented by 5,518
+metagenome-assembled genomes (MAGs) across eight habitats (\autoref{fig:md}).
+Neutral and phylogenetic diversity show different patterns across habitats
+(\autoref{fig:md}b, c), and the phylogenetic dissimilarity separates samples
+by habitat (\autoref{fig:md}d). At the phylum level,
+Actinomycetota hold almost the same share of agricultural field and natural
+grassland soils (34.9% and 34.7% median share at $q = 1$), yet within it
+Gaiellales fall from 12.5% to 3.0% and Streptosporangiales rise from 1.0% to
+5.9% (\autoref{fig:md}e): turnover that a phylum-level total hides.
+`hillcontrib()` attributes the order-one dissimilarity between the two soil
+types to the same taxonomic sets (\autoref{fig:md}f). It is 0.285 for neutral
+and 0.048 for phylogenetic diversity, and Actinomycetota account for 38% and
+35% of them, respectively. Reading neutral and phylogenetic results side by side
+requires them to be on the same scale. A second example in the package documentation,
+dietary metabarcoding of bats nested within roosts and habitats, uses nested
+partitioning to show that neutral turnover is spread between individuals and
+habitats, whereas phylogenetic turnover is concentrated between habitats.
 
-![Between-group beta diversity across diversity orders for neutral,
-phylogenetic and functional Hill numbers in the simulated gut-microbiome
-example. The dashed line marks $\beta = 1$ (no turnover).\label{fig:beta}](figure1.png){ width=80% }
+![Worked example on the Microflora Danica atlas (360 samples, 5,518 MAGs, eight
+habitats). (a) Sampling locations coloured by habitat. (b) Hill diversity at
+$q = 1$ by habitat, neutral and phylogenetic. (c) Diversity profiles across
+$q$. (d) Principal coordinates analysis of phylogenetic order-one C
+dissimilarity. (e) `hillshare()` power-sum shares of Actinomycetota, Gaiellales
+and Streptosporangiales in agricultural field and natural grassland soils.
+(f) `hillcontrib()` partition of the order-one C dissimilarity between the two
+soil types across phyla.\label{fig:md}](figures/final/fig3.png)
 
 # State of the field
 
@@ -120,14 +131,19 @@ the ordering largely reversed. The largest differences were in pairwise
 matrices: `hilldiv3` built them in 54–70 ms using 45–98 MB of allocated memory,
 whereas `hilldiv2` needed 2.1–50.6 s and up to 20 GB, and `hillR` needed
 0.8–16.2 s and up to 10.6 GB. The benchmark scripts and results ship with the
-package.
+package (\autoref{fig:bench}).
+
+![Benchmarks of `hilldiv3` against `hilldiv2`, `hillR`, `entropart`, `vegan` and `BAT` on simulated data (200 taxa, 50 samples, 10 iterations). (a) Operations each package supports directly, partially or not at all. (b) Median time (points) and range (lines) per operation and diversity type. (c) Memory allocated by pairwise beta matrices. Missing combinations are unsupported.\label{fig:bench}](figures/final/fig2.png)
 
 # Software design
 
 `hilldiv3` keeps the mathematics separate from the user interface. Per-sample
 alpha, the alpha/gamma/beta partition, the nested partition and the
 beta-to-(dis)similarity conversions all live in an internal compute engine. The
-user-facing functions (\autoref{tab:functions}) are thin wrappers around it.
+user-facing functions (\autoref{tab:functions}) are thin wrappers around it
+(\autoref{fig:structure}).
+
+![Structure of `hilldiv3`. Every input passes through one adapter and validation layer into a shared compute engine, which infers the diversity type from the inputs. Thin wrappers expose the engine as user-facing functions.\label{fig:structure}](figures/final/fig1.png)
 This makes the mathematics auditable in one place and keeps the public API
 stable.
 
@@ -141,6 +157,7 @@ stable.
 | `hilldiss()`, `hillsim()` | Bounded (dis)similarity [@Chiu2014] |
 | `hillpair()` | Pairwise dissimilarity as `dist` objects |
 | `hillred()` | Phylogenetic or functional redundancy |
+| `hillshare()`, `hillcontrib()` | Taxon-set power-sum shares; taxon contributions to dissimilarity |
 | `traits2dist()`, `tss()` | Trait distances [@Gower1971]; total-sum scaling |
 
 **One input layer.** All inputs pass through one adapter and validation layer.
