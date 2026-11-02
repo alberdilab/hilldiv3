@@ -1,5 +1,21 @@
 # hilldiv3 3.1.0.9000 (unreleased)
 
+* Multi-scale partitioning with `hierarchy` now weights units linearly
+  (Routledge/Tsallis-type), so every nested beta is at least one for `q >= 0`
+  and `alpha * prod(beta) = gamma` holds exactly in unbalanced designs. Earlier
+  `p_u^q` weights could give beta below one when units were unequal. Balanced
+  equal-weight results are unchanged, but for unbalanced designs the nested
+  alpha, betas and gamma at `q != 1` now differ from earlier development
+  versions by a few per cent (and slightly at `q = 1` for functional
+  diversity).
+* `hillpart()` gains `weights` (`"equal"`, `"abundance"` or a numeric vector)
+  for hierarchical designs, a reference `depth` for phylogenetic hierarchies
+  (ultrametric trees) and a grid of `tau` values for functional hierarchies
+  (one hierarchy per `tau`).
+* `hilldiss()` and `hillsim()` return overlap metrics (S, C, U, V) per
+  hierarchical transition, using a data-dependent effective number of units
+  that keeps them in [0, 1]. `hillpair(hierarchy =, level =)` compares units of
+  a chosen level after weighted pooling of their samples.
 * Added `hillcontrib()` to rank taxa or named sets by their additive
   contributions to pairwise or collective Hill dissimilarity. It supports
   neutral, phylogenetic and functional diversity and all four dissimilarity

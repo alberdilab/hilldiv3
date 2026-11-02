@@ -169,15 +169,24 @@ optionally be computed in parallel through `future`.
 
 **Nested partitioning.** Supplying a formula such as `~ region / site` to
 `hillpart()` returns the finest-scale alpha, one beta per level of the
-hierarchy and the overall gamma [@Jost2007; @Chao2016; @Gaggiotti2018]. Each
-sample receives a single global weight, and each beta is the ratio of
-consecutive scale-level Hill numbers. Each beta is therefore independent of
-alpha for all $q$ and bounded by the number of child units it aggregates, and
-the chain telescopes exactly ($\gamma = \alpha \prod_k \beta_k$). The three
-diversity types share this construction and differ only in the per-unit measure
-and its normaliser. The phylogenetic version holds one tree depth fixed across
-all levels, and the functional version holds one $\tau$ fixed. The current
-release assumes equal sample weights, and the documentation states this.
+hierarchy and the overall gamma [@Jost2007; @Chao2016; @Gaggiotti2018]. Samples
+carry weights (equal by default, or proportional to their totals, or supplied
+as a numeric vector), and each unit is weighted linearly by the sum of its
+sample weights, as in a Routledge/Tsallis-type decomposition. Each beta is the
+ratio of consecutive scale-level Hill numbers, so every beta is at least one
+for $q \ge 0$ and the chain telescopes exactly ($\gamma = \alpha \prod_k
+\beta_k$), including in unbalanced designs. The three diversity types share this
+construction and differ only in the per-unit measure and its normaliser. The
+phylogenetic version holds one tree depth fixed across all levels, and the
+functional version holds one $\tau$ fixed. These are deliberate choices, because
+they make the chain telescope and keep every beta at least one. The depth can
+be set by the user as a reference time on ultrametric trees [@Chao2010], and a
+grid of $\tau$ values returns one hierarchy per threshold. Hierarchical output
+also feeds the other wrappers. `hilldiss()` and `hillsim()` return the overlap
+metrics for each transition, using a data-dependent effective number of units
+that equals the child count in balanced equal-weight designs and keeps the
+metrics within $[0, 1]$, and `hillpair()` computes pairwise dissimilarity
+between the units of a chosen level after weighted pooling of their samples.
 
 **Testing.** A `testthat` suite tests the engine independently of the
 wrappers. It includes golden-value tests against `vegan` and analytical
@@ -214,7 +223,7 @@ refactoring of the compute engine and wrappers, test scaffolding,
 documentation and vignette drafting, and benchmark scripts. It was also used to
 adapt the author's manuscript into this paper's format. The author made the
 core design decisions, including the unified engine architecture and the
-global-weight construction for nested partitioning, and reviewed, edited and
+linear-weight construction for nested partitioning, and reviewed, edited and
 validated all AI-assisted outputs.
 The numerical results were checked against independent references through the
 test suite.
