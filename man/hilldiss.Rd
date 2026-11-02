@@ -12,7 +12,11 @@ hilldiss(
   dist = NULL,
   tau = NULL,
   type = c("auto", "neutral", "phylogenetic", "functional"),
-  out = c("tibble", "matrix")
+  out = c("tibble", "matrix"),
+  hierarchy = NULL,
+  metadata = NULL,
+  weights = "equal",
+  depth = NULL
 )
 }
 \arguments{
@@ -41,7 +45,32 @@ type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
 \item{out}{Output shape: \code{"tibble"} (default) returns a long-format
 \code{data.frame} with columns \code{q}, \code{metric}, \code{value}; \code{"matrix"} returns the
 legacy matrix (orders in rows, metrics in columns, dropped to a vector for
-a single metric).}
+a single metric). With \code{hierarchy}, the table adds a \code{scale} column for
+each transition above the sample scale. A \code{tau} grid adds a \code{tau} column.
+Matrix output has one row per \code{q} and transition, with a named list of
+matrices for a \code{tau} grid.}
+
+\item{hierarchy}{Optional one-sided nesting formula, coarsest to finest,
+e.g. \code{~ region / site}. Every transition above \code{sample}, including
+\code{total}, gets its own overlap metrics. Each run uses one shared tree
+\code{depth} or functional \code{tau}; a functional \code{tau} grid runs the full
+hierarchy once per threshold.}
+
+\item{metadata}{Optional per-sample \code{data.frame} supplying the variables
+named in \code{hierarchy}; rows are matched to the count-table columns by name
+when possible, otherwise by position.}
+
+\item{weights}{Sample weights for hierarchical partitioning: \code{"equal"}
+(default), \code{"abundance"} (proportional to each sample's total count), or
+a positive numeric vector with one value per sample. A named vector is
+matched to count-table columns; an unnamed vector uses column order.
+Weights are normalised to sum to one. Requires \code{hierarchy}.}
+
+\item{depth}{Optional positive phylogenetic reference depth for hierarchical
+partitioning. On an ultrametric tree, use only branch segments within the
+last \code{depth} units before the tips. Must not exceed the tree height.
+\code{NULL} (default) uses the current shared mean-depth normaliser. Requires
+\code{hierarchy} and a phylogenetic \code{tree}.}
 }
 \value{
 A long-format \code{data.frame} of class \code{hill_dissimilarity} (default,
@@ -51,7 +80,9 @@ with a \code{plot()} method), or a matrix/vector of dissimilarities when
 \description{
 Compute overall (multi-sample) dissimilarity metrics from the Hill-number
 beta diversity following Chiu et al. (2014). These are the complements of the
-similarities returned by \code{\link[=hillsim]{hillsim()}}.
+similarities returned by \code{\link[=hillsim]{hillsim()}}. With \code{hierarchy}, each transition's
+beta is converted using its data-dependent effective ceiling rather than
+the number of child units, keeping the metrics in \verb{[0, 1]}.
 }
 \examples{
 counts <- matrix(c(10, 0, 5, 2, 8, 1), nrow = 3,

@@ -13,7 +13,11 @@ hillpair(
   tau = NULL,
   type = c("auto", "neutral", "phylogenetic", "functional"),
   out = c("dist", "tibble"),
-  parallel = FALSE
+  parallel = FALSE,
+  hierarchy = NULL,
+  metadata = NULL,
+  weights = "equal",
+  level = NULL
 )
 }
 \arguments{
@@ -44,16 +48,36 @@ requested metric/order combination; \code{"tibble"} returns a long-format table.
 
 \item{parallel}{Logical; if \code{TRUE} and \code{furrr} is installed, compute pairs in
 parallel.}
+
+\item{hierarchy}{Optional nesting formula. When supplied, compare units at
+\code{level} after pooling their samples with \code{weights}.}
+
+\item{metadata}{Optional per-sample \code{data.frame} supplying the variables
+named in \code{hierarchy}; rows are matched to the count-table columns by name
+when possible, otherwise by position.}
+
+\item{weights}{Sample weights for hierarchical partitioning: \code{"equal"}
+(default), \code{"abundance"} (proportional to each sample's total count), or
+a positive numeric vector with one value per sample. A named vector is
+matched to count-table columns; an unnamed vector uses column order.
+Weights are normalised to sum to one. Requires \code{hierarchy}.}
+
+\item{level}{Name of the hierarchy level to compare. Defaults to the finest
+named level in \code{hierarchy}.}
 }
 \value{
 For \code{out = "dist"}, a named list of \code{dist} objects (one per
 order/metric, named e.g. \code{"q0S"}), collapsed to a single \code{dist} when only
 one combination is requested. For \code{out = "tibble"}, a long-format
 \code{data.frame} with columns \code{first}, \code{second}, \code{q}, \code{metric}, \code{value}.
+Hierarchical output labels units at the selected level in place of samples.
 }
 \description{
 Compute dissimilarity metrics for every pair of samples, returning distance
 objects suitable for ordination (e.g. NMDS, PCoA).
+With \code{hierarchy}, compare units at \code{level}: each unit pools the relative
+abundances of its samples using their normalised sample weights. Abundance
+weights make this equivalent to pooling the original counts.
 }
 \details{
 The type-specific structure (per-sample normalisation, the tree traversal or

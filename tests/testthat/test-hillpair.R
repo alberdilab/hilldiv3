@@ -70,3 +70,75 @@ test_that("pairwise needs at least two samples", {
   expect_error(suppressMessages(
     hillpair(counts[, 1, drop = FALSE], q = 0)))
 })
+
+test_that("hierarchical pairwise dissimilarity matches weighted pooled units", {
+  counts6 <- cbind(counts, s5 = counts[, 1], s6 = counts[, 2])
+  md <- data.frame(region = rep(c("N", "S"), each = 3),
+                   site = c("a", "a", "b", "a", "a", "b"),
+                   row.names = colnames(counts6))
+  weights <- 1:6
+  grouping <- interaction(md$region, md$site, drop = TRUE, sep = ":")
+  units <- levels(grouping)
+  pi <- tss(counts6)
+  pooled <- do.call(cbind, lapply(units, function(u) {
+    idx <- which(grouping == u)
+    as.vector(pi[, idx, drop = FALSE] %*% (weights[idx] / sum(weights[idx])))
+  }))
+  dimnames(pooled) <- list(rownames(counts6), units)
+
+  args <- list(data = counts6, q = c(1, 2), metric = "C",
+               hierarchy = ~ region / site, metadata = md, weights = weights)
+  got <- suppressMessages(do.call(hillpair, args))
+  ref <- suppressMessages(hillpair(pooled, q = c(1, 2), metric = "C"))
+  expect_equal(got, ref, tolerance = 1e-12)
+  default_level <- suppressMessages(do.call(hillpair,
+                                             c(args, list(level = "site"))))
+  expect_equal(default_level, got, tolerance = 1e-12)
+  tb <- suppressMessages(do.call(hillpair, c(args, list(out = "tibble"))))
+  expect_setequal(unique(c(tb$first, tb$second)), units)
+
+  region <- md$region
+  region_units <- unique(region)
+  pooled_region <- do.call(cbind, lapply(region_units, function(u) {
+    idx <- which(region == u)
+    as.vector(pi[, idx, drop = FALSE] %*% (weights[idx] / sum(weights[idx])))
+  }))
+  dimnames(pooled_region) <- list(rownames(counts6), region_units)
+  got_region <- suppressMessages(do.call(hillpair,
+                                          c(args, list(level = "region"))))
+  ref_region <- suppressMessages(hillpair(pooled_region, q = c(1, 2),
+                                          metric = "C"))
+  expect_equal(got_region, ref_region, tolerance = 1e-12)
+
+  for (input in list(list(tree = tree), list(dist = dist, tau = 0.5))) {
+    got_type <- suppressMessages(do.call(hillpair, c(args, input)))
+    ref_type <- suppressMessages(do.call(hillpair, c(
+      list(data = pooled, q = c(1, 2), metric = "C"), input
+    )))
+    expect_equal(got_type, ref_type, tolerance = 1e-12)
+  }
+})
+
+test_that("abundance-weighted units equal pooled count tables", {
+  md <- data.frame(region = c("N", "N", "S", "S"),
+                   row.names = colnames(counts))
+  pooled <- cbind(N = rowSums(counts[, 1:2, drop = FALSE]),
+                  S = rowSums(counts[, 3:4, drop = FALSE]))
+  got <- suppressMessages(hillpair(counts, q = c(0, 1, 2), metric = "C",
+                                    hierarchy = ~ region, metadata = md,
+                                    weights = "abundance"))
+  ref <- suppressMessages(hillpair(pooled, q = c(0, 1, 2), metric = "C"))
+  expect_equal(got, ref, tolerance = 1e-12)
+})
+
+test_that("hierarchical pairwise validates level and weights", {
+  md <- data.frame(region = c("N", "N", "S", "S"),
+                   row.names = colnames(counts))
+  expect_error(suppressMessages(hillpair(counts, weights = "equal")),
+               "hierarchy")
+  expect_error(suppressMessages(hillpair(counts, level = "region")),
+               "hierarchy")
+  expect_error(suppressMessages(hillpair(counts, hierarchy = ~ region,
+                                         metadata = md, level = "site")),
+               "level")
+})
