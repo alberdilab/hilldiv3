@@ -90,7 +90,17 @@ plot.hill_partition <- function(x, ...) {
 
 #' @exportS3Method graphics::plot hill_dissimilarity
 plot.hill_dissimilarity <- function(x, ...) {
-  .hill_lineplot(x, "metric", "Dissimilarity", ...)
+  .hill_overlap_plot(x, "Dissimilarity", ...)
+}
+
+.hill_overlap_plot <- function(x, ylab, ...) {
+  if ("scale" %in% names(x)) {
+    parts <- list(x$metric, x$scale)
+    if ("tau" %in% names(x)) parts <- c(parts, list(x$tau))
+    x$.group <- do.call(interaction, c(parts, list(sep = " / ", drop = TRUE)))
+    return(.hill_lineplot(x, ".group", ylab, ...))
+  }
+  .hill_lineplot(x, "metric", ylab, ...)
 }
 
 #' @exportS3Method graphics::plot hill_hierarchy
@@ -99,12 +109,16 @@ plot.hill_hierarchy <- function(x, ...) {
   b <- x[!is.na(x$beta), ]
   b$value <- b$beta
   b$scale <- factor(b$scale)
+  if ("tau" %in% names(b)) {
+    b$.group <- interaction(b$scale, b$tau, sep = " / ", drop = TRUE)
+    return(.hill_lineplot(b, ".group", "Beta (turnover)", ...))
+  }
   .hill_lineplot(b, "scale", "Beta (turnover)", ...)
 }
 
 #' @exportS3Method graphics::plot hill_similarity
 plot.hill_similarity <- function(x, ...) {
-  .hill_lineplot(x, "metric", "Similarity", ...)
+  .hill_overlap_plot(x, "Similarity", ...)
 }
 
 # ggplot2 autoplot worker: a single grouped profile geom. Registered for each
@@ -153,7 +167,7 @@ autoplot.hill_hierarchy <- function(object, ...) {
   rlang::check_installed("ggplot2", "for `autoplot()` methods.")
   b <- object[!is.na(object$beta), ]
   b$scale <- factor(b$scale)
-  ggplot2::ggplot(
+  plot <- ggplot2::ggplot(
     b, ggplot2::aes(x = .data$q, y = .data$beta,
                     colour = .data$scale, group = .data$scale)
   ) +
@@ -161,12 +175,30 @@ autoplot.hill_hierarchy <- function(object, ...) {
     ggplot2::geom_point() +
     ggplot2::labs(x = "Diversity order (q)", y = "Beta (turnover)",
                   colour = NULL)
+  if ("tau" %in% names(b)) {
+    plot <- plot + ggplot2::facet_wrap(ggplot2::vars(.data$tau))
+  }
+  plot
 }
 autoplot.hill_dissimilarity <- function(object, ...) {
-  .hill_autoplot(object, "metric", "Dissimilarity", ...)
+  .hill_overlap_autoplot(object, "Dissimilarity", ...)
 }
 autoplot.hill_similarity <- function(object, ...) {
-  .hill_autoplot(object, "metric", "Similarity", ...)
+  .hill_overlap_autoplot(object, "Similarity", ...)
+}
+
+.hill_overlap_autoplot <- function(object, ylab, ...) {
+  plot <- .hill_autoplot(object, "metric", ylab, ...)
+  if ("scale" %in% names(object)) {
+    if ("tau" %in% names(object)) {
+      plot <- plot + ggplot2::facet_grid(
+        rows = ggplot2::vars(.data$scale), cols = ggplot2::vars(.data$tau)
+      )
+    } else {
+      plot <- plot + ggplot2::facet_wrap(ggplot2::vars(.data$scale))
+    }
+  }
+  plot
 }
 autoplot.hill_redundancy <- function(object, ...) {
   rlang::check_installed("ggplot2", "for `autoplot()` methods.")

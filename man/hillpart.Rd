@@ -13,7 +13,9 @@ hillpart(
   hierarchy = NULL,
   metadata = NULL,
   type = c("auto", "neutral", "phylogenetic", "functional"),
-  out = c("tibble", "matrix")
+  out = c("tibble", "matrix"),
+  weights = "equal",
+  depth = NULL
 )
 }
 \arguments{
@@ -36,10 +38,18 @@ the default single-level partition. One beta is returned per hierarchical
 transition and the chain telescopes exactly:
 \code{gamma = alpha_finest * prod(beta)}. Works for all three diversity types
 (neutral, phylogenetic, functional); see the partitioning vignette for the
-shared construction and its assumptions (equal per-sample weighting; one
-shared tree depth / \code{tau} across scales). Grouping variables are resolved
-against \code{metadata} when supplied, otherwise against the calling
-environment.}
+shared construction. A single tree \code{depth} or functional \code{tau} is used
+across every scale in a partition, so \code{alpha * prod(beta) = gamma} exactly
+and every beta is at least one. Grouping variables are resolved against
+\code{metadata} when supplied, otherwise against the calling environment.
+Linear unit weighting changes results relative to the older \code{p_u^q}
+formula in unbalanced designs for \code{q != 1} (a few per cent in neutral
+examples; balanced equal-weight designs are identical). With functional
+diversity it can also shift \code{q = 1} slightly (about 0.003 in the gut
+data), because a unit's measure-weighted mass need not equal its sample
+weight. For
+functional diversity, a vector of \code{tau} values runs the full hierarchy
+once per threshold; per-scale thresholds are not supported.}
 
 \item{metadata}{Optional per-sample \code{data.frame} supplying the variables
 named in \code{hierarchy}; rows are matched to the count-table columns by name
@@ -55,7 +65,21 @@ type and is validated against the inputs (e.g. \code{"phylogenetic"} requires a
 \code{data.frame} with columns \code{q}, \code{component}, \code{value}; \code{"matrix"} returns the
 legacy matrix (orders in rows, \code{alpha}/\code{gamma}/\code{beta} in columns). With
 \code{hierarchy}, \code{"tibble"} returns one row per \verb{(q, scale)} and \code{"matrix"}
-returns \code{alpha}, one \verb{beta_<level>} per nesting level, and \code{gamma}.}
+returns \code{alpha}, one \verb{beta_<level>} per nesting level, and \code{gamma}. A
+multi-\code{tau} hierarchy returns an extra \code{tau} column for \code{"tibble"}, or a
+named list of matrices for \code{"matrix"}.}
+
+\item{weights}{Sample weights for hierarchical partitioning: \code{"equal"}
+(default), \code{"abundance"} (proportional to each sample's total count), or
+a positive numeric vector with one value per sample. A named vector is
+matched to count-table columns; an unnamed vector uses column order.
+Weights are normalised to sum to one. Requires \code{hierarchy}.}
+
+\item{depth}{Optional positive phylogenetic reference depth for hierarchical
+partitioning. On an ultrametric tree, use only branch segments within the
+last \code{depth} units before the tips. Must not exceed the tree height.
+\code{NULL} (default) uses the current shared mean-depth normaliser. Requires
+\code{hierarchy} and a phylogenetic \code{tree}.}
 }
 \value{
 A long-format \code{data.frame} of class \code{hill_partition} (default) with a
