@@ -24,6 +24,12 @@
   shared functional-similarity kernel.
 * Expanded the gut microbiome vignette with MAG power-sum shares and an
   illustrated example of MAG contributions to dissimilarity.
+* Corrected the partitioning and dissimilarity vignette and the documentation
+  of `hilldiss()`, `hillsim()`, `hillpair()` and `hillcontrib()`: S and V are
+  now described as turnover measures and U and C as overlap complements, C is
+  one minus Morisita-Horn at `q = 2`, `hillsim()` documents its metrics as
+  similarities, and the output descriptions and example names match what the
+  functions return.
 
 # hilldiv3 3.1.0
 
