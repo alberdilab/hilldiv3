@@ -1,4 +1,4 @@
-# hilldiv3 3.1.0.9000 (unreleased)
+# hilldiv3 3.2.0
 
 * Multi-scale partitioning with `hierarchy` now weights units linearly
   (Routledge/Tsallis-type), so every nested beta is at least one for `q >= 0`
@@ -30,6 +30,12 @@
   one minus Morisita-Horn at `q = 2`, `hillsim()` documents its metrics as
   similarities, and the output descriptions and example names match what the
   functions return.
+
+# hilldiv3 3.1.1
+
+* Documentation only: links in the README to `CONTRIBUTING.md`,
+  `CODE_OF_CONDUCT.md` and `CITATION.cff` now use absolute URLs, fixing the
+  invalid file URI note raised by the CRAN incoming checks.
 
 # hilldiv3 3.1.0
 

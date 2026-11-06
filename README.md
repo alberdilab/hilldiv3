@@ -68,10 +68,6 @@ sets <- list(C = rownames(gut_counts)[3],
 hillshare(gut_counts, q = c(0, 1, 2), tree = gut_tree, sets = sets)
 hillshare(gut_counts, q = c(0, 1, 2), dist = dist, sets = sets)
 
-# Rank taxa by their contribution to pairwise or collective dissimilarity.
-head(hillcontrib(gut_counts, q = 1, metric = "C"))
-head(hillcontrib(gut_counts, q = 1, metric = "C", by = "collective"))
-
 # Core diversity results are tidy by default and plot directly.
 plot(hillprof(gut_counts))             # diversity profile
 hilldiv(gut_counts, out = "matrix")    # matrix: samples x q orders
@@ -109,14 +105,13 @@ full redesign that keeps the familiar function names (`hilldiv()`,
   reuses it across all sample pairs.
 * **Tidy by default**: the core diversity and comparison functions return a
   long-format `data.frame` with `print()`/`plot()`/`autoplot()` methods; pass
-  `out = "matrix"` for a plain matrix. `hillshare()` and `hillcontrib()` return
-  data frames of taxon and set shares or contributions.
+  `out = "matrix"` for a plain matrix. `hillshare()` returns a data frame of
+  taxon and set shares.
 * An explicit `type = c("auto", "neutral", "phylogenetic", "functional")`
   argument that asserts and validates the diversity type (auto-detected by
   default).
 * New functions `hillprof()` (diversity profiles), `hilleven()` (evenness)
-  `hillshare()` (taxon and set shares) and `hillcontrib()` (taxon turnover
-  contributions), hierarchical multi-scale
+  and `hillshare()` (taxon and set shares), hierarchical multi-scale
   partitioning in `hillpart()`, plus bundled example data (`gut_counts`,
   `gut_tree`, `gut_traits`).
 
@@ -140,18 +135,18 @@ Actions.
 
 * Questions and bug reports: open an
   [issue](https://github.com/alberdilab/hilldiv3/issues).
-* Contributions are welcome — see [`CONTRIBUTING.md`](CONTRIBUTING.md) for how
+* Contributions are welcome — see [`CONTRIBUTING.md`](https://github.com/alberdilab/hilldiv3/blob/main/CONTRIBUTING.md) for how
   to report problems, propose features and submit pull requests, and for the
   support we aim to provide.
 
 Please note that the hilldiv3 project is released with a
-[Contributor Code of Conduct](CODE_OF_CONDUCT.md). By contributing to this
+[Contributor Code of Conduct](https://github.com/alberdilab/hilldiv3/blob/main/CODE_OF_CONDUCT.md). By contributing to this
 project, you agree to abide by its terms.
 
 ## Citation
 
 If you use `hilldiv3`, please cite it using the metadata in
-[`CITATION.cff`](CITATION.cff) (GitHub's "Cite this repository" button), and
+[`CITATION.cff`](https://github.com/alberdilab/hilldiv3/blob/main/CITATION.cff) (GitHub's "Cite this repository" button), and
 the methodological guide:
 
 * Alberdi, A. & Gilbert, M.T.P. (2019). A guide to the application of Hill

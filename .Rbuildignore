@@ -20,3 +20,5 @@
 ^CONTRIBUTING\.md$
 ^CITATION\.cff$
 ^paper$
+^\.claude$
+^\.codeome$
