@@ -1,7 +1,10 @@
 # Pairwise Hill numbers-based dissimilarity
 
 Compute dissimilarity metrics for every pair of samples, returning
-distance objects suitable for ordination (e.g. NMDS, PCoA).
+distance objects suitable for ordination (e.g. NMDS, PCoA). With
+`hierarchy`, compare units at `level`: each unit pools the relative
+abundances of its samples using their normalised sample weights.
+Abundance weights make this equivalent to pooling the original counts.
 
 ## Usage
 
@@ -15,7 +18,11 @@ hillpair(
   tau = NULL,
   type = c("auto", "neutral", "phylogenetic", "functional"),
   out = c("dist", "tibble"),
-  parallel = FALSE
+  parallel = FALSE,
+  hierarchy = NULL,
+  metadata = NULL,
+  weights = "equal",
+  level = NULL
 )
 ```
 
@@ -34,7 +41,13 @@ hillpair(
 - metric:
 
   Dissimilarity metric(s) to return, any of `"S"`, `"C"`, `"U"`, `"V"`.
-  Defaults to all four.
+  Defaults to all four. `"S"` (Jaccard-type) and `"V"` (Sorensen-type)
+  are turnover measures, relative to the pooled assemblage and to a
+  single assemblage respectively; `"U"` (Jaccard-type) and `"C"`
+  (Sorensen-type; one minus the Morisita-Horn similarity at `q = 2`) are
+  the corresponding overlap complements (proportions of non-shared
+  units). At `q = 0`, `"U"` equals `"S"` and `"C"` equals `"V"`; at
+  `q = 1`, `"U"` equals `"C"`.
 
 - tree:
 
@@ -68,12 +81,38 @@ hillpair(
   Logical; if `TRUE` and `furrr` is installed, compute pairs in
   parallel.
 
+- hierarchy:
+
+  Optional nesting formula. When supplied, compare units at `level`
+  after pooling their samples with `weights`.
+
+- metadata:
+
+  Optional per-sample `data.frame` supplying the variables named in
+  `hierarchy`; rows are matched to the count-table columns by name when
+  possible, otherwise by position.
+
+- weights:
+
+  Sample weights for hierarchical partitioning: `"equal"` (default),
+  `"abundance"` (proportional to each sample's total count), or a
+  positive numeric vector with one value per sample. A named vector is
+  matched to count-table columns; an unnamed vector uses column order.
+  Weights are normalised to sum to one. Requires `hierarchy`.
+
+- level:
+
+  Name of the hierarchy level to compare. Defaults to the finest named
+  level in `hierarchy`.
+
 ## Value
 
 For `out = "dist"`, a named list of `dist` objects (one per
 order/metric, named e.g. `"q0S"`), collapsed to a single `dist` when
 only one combination is requested. For `out = "tibble"`, a long-format
 `data.frame` with columns `first`, `second`, `q`, `metric`, `value`.
+Hierarchical output labels units at the selected level in place of
+samples.
 
 ## Details
 
@@ -81,7 +120,7 @@ The type-specific structure (per-sample normalisation, the tree
 traversal or the functional similarity product) is computed **once**
 over all samples via the partitioning engine; each pair then only
 combines its two precomputed columns into beta, which is turned into the
-requested overlap metrics. The maths are therefore identical to
+requested dissimilarity metrics. The maths are therefore identical to
 [`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md)
 on two samples, without re-running the full engine per pair. When
 `parallel = TRUE` and the `furrr` package is installed, pairs are

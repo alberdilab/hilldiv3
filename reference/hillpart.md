@@ -17,7 +17,9 @@ hillpart(
   hierarchy = NULL,
   metadata = NULL,
   type = c("auto", "neutral", "phylogenetic", "functional"),
-  out = c("tibble", "matrix")
+  out = c("tibble", "matrix"),
+  weights = "equal",
+  depth = NULL
 )
 ```
 
@@ -54,10 +56,18 @@ hillpart(
   per hierarchical transition and the chain telescopes exactly:
   `gamma = alpha_finest * prod(beta)`. Works for all three diversity
   types (neutral, phylogenetic, functional); see the partitioning
-  vignette for the shared construction and its assumptions (equal
-  per-sample weighting; one shared tree depth / `tau` across scales).
+  vignette for the shared construction. A single tree `depth` or
+  functional `tau` is used across every scale in a partition, so
+  `alpha * prod(beta) = gamma` exactly and every beta is at least one.
   Grouping variables are resolved against `metadata` when supplied,
-  otherwise against the calling environment.
+  otherwise against the calling environment. Linear unit weighting
+  changes results relative to the older `p_u^q` formula in unbalanced
+  designs for `q != 1` (a few per cent in neutral examples; balanced
+  equal-weight designs are identical). With functional diversity it can
+  also shift `q = 1` slightly (about 0.003 in the gut data), because a
+  unit's measure-weighted mass need not equal its sample weight. For
+  functional diversity, a vector of `tau` values runs the full hierarchy
+  once per threshold; per-scale thresholds are not supported.
 
 - metadata:
 
@@ -81,7 +91,24 @@ hillpart(
   matrix (orders in rows, `alpha`/`gamma`/`beta` in columns). With
   `hierarchy`, `"tibble"` returns one row per `(q, scale)` and
   `"matrix"` returns `alpha`, one `beta_<level>` per nesting level, and
-  `gamma`.
+  `gamma`. A multi-`tau` hierarchy returns an extra `tau` column for
+  `"tibble"`, or a named list of matrices for `"matrix"`.
+
+- weights:
+
+  Sample weights for hierarchical partitioning: `"equal"` (default),
+  `"abundance"` (proportional to each sample's total count), or a
+  positive numeric vector with one value per sample. A named vector is
+  matched to count-table columns; an unnamed vector uses column order.
+  Weights are normalised to sum to one. Requires `hierarchy`.
+
+- depth:
+
+  Optional positive phylogenetic reference depth for hierarchical
+  partitioning. On an ultrametric tree, use only branch segments within
+  the last `depth` units before the tips. Must not exceed the tree
+  height. `NULL` (default) uses the current shared mean-depth
+  normaliser. Requires `hierarchy` and a phylogenetic `tree`.
 
 ## Value
 

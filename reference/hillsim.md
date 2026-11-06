@@ -15,7 +15,11 @@ hillsim(
   dist = NULL,
   tau = NULL,
   type = c("auto", "neutral", "phylogenetic", "functional"),
-  out = c("tibble", "matrix")
+  out = c("tibble", "matrix"),
+  hierarchy = NULL,
+  metadata = NULL,
+  weights = "equal",
+  depth = NULL
 )
 ```
 
@@ -33,8 +37,12 @@ hillsim(
 
 - metric:
 
-  Dissimilarity metric(s) to return, any of `"S"`, `"C"`, `"U"`, `"V"`.
-  Defaults to all four.
+  Similarity metric(s) to return, any of `"S"`, `"C"`, `"U"`, `"V"`.
+  Defaults to all four. Each is one minus the dissimilarity of the same
+  code in
+  [`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md),
+  so identical assemblages give 1. `"C"` at `q = 2` is the Morisita-Horn
+  similarity.
 
 - tree:
 
@@ -63,7 +71,40 @@ hillsim(
   Output shape: `"tibble"` (default) returns a long-format `data.frame`
   with columns `q`, `metric`, `value`; `"matrix"` returns the legacy
   matrix (orders in rows, metrics in columns, dropped to a vector for a
-  single metric).
+  single metric). With `hierarchy`, the table adds a `scale` column for
+  each transition above the sample scale. A `tau` grid adds a `tau`
+  column. Matrix output has one row per `q` and transition, with a named
+  list of matrices for a `tau` grid.
+
+- hierarchy:
+
+  Optional one-sided nesting formula, coarsest to finest, e.g.
+  `~ region / site`. Every transition above `sample`, including `total`,
+  gets its own dissimilarity metrics. Each run uses one shared tree
+  `depth` or functional `tau`; a functional `tau` grid runs the full
+  hierarchy once per threshold.
+
+- metadata:
+
+  Optional per-sample `data.frame` supplying the variables named in
+  `hierarchy`; rows are matched to the count-table columns by name when
+  possible, otherwise by position.
+
+- weights:
+
+  Sample weights for hierarchical partitioning: `"equal"` (default),
+  `"abundance"` (proportional to each sample's total count), or a
+  positive numeric vector with one value per sample. A named vector is
+  matched to count-table columns; an unnamed vector uses column order.
+  Weights are normalised to sum to one. Requires `hierarchy`.
+
+- depth:
+
+  Optional positive phylogenetic reference depth for hierarchical
+  partitioning. On an ultrametric tree, use only branch segments within
+  the last `depth` units before the tips. Must not exceed the tree
+  height. `NULL` (default) uses the current shared mean-depth
+  normaliser. Requires `hierarchy` and a phylogenetic `tree`.
 
 ## Value
 

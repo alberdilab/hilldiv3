@@ -4,6 +4,9 @@ Compute overall (multi-sample) dissimilarity metrics from the
 Hill-number beta diversity following Chiu et al. (2014). These are the
 complements of the similarities returned by
 [`hillsim()`](https://alberdilab.github.io/hilldiv3/reference/hillsim.md).
+With `hierarchy`, each transition's beta is converted using its
+data-dependent effective ceiling rather than the number of child units,
+keeping the metrics in `[0, 1]`.
 
 ## Usage
 
@@ -16,7 +19,11 @@ hilldiss(
   dist = NULL,
   tau = NULL,
   type = c("auto", "neutral", "phylogenetic", "functional"),
-  out = c("tibble", "matrix")
+  out = c("tibble", "matrix"),
+  hierarchy = NULL,
+  metadata = NULL,
+  weights = "equal",
+  depth = NULL
 )
 ```
 
@@ -35,7 +42,13 @@ hilldiss(
 - metric:
 
   Dissimilarity metric(s) to return, any of `"S"`, `"C"`, `"U"`, `"V"`.
-  Defaults to all four.
+  Defaults to all four. `"S"` (Jaccard-type) and `"V"` (Sorensen-type)
+  are turnover measures, relative to the pooled assemblage and to a
+  single assemblage respectively; `"U"` (Jaccard-type) and `"C"`
+  (Sorensen-type; one minus the Morisita-Horn similarity at `q = 2`) are
+  the corresponding overlap complements (proportions of non-shared
+  units). At `q = 0`, `"U"` equals `"S"` and `"C"` equals `"V"`; at
+  `q = 1`, `"U"` equals `"C"`.
 
 - tree:
 
@@ -64,7 +77,40 @@ hilldiss(
   Output shape: `"tibble"` (default) returns a long-format `data.frame`
   with columns `q`, `metric`, `value`; `"matrix"` returns the legacy
   matrix (orders in rows, metrics in columns, dropped to a vector for a
-  single metric).
+  single metric). With `hierarchy`, the table adds a `scale` column for
+  each transition above the sample scale. A `tau` grid adds a `tau`
+  column. Matrix output has one row per `q` and transition, with a named
+  list of matrices for a `tau` grid.
+
+- hierarchy:
+
+  Optional one-sided nesting formula, coarsest to finest, e.g.
+  `~ region / site`. Every transition above `sample`, including `total`,
+  gets its own dissimilarity metrics. Each run uses one shared tree
+  `depth` or functional `tau`; a functional `tau` grid runs the full
+  hierarchy once per threshold.
+
+- metadata:
+
+  Optional per-sample `data.frame` supplying the variables named in
+  `hierarchy`; rows are matched to the count-table columns by name when
+  possible, otherwise by position.
+
+- weights:
+
+  Sample weights for hierarchical partitioning: `"equal"` (default),
+  `"abundance"` (proportional to each sample's total count), or a
+  positive numeric vector with one value per sample. A named vector is
+  matched to count-table columns; an unnamed vector uses column order.
+  Weights are normalised to sum to one. Requires `hierarchy`.
+
+- depth:
+
+  Optional positive phylogenetic reference depth for hierarchical
+  partitioning. On an ultrametric tree, use only branch segments within
+  the last `depth` units before the tips. Must not exceed the tree
+  height. `NULL` (default) uses the current shared mean-depth
+  normaliser. Requires `hierarchy` and a phylogenetic `tree`.
 
 ## Value
 

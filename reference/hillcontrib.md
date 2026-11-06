@@ -41,7 +41,13 @@ hillcontrib(
 - metric:
 
   Dissimilarity metric(s) to return, any of `"S"`, `"C"`, `"U"`, `"V"`.
-  Defaults to all four.
+  Defaults to all four. `"S"` (Jaccard-type) and `"V"` (Sorensen-type)
+  are turnover measures, relative to the pooled assemblage and to a
+  single assemblage respectively; `"U"` (Jaccard-type) and `"C"`
+  (Sorensen-type; one minus the Morisita-Horn similarity at `q = 2`) are
+  the corresponding overlap complements (proportions of non-shared
+  units). At `q = 0`, `"U"` equals `"S"` and `"C"` equals `"V"`; at
+  `q = 1`, `"U"` equals `"C"`.
 
 - tree:
 

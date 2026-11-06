@@ -134,13 +134,14 @@ The betas multiply back to the overall beta exactly:
 ```
 
 This **telescoping identity** is guaranteed by construction (and checked
-in the package tests), so a hierarchical run is always consistent with
-the plain
-[`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
-alpha and gamma. Arbitrarily deep hierarchies work — just chain more
-terms, e.g. `~ study / region / site`. The `out = "matrix"` form returns
-the same information as `alpha`, one `beta_<level>` column per
-transition, and `gamma`.
+in the package tests). With equal sample weights, neutral and functional
+endpoints match plain
+[`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md);
+phylogenetic endpoints match on an ultrametric tree at the default
+depth. Arbitrarily deep hierarchies work — just chain more terms,
+e.g. `~ study / region / site`. The `out = "matrix"` form returns the
+same information as `alpha`, one `beta_<level>` column per transition,
+and `gamma`.
 
 ### How it works (and what it assumes)
 
@@ -150,26 +151,25 @@ transition, and `gamma`.
 > The practical takeaways are the bullet points on assumptions that
 > follow it.
 
-All three diversity types share one construction under **global equal
-sample weighting** (every sample weighted `1/n`). Each scale’s diversity
-is Jost’s (2007) weighted alpha,
+All three diversity types share one construction with sample weights
+$`p_j`$ (equal weights $`1/n`$ by default). For a unit $`u`$, let
+$`p_u=\sum_{j\in u}p_j`$ and $`x_{u,i}=m_{u,i}/(p_u C)`$. Each scale
+uses a linear-weighted power sum,
 
 ``` math
-A_k \;=\;
-\frac{\left(\sum_{u,i} w_i\,(m_{u,i}/C)^q\right)^{1/(1-q)}}
-     {\left(\sum_{u} (n_u/n)^q\right)^{1/(1-q)}},
+A_k \;=\; \left(\sum_u p_u\sum_i w_i x_{u,i}^q\right)^{1/(1-q)}
+\quad(q\ne1),
 ```
 
-where units $`u`$ pool $`n_u`$ of the $`n`$ samples,
-$`m_{u,i}=\sum_{j\in u} c_{ij}`$ is the pooled contribution of feature
-$`i`$, $`w_i`$ is a per-feature *measure*, and $`C`$ a grand-total
-normaliser. The three types differ only in those pieces: neutral uses
-taxa with measure $`1`$ and $`C=n`$; **phylogenetic** uses branches with
-measure $`L_i`$ (branch length) and $`C=T_+=\sum_j T_j`$ (summed tree
-depth); **functional** uses taxa with measure $`v_i`$ (attribute
-contribution at threshold `tau`) and $`C=n_+`$ (total count). The
-denominator is the numbers-equivalent of the unit weights, which is
-exactly what keeps every $`\beta_k \ge 1`$ and independent of $`A`$.
+with the entropy limit $`A_k=\exp(\sum_u p_u H_u)`$ at $`q=1`$, where
+$`H_u=-\sum_i w_i x_{u,i}\log x_{u,i}`$. Here
+$`m_{u,i}=\sum_{j\in u}c_{ij}`$ pools feature contributions, $`w_i`$ is
+the per-feature *measure*, and $`C`$ is a grand-total normaliser.
+Neutral diversity uses taxa with measure $`1`$; phylogenetic diversity
+uses branches with measure $`L_i`$; functional diversity uses taxa with
+measure $`v_i`$ (attribute contribution at threshold `tau`). Coarsening
+takes weighted means of the $`x_{u,i}`$, so convexity or concavity keeps
+every $`\beta_k\ge1`$.
 
 Phylogenetic and functional hierarchical partitioning simply add a
 `tree` or `dist`, as everywhere else in `hilldiv3`:
@@ -183,32 +183,33 @@ hillpart(tab, hierarchy = ~ region / site, metadata = md, dist = my_dist)
 **Limitations and assumptions** — worth knowing before interpreting the
 betas:
 
-- **Equal per-sample weighting only.** Units are weighted by their
-  sample count (`n_u / n`), not by abundance or sampling effort. This is
-  the choice that makes every beta independent of alpha for *all* `q`
-  (Jost 2007); unequal weighting breaks that independence for `q ≠ 1`
-  and is not offered.
+- **Sample weights.** `weights = "equal"` gives every sample weight
+  `1/n`; `"abundance"` uses sample count totals, and a positive numeric
+  vector supplies custom weights. Unit weights are sums of their sample
+  weights.
 - **Phylogenetic: one shared tree depth across scales.** Alpha and gamma
   are reported in effective-branch-length (PD) units and share a single
-  mean depth `T_+` over *all* scales, which is what lets the betas
-  telescope. For **ultrametric** trees the finest alpha equals the
-  single-level phylogenetic
+  mean depth `T_+` over *all* scales by default. On an ultrametric tree,
+  `depth` can select the last `depth` units before the tips. For
+  **ultrametric** trees the finest alpha equals the single-level
+  phylogenetic
   [`hillpart()`](https://alberdilab.github.io/hilldiv3/reference/hillpart.md)
   alpha exactly; for non-ultrametric trees the chain still telescopes,
   but the shared `T_+` makes the per-scale PD values depth-pooled rather
   than strictly per-sample — prefer ultrametric (time-calibrated) trees
   here.
-- **Functional: one shared `tau` and `v_i` across scales.** The distance
-  threshold is capped once over the whole table and the attribute
-  contributions `v_i` are computed once from the fully pooled data, so
-  they stay constant across scales (a prerequisite for telescoping). A
-  per-subset `tau` is therefore not meaningful in a hierarchical run.
-- **Hierarchical output is not (yet) wired into
-  [`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md)/[`hillsim()`](https://alberdilab.github.io/hilldiv3/reference/hillsim.md)
-  or
-  [`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md).**
-  Those convert a single beta to bounded (dis)similarity; the per-level
-  rescaling of a nested beta chain is left for future work.
+- **Functional: one shared `tau` and `v_i` per run.** Each `tau` is
+  applied across every scale, with `v_i` computed from the pooled data.
+  A vector of `tau` values runs one full hierarchy per threshold;
+  per-scale `tau` values are not supported.
+- **Hierarchical overlap and pairwise comparisons.**
+  [`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md)
+  and
+  [`hillsim()`](https://alberdilab.github.io/hilldiv3/reference/hillsim.md)
+  convert each transition’s beta to bounded dissimilarity metrics using
+  its data-dependent ceiling.
+  [`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md)
+  compares weighted pooled units at a selected hierarchy level.
 
 This nested multiplicative decomposition across neutral, phylogenetic
 and functional Hill numbers in one engine is, to our knowledge, not
@@ -222,19 +223,23 @@ different sample counts.
 [`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md)
 and
 [`hillsim()`](https://alberdilab.github.io/hilldiv3/reference/hillsim.md)
-rescale it to `[0, 1]` using the four overlap measures of Chiu et
-al. (2014):
+rescale it to `[0, 1]` using the four (dis)similarity measures of Chiu
+et al. (2014): two turnover types and two overlap-complement types. The
+table describes the dissimilarities returned by
+[`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md);
+[`hillsim()`](https://alberdilab.github.io/hilldiv3/reference/hillsim.md)
+returns one minus each.
 
-| Code | Measure | Type |
+| Code | Measure | Perspective |
 |----|----|----|
-| `S` | Sorensen-type | local overlap, occurrence-flavoured |
-| `C` | Jaccard-type (Morisita-Horn at `q = 2`) | local overlap, abundance-flavoured |
-| `U` | one-minus regional overlap | regional |
-| `V` | homogeneity / Sorensen complement | regional |
+| `S` | Jaccard-type turnover | turnover relative to the pooled assemblage (gamma) |
+| `V` | Sorensen-type turnover | turnover relative to a single assemblage (alpha) |
+| `U` | Jaccard-type overlap complement | proportion of non-shared units in the pooled assemblage |
+| `C` | Sorensen-type overlap complement (1 − Morisita-Horn at `q = 2`) | effective average proportion of non-shared units in a single assemblage |
 
 ``` r
 
-hilldiss(counts)            # dissimilarities, one column per metric
+hilldiss(counts)            # dissimilarities, long table (q, metric, value)
 #> dissimilarity from neutral Hill numbers of "q0", "q1",
 #> and "q2".
 #> <hilldiv3 result: neutral>
@@ -274,22 +279,20 @@ hillsim(counts)             # similarities = 1 - dissimilarity
 #> 12 2      V 0.8544983
 ```
 
-Request a single metric and order to get a plain matrix slice:
+Request a single metric and order, and ask for the legacy matrix form
+with `out = "matrix"`:
 
 ``` r
 
-hilldiss(counts, q = 1, metric = "C")
+hilldiss(counts, q = 1, metric = "C", out = "matrix")
 #> dissimilarity from neutral Hill numbers of "q1".
-#> <hilldiv3 result: neutral>
-#> 1 rows x 3 cols
-#> 
-#>   q metric     value
-#> 1 1      C 0.2158525
+#> [1] 0.2158525
 ```
 
-The choice of `q` matters as much as the metric: `q = 0` weights
-presence/ absence (turnover of rare taxa), while `q = 2` reflects shifts
-among dominant taxa.
+The choice of `q` matters as much as the metric: `q = 0` counts all taxa
+equally (presence/absence), while `q = 2` reflects shifts among dominant
+taxa. At `q = 0`, `U` equals `S` and `C` equals `V`; at `q = 1`, `U`
+equals `C`.
 
 ## Pairwise dissimilarity for ordination
 
@@ -323,7 +326,7 @@ text(pcoa, labels = rownames(pcoa))
 dissimilarities](partitioning-and-dissimilarity_files/figure-html/ordination-1.png)
 
 Ask for several orders/metrics at once and you get a **named list** of
-`dist` objects (e.g. `q0S`, `q1C`):
+`dist` objects (e.g. `q0C`, `q2U`):
 
 ``` r
 
