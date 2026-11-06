@@ -1,6 +1,9 @@
-## Update (3.2.0)
+## Update (3.2.1)
 
-This is an update to 'hilldiv3', which is on CRAN as 3.1.1. It adds
+This is a resubmission of 3.2.0, which failed the Windows incoming check
+because two tests opened a PDF device on `/dev/null`. They now use a temporary
+file; no package code changed. It is an update to 'hilldiv3', which is on CRAN
+as 3.1.1. It adds
 multi-scale (hierarchical) Hill partitioning to `hillpart()`, `hilldiss()`,
 `hillsim()` and `hillpair()`, and a new `hillcontrib()` for taxon
 contributions to dissimilarity. See NEWS.md for details.

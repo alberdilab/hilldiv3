@@ -540,8 +540,12 @@ test_that("a functional tau grid matches separate hierarchy calls", {
     )))
     expect_identical(wide[[i]], one_wide)
   }
-  grDevices::pdf(file = "/dev/null")
-  on.exit(grDevices::dev.off(), add = TRUE)
+  pdf_file <- tempfile(fileext = ".pdf")
+  grDevices::pdf(file = pdf_file)
+  on.exit({
+    grDevices::dev.off()
+    unlink(pdf_file)
+  }, add = TRUE)
   expect_silent(plot(grid))
 })
 

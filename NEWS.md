@@ -1,3 +1,8 @@
+# hilldiv3 3.2.1
+
+* Tests no longer open a PDF device on `/dev/null`, which does not exist on
+  Windows; they use a temporary file instead. No user-facing changes.
+
 # hilldiv3 3.2.0
 
 * Multi-scale partitioning with `hierarchy` now weights units linearly

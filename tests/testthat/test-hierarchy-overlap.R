@@ -67,8 +67,12 @@ test_that("hierarchical overlap supports tau grids and plots", {
     expect_identical(matrices[[i]], one_matrix)
   }
 
-  grDevices::pdf(file = "/dev/null")
-  on.exit(grDevices::dev.off(), add = TRUE)
+  pdf_file <- tempfile(fileext = ".pdf")
+  grDevices::pdf(file = pdf_file)
+  on.exit({
+    grDevices::dev.off()
+    unlink(pdf_file)
+  }, add = TRUE)
   expect_silent(plot(got))
   expect_silent(plot(sim))
   if (requireNamespace("ggplot2", quietly = TRUE)) {
