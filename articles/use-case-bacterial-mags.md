@@ -402,8 +402,8 @@ replace genomes without losing function.
 red <- hillred(gut_counts, q = c(1, 2), dist = fdist)
 as_df(red)[, c("q", "redundancy")]
 #>   q redundancy
-#> 1 1  0.6957597
-#> 2 2  0.6024732
+#> 1 1  0.6957598
+#> 2 2  0.6024726
 plot(red)
 ```
 
