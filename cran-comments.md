@@ -1,12 +1,9 @@
 ## Update (3.2.0)
 
-This is an update to 'hilldiv3', which was published on CRAN as 3.0.0 on
-6 October 2026. It adds multi-scale (hierarchical) Hill partitioning to
-`hillpart()`, `hilldiss()`, `hillsim()` and `hillpair()`, a new
-`hillcontrib()` for taxon contributions to dissimilarity, and `hillshare()`.
-It also fixes the README links to repository files that are not part of the
-built package, which had caused the incoming checks to report possibly
-invalid file URIs for an earlier 3.1.x submission. See NEWS.md for details.
+This is an update to 'hilldiv3', which is on CRAN as 3.1.1. It adds
+multi-scale (hierarchical) Hill partitioning to `hillpart()`, `hilldiss()`,
+`hillsim()` and `hillpair()`, and a new `hillcontrib()` for taxon
+contributions to dissimilarity. See NEWS.md for details.
 
 ## R CMD check results
 
