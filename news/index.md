@@ -1,6 +1,6 @@
 # Changelog
 
-## hilldiv3 3.1.0.9000 (unreleased)
+## hilldiv3 3.2.0
 
 - Multi-scale partitioning with `hierarchy` now weights units linearly
   (Routledge/Tsallis-type), so every nested beta is at least one for
@@ -32,6 +32,26 @@
   through the shared functional-similarity kernel.
 - Expanded the gut microbiome vignette with MAG power-sum shares and an
   illustrated example of MAG contributions to dissimilarity.
+- Corrected the partitioning and dissimilarity vignette and the
+  documentation of
+  [`hilldiss()`](https://alberdilab.github.io/hilldiv3/reference/hilldiss.md),
+  [`hillsim()`](https://alberdilab.github.io/hilldiv3/reference/hillsim.md),
+  [`hillpair()`](https://alberdilab.github.io/hilldiv3/reference/hillpair.md)
+  and
+  [`hillcontrib()`](https://alberdilab.github.io/hilldiv3/reference/hillcontrib.md):
+  S and V are now described as turnover measures and U and C as overlap
+  complements, C is one minus Morisita-Horn at `q = 2`,
+  [`hillsim()`](https://alberdilab.github.io/hilldiv3/reference/hillsim.md)
+  documents its metrics as similarities, and the output descriptions and
+  example names match what the functions return.
+
+## hilldiv3 3.1.1
+
+CRAN release: 2026-10-16
+
+- Documentation only: links in the README to `CONTRIBUTING.md`,
+  `CODE_OF_CONDUCT.md` and `CITATION.cff` now use absolute URLs, fixing
+  the invalid file URI note raised by the CRAN incoming checks.
 
 ## hilldiv3 3.1.0
 

@@ -21,7 +21,7 @@
 
     <a class="navbar-brand me-2" href="index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -111,10 +111,6 @@
 <span><span class="fu"><a href="reference/hillshare.html">hillshare</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, tree <span class="op">=</span> <span class="va">gut_tree</span>, sets <span class="op">=</span> <span class="va">sets</span><span class="op">)</span></span>
 <span><span class="fu"><a href="reference/hillshare.html">hillshare</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0</span>, <span class="fl">1</span>, <span class="fl">2</span><span class="op">)</span>, dist <span class="op">=</span> <span class="va">dist</span>, sets <span class="op">=</span> <span class="va">sets</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Rank taxa by their contribution to pairwise or collective dissimilarity.</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/hillcontrib.html">hillcontrib</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="fu"><a href="reference/hillcontrib.html">hillcontrib</a></span><span class="op">(</span><span class="va">gut_counts</span>, q <span class="op">=</span> <span class="fl">1</span>, metric <span class="op">=</span> <span class="st">"C"</span>, by <span class="op">=</span> <span class="st">"collective"</span><span class="op">)</span><span class="op">)</span></span>
-<span></span>
 <span><span class="co"># Core diversity results are tidy by default and plot directly.</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="fu"><a href="reference/hillprof.html">hillprof</a></span><span class="op">(</span><span class="va">gut_counts</span><span class="op">)</span><span class="op">)</span>             <span class="co"># diversity profile</span></span>
 <span><span class="fu"><a href="reference/hilldiv.html">hilldiv</a></span><span class="op">(</span><span class="va">gut_counts</span>, out <span class="op">=</span> <span class="st">"matrix"</span><span class="op">)</span>    <span class="co"># matrix: samples x q orders</span></span></code></pre></div>
@@ -145,9 +141,9 @@
 <strong>Broad input support</strong>: matrices, data frames, tibbles, <code>phyloseq</code> and <code>TreeSummarizedExperiment</code> objects.</li>
 <li>Faster phylogenetic computation using an <code>ape</code> post-order traversal in place of <code>geiger::tips()</code>; <code><a href="reference/hillpair.html">hillpair()</a></code> computes the shared structure once and reuses it across all sample pairs.</li>
 <li>
-<strong>Tidy by default</strong>: the core diversity and comparison functions return a long-format <code>data.frame</code> with <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>/<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>/<code>autoplot()</code> methods; pass <code>out = "matrix"</code> for a plain matrix. <code><a href="reference/hillshare.html">hillshare()</a></code> and <code><a href="reference/hillcontrib.html">hillcontrib()</a></code> return data frames of taxon and set shares or contributions.</li>
+<strong>Tidy by default</strong>: the core diversity and comparison functions return a long-format <code>data.frame</code> with <code><a href="https://rdrr.io/r/base/print.html" class="external-link">print()</a></code>/<code><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot()</a></code>/<code>autoplot()</code> methods; pass <code>out = "matrix"</code> for a plain matrix. <code><a href="reference/hillshare.html">hillshare()</a></code> returns a data frame of taxon and set shares.</li>
 <li>An explicit <code>type = c("auto", "neutral", "phylogenetic", "functional")</code> argument that asserts and validates the diversity type (auto-detected by default).</li>
-<li>New functions <code><a href="reference/hillprof.html">hillprof()</a></code> (diversity profiles), <code><a href="reference/hilleven.html">hilleven()</a></code> (evenness) <code><a href="reference/hillshare.html">hillshare()</a></code> (taxon and set shares) and <code><a href="reference/hillcontrib.html">hillcontrib()</a></code> (taxon turnover contributions), hierarchical multi-scale partitioning in <code><a href="reference/hillpart.html">hillpart()</a></code>, plus bundled example data (<code>gut_counts</code>, <code>gut_tree</code>, <code>gut_traits</code>).</li>
+<li>New functions <code><a href="reference/hillprof.html">hillprof()</a></code> (diversity profiles), <code><a href="reference/hilleven.html">hilleven()</a></code> (evenness) and <code><a href="reference/hillshare.html">hillshare()</a></code> (taxon and set shares), hierarchical multi-scale partitioning in <code><a href="reference/hillpart.html">hillpart()</a></code>, plus bundled example data (<code>gut_counts</code>, <code>gut_tree</code>, <code>gut_traits</code>).</li>
 </ul>
 <p>See <a href="NEWS.html"><code>NEWS.md</code></a> for the full changelog.</p>
 </div>
@@ -164,14 +160,14 @@
 </h2>
 <ul>
 <li>Questions and bug reports: open an <a href="https://github.com/alberdilab/hilldiv3/issues" class="external-link">issue</a>.</li>
-<li>Contributions are welcome — see <a href="CONTRIBUTING.html"><code>CONTRIBUTING.md</code></a> for how to report problems, propose features and submit pull requests, and for the support we aim to provide.</li>
+<li>Contributions are welcome — see <a href="https://github.com/alberdilab/hilldiv3/blob/main/CONTRIBUTING.md" class="external-link"><code>CONTRIBUTING.md</code></a> for how to report problems, propose features and submit pull requests, and for the support we aim to provide.</li>
 </ul>
-<p>Please note that the hilldiv3 project is released with a <a href="CODE_OF_CONDUCT.html">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
+<p>Please note that the hilldiv3 project is released with a <a href="https://github.com/alberdilab/hilldiv3/blob/main/CODE_OF_CONDUCT.md" class="external-link">Contributor Code of Conduct</a>. By contributing to this project, you agree to abide by its terms.</p>
 </div>
 <div class="section level2">
 <h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a>
 </h2>
-<p>If you use <code>hilldiv3</code>, please cite it using the metadata in <a href="CITATION.cff"><code>CITATION.cff</code></a> (GitHub’s “Cite this repository” button), and the methodological guide:</p>
+<p>If you use <code>hilldiv3</code>, please cite it using the metadata in <a href="https://github.com/alberdilab/hilldiv3/blob/main/CITATION.cff" class="external-link"><code>CITATION.cff</code></a> (GitHub’s “Cite this repository” button), and the methodological guide:</p>
 <ul>
 <li>Alberdi, A. &amp; Gilbert, M.T.P. (2019). A guide to the application of Hill numbers to DNA-based diversity analyses. <em>Mol. Ecol. Resour.</em>, 19, 804-817. <a href="https://doi.org/10.1111/1755-0998.13014" class="external-link uri">https://doi.org/10.1111/1755-0998.13014</a>
 </li>

@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">hilldiv3</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.1.0.9000</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">3.2.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,7 +54,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="3.1.0.9000" id="hilldiv3-3109000-unreleased">hilldiv3 3.1.0.9000 (unreleased)<a class="anchor" aria-label="anchor" href="#hilldiv3-3109000-unreleased"></a></h2>
+<h2 class="pkg-version" data-toc-text="3.2.0" id="hilldiv3-320">hilldiv3 3.2.0<a class="anchor" aria-label="anchor" href="#hilldiv3-320"></a></h2>
 <ul><li>Multi-scale partitioning with <code>hierarchy</code> now weights units linearly (Routledge/Tsallis-type), so every nested beta is at least one for <code>q &gt;= 0</code> and <code>alpha * prod(beta) = gamma</code> holds exactly in unbalanced designs. Earlier <code>p_u^q</code> weights could give beta below one when units were unequal. Balanced equal-weight results are unchanged, but for unbalanced designs the nested alpha, betas and gamma at <code>q != 1</code> now differ from earlier development versions by a few per cent (and slightly at <code>q = 1</code> for functional diversity).</li>
 <li>
 <code><a href="../reference/hillpart.html">hillpart()</a></code> gains <code>weights</code> (<code>"equal"</code>, <code>"abundance"</code> or a numeric vector) for hierarchical designs, a reference <code>depth</code> for phylogenetic hierarchies (ultrametric trees) and a grid of <code>tau</code> values for functional hierarchies (one hierarchy per <code>tau</code>).</li>
@@ -63,6 +63,11 @@
 <li>Added <code><a href="../reference/hillcontrib.html">hillcontrib()</a></code> to rank taxa or named sets by their additive contributions to pairwise or collective Hill dissimilarity. It supports neutral, phylogenetic and functional diversity and all four dissimilarity metrics. Collective comparisons can be run for named groups of samples.</li>
 <li>Functional partitioning now handles an all-zero distance matrix through the shared functional-similarity kernel.</li>
 <li>Expanded the gut microbiome vignette with MAG power-sum shares and an illustrated example of MAG contributions to dissimilarity.</li>
+<li>Corrected the partitioning and dissimilarity vignette and the documentation of <code><a href="../reference/hilldiss.html">hilldiss()</a></code>, <code><a href="../reference/hillsim.html">hillsim()</a></code>, <code><a href="../reference/hillpair.html">hillpair()</a></code> and <code><a href="../reference/hillcontrib.html">hillcontrib()</a></code>: S and V are now described as turnover measures and U and C as overlap complements, C is one minus Morisita-Horn at <code>q = 2</code>, <code><a href="../reference/hillsim.html">hillsim()</a></code> documents its metrics as similarities, and the output descriptions and example names match what the functions return.</li>
+</ul></div>
+    <div class="section level2">
+<h2 class="pkg-version" data-toc-text="3.1.1" id="hilldiv3-311">hilldiv3 3.1.1<a class="anchor" aria-label="anchor" href="#hilldiv3-311"></a></h2><p class="text-muted">CRAN release: 2026-10-16</p>
+<ul><li>Documentation only: links in the README to <code>CONTRIBUTING.md</code>, <code>CODE_OF_CONDUCT.md</code> and <code>CITATION.cff</code> now use absolute URLs, fixing the invalid file URI note raised by the CRAN incoming checks.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="3.1.0" id="hilldiv3-310">hilldiv3 3.1.0<a class="anchor" aria-label="anchor" href="#hilldiv3-310"></a></h2>
