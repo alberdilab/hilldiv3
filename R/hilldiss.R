@@ -9,11 +9,16 @@
 #' @inheritParams hillpart
 #' @param hierarchy Optional one-sided nesting formula, coarsest to finest,
 #'   e.g. `~ region / site`. Every transition above `sample`, including
-#'   `total`, gets its own overlap metrics. Each run uses one shared tree
+#'   `total`, gets its own dissimilarity metrics. Each run uses one shared tree
 #'   `depth` or functional `tau`; a functional `tau` grid runs the full
 #'   hierarchy once per threshold.
 #' @param metric Dissimilarity metric(s) to return, any of `"S"`, `"C"`, `"U"`,
-#'   `"V"`. Defaults to all four.
+#'   `"V"`. Defaults to all four. `"S"` (Jaccard-type) and `"V"` (Sorensen-type)
+#'   are turnover measures, relative to the pooled assemblage and to a single
+#'   assemblage respectively; `"U"` (Jaccard-type) and `"C"` (Sorensen-type;
+#'   one minus the Morisita-Horn similarity at `q = 2`) are the corresponding
+#'   overlap complements (proportions of non-shared units). At `q = 0`,
+#'   `"U"` equals `"S"` and `"C"` equals `"V"`; at `q = 1`, `"U"` equals `"C"`.
 #' @param out Output shape: `"tibble"` (default) returns a long-format
 #'   `data.frame` with columns `q`, `metric`, `value`; `"matrix"` returns the
 #'   legacy matrix (orders in rows, metrics in columns, dropped to a vector for
@@ -51,6 +56,10 @@ hilldiss <- function(data, q = c(0, 1, 2), metric = c("S", "C", "U", "V"),
 #' (Chiu et al. 2014). These are `1 -` the dissimilarities from [hilldiss()].
 #'
 #' @inheritParams hilldiss
+#' @param metric Similarity metric(s) to return, any of `"S"`, `"C"`, `"U"`,
+#'   `"V"`. Defaults to all four. Each is one minus the dissimilarity of the
+#'   same code in [hilldiss()], so identical assemblages give 1. `"C"` at
+#'   `q = 2` is the Morisita-Horn similarity.
 #' @return A long-format `data.frame` of class `hill_similarity` (default, with
 #'   a `plot()` method), or a matrix/vector of similarities when
 #'   `out = "matrix"`.

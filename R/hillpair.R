@@ -9,7 +9,7 @@
 #' The type-specific structure (per-sample normalisation, the tree traversal or
 #' the functional similarity product) is computed **once** over all samples via
 #' the partitioning engine; each pair then only combines its two precomputed
-#' columns into beta, which is turned into the requested overlap metrics. The
+#' columns into beta, which is turned into the requested dissimilarity metrics. The
 #' maths are therefore identical to [hilldiss()] on two samples, without
 #' re-running the full engine per pair. When `parallel = TRUE` and the `furrr`
 #' package is installed, pairs are computed in parallel via the active `future`

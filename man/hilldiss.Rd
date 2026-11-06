@@ -27,7 +27,12 @@ sample is not meaningful for partitioning.}
 \code{c(0, 1, 2)} (richness, Shannon, Simpson).}
 
 \item{metric}{Dissimilarity metric(s) to return, any of \code{"S"}, \code{"C"}, \code{"U"},
-\code{"V"}. Defaults to all four.}
+\code{"V"}. Defaults to all four. \code{"S"} (Jaccard-type) and \code{"V"} (Sorensen-type)
+are turnover measures, relative to the pooled assemblage and to a single
+assemblage respectively; \code{"U"} (Jaccard-type) and \code{"C"} (Sorensen-type;
+one minus the Morisita-Horn similarity at \code{q = 2}) are the corresponding
+overlap complements (proportions of non-shared units). At \code{q = 0},
+\code{"U"} equals \code{"S"} and \code{"C"} equals \code{"V"}; at \code{q = 1}, \code{"U"} equals \code{"C"}.}
 
 \item{tree}{A phylogenetic tree of class \code{phylo} whose tip labels match the
 taxa in \code{data}.}
@@ -52,7 +57,7 @@ matrices for a \code{tau} grid.}
 
 \item{hierarchy}{Optional one-sided nesting formula, coarsest to finest,
 e.g. \code{~ region / site}. Every transition above \code{sample}, including
-\code{total}, gets its own overlap metrics. Each run uses one shared tree
+\code{total}, gets its own dissimilarity metrics. Each run uses one shared tree
 \code{depth} or functional \code{tau}; a functional \code{tau} grid runs the full
 hierarchy once per threshold.}
 

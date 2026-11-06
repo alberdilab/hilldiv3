@@ -26,8 +26,10 @@ sample is not meaningful for partitioning.}
 \item{q}{Numeric vector of diversity orders (>= 0). Defaults to
 \code{c(0, 1, 2)} (richness, Shannon, Simpson).}
 
-\item{metric}{Dissimilarity metric(s) to return, any of \code{"S"}, \code{"C"}, \code{"U"},
-\code{"V"}. Defaults to all four.}
+\item{metric}{Similarity metric(s) to return, any of \code{"S"}, \code{"C"}, \code{"U"},
+\code{"V"}. Defaults to all four. Each is one minus the dissimilarity of the
+same code in \code{\link[=hilldiss]{hilldiss()}}, so identical assemblages give 1. \code{"C"} at
+\code{q = 2} is the Morisita-Horn similarity.}
 
 \item{tree}{A phylogenetic tree of class \code{phylo} whose tip labels match the
 taxa in \code{data}.}
@@ -52,7 +54,7 @@ matrices for a \code{tau} grid.}
 
 \item{hierarchy}{Optional one-sided nesting formula, coarsest to finest,
 e.g. \code{~ region / site}. Every transition above \code{sample}, including
-\code{total}, gets its own overlap metrics. Each run uses one shared tree
+\code{total}, gets its own dissimilarity metrics. Each run uses one shared tree
 \code{depth} or functional \code{tau}; a functional \code{tau} grid runs the full
 hierarchy once per threshold.}
 

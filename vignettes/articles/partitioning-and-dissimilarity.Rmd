@@ -162,7 +162,7 @@ hillpart(tab, hierarchy = ~ region / site, metadata = md, dist = my_dist)
   `tau` values runs one full hierarchy per threshold; per-scale `tau` values
   are not supported.
 * **Hierarchical overlap and pairwise comparisons.** `hilldiss()` and
-  `hillsim()` convert each transition's beta to bounded overlap metrics using
+  `hillsim()` convert each transition's beta to bounded dissimilarity metrics using
   its data-dependent ceiling. `hillpair()` compares weighted pooled units at
   a selected hierarchy level.
 
@@ -175,29 +175,32 @@ replacing it.
 
 Beta lives on `[1, N]`, which is awkward to compare across studies with
 different sample counts. `hilldiss()` and `hillsim()` rescale it to `[0, 1]`
-using the four overlap measures of Chiu et al. (2014):
+using the four (dis)similarity measures of Chiu et al. (2014): two turnover
+types and two overlap-complement types. The table describes the
+dissimilarities returned by `hilldiss()`; `hillsim()` returns one minus each.
 
-| Code | Measure | Type |
+| Code | Measure | Perspective |
 |---|---|---|
-| `S` | Sorensen-type | local overlap, occurrence-flavoured |
-| `C` | Jaccard-type (Morisita-Horn at `q = 2`) | local overlap, abundance-flavoured |
-| `U` | one-minus regional overlap | regional |
-| `V` | homogeneity / Sorensen complement | regional |
+| `S` | Jaccard-type turnover | turnover relative to the pooled assemblage (gamma) |
+| `V` | Sorensen-type turnover | turnover relative to a single assemblage (alpha) |
+| `U` | Jaccard-type overlap complement | proportion of non-shared units in the pooled assemblage |
+| `C` | Sorensen-type overlap complement (1 − Morisita-Horn at `q = 2`) | effective average proportion of non-shared units in a single assemblage |
 
 ```{r hilldiss}
-hilldiss(counts)            # dissimilarities, one column per metric
+hilldiss(counts)            # dissimilarities, long table (q, metric, value)
 hillsim(counts)             # similarities = 1 - dissimilarity
 ```
 
-Request a single metric and order to get a plain matrix slice:
+Request a single metric and order, and ask for the legacy matrix form with
+`out = "matrix"`:
 
 ```{r single-metric}
-hilldiss(counts, q = 1, metric = "C")
+hilldiss(counts, q = 1, metric = "C", out = "matrix")
 ```
 
-The choice of `q` matters as much as the metric: `q = 0` weights presence/
-absence (turnover of rare taxa), while `q = 2` reflects shifts among dominant
-taxa.
+The choice of `q` matters as much as the metric: `q = 0` counts all taxa
+equally (presence/absence), while `q = 2` reflects shifts among dominant taxa.
+At `q = 0`, `U` equals `S` and `C` equals `V`; at `q = 1`, `U` equals `C`.
 
 ## Pairwise dissimilarity for ordination
 
@@ -219,7 +222,7 @@ text(pcoa, labels = rownames(pcoa))
 ```
 
 Ask for several orders/metrics at once and you get a **named list** of `dist`
-objects (e.g. `q0S`, `q1C`):
+objects (e.g. `q0C`, `q2U`):
 
 ```{r hillpair-list}
 ds <- hillpair(counts, q = c(0, 2), metric = c("C", "U"))

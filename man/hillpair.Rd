@@ -28,7 +28,12 @@ sample is not meaningful for partitioning.}
 \code{c(0, 1, 2)} (richness, Shannon, Simpson).}
 
 \item{metric}{Dissimilarity metric(s) to return, any of \code{"S"}, \code{"C"}, \code{"U"},
-\code{"V"}. Defaults to all four.}
+\code{"V"}. Defaults to all four. \code{"S"} (Jaccard-type) and \code{"V"} (Sorensen-type)
+are turnover measures, relative to the pooled assemblage and to a single
+assemblage respectively; \code{"U"} (Jaccard-type) and \code{"C"} (Sorensen-type;
+one minus the Morisita-Horn similarity at \code{q = 2}) are the corresponding
+overlap complements (proportions of non-shared units). At \code{q = 0},
+\code{"U"} equals \code{"S"} and \code{"C"} equals \code{"V"}; at \code{q = 1}, \code{"U"} equals \code{"C"}.}
 
 \item{tree}{A phylogenetic tree of class \code{phylo} whose tip labels match the
 taxa in \code{data}.}
@@ -83,7 +88,7 @@ weights make this equivalent to pooling the original counts.
 The type-specific structure (per-sample normalisation, the tree traversal or
 the functional similarity product) is computed \strong{once} over all samples via
 the partitioning engine; each pair then only combines its two precomputed
-columns into beta, which is turned into the requested overlap metrics. The
+columns into beta, which is turned into the requested dissimilarity metrics. The
 maths are therefore identical to \code{\link[=hilldiss]{hilldiss()}} on two samples, without
 re-running the full engine per pair. When \code{parallel = TRUE} and the \code{furrr}
 package is installed, pairs are computed in parallel via the active \code{future}
