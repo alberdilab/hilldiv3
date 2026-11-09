@@ -214,7 +214,9 @@ hier_part_prep <- function(counts, type = "neutral", tree = NULL, dist = NULL,
         node_depth <- ape::node.depth.edgelength(tree)
         height <- max(node_depth[seq_along(tree$tip.label)])
         if (depth > height) {
-          cli::cli_abort("{.arg depth} must not exceed the tree height ({height}).")
+          cli::cli_abort(
+            "{.arg depth} must not exceed the tree height ({height})."
+          )
         }
       }
       ba <- branch_abundance(tree, tss(counts))   # Li, ai (edges x samples)
@@ -296,7 +298,8 @@ hier_part_prep <- function(counts, type = "neutral", tree = NULL, dist = NULL,
   if (!is.null(names(weights))) {
     sample_ids <- colnames(counts)
     if (is.null(sample_ids) || anyNA(names(weights)) ||
-        anyDuplicated(names(weights)) || !setequal(names(weights), sample_ids)) {
+        anyDuplicated(names(weights)) ||
+        !setequal(names(weights), sample_ids)) {
       cli::cli_abort("Named {.arg weights} must match the sample column names
                       exactly.")
     }
