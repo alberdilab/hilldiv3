@@ -18,7 +18,9 @@ Chiu et al. (2014)
 [doi:10.1890/12-0960.1](https://doi.org/10.1890/12-0960.1) and reviewed
 in Alberdi & Gilbert (2019)
 [doi:10.1111/1755-0998.13014](https://doi.org/10.1111/1755-0998.13014) .
-Optional import adapters interoperate with the Bioconductor packages
+The package is described in Alberdi, Gilbert & Aizpurua (2026)
+[doi:10.64898/2026.11.12.766119](https://doi.org/10.64898/2026.11.12.766119)
+. Optional import adapters interoperate with the Bioconductor packages
 'phyloseq', 'SummarizedExperiment' and 'TreeSummarizedExperiment', which
 are available from <https://bioconductor.org>.
 

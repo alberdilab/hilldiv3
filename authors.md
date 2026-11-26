@@ -8,16 +8,17 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/alberdilab/hilldiv3/blob/main/DESCRIPTION)
+[`inst/CITATION`](https://github.com/alberdilab/hilldiv3/blob/main/inst/CITATION)
 
-Alberdi A (2026). *hilldiv3: Integral Analysis of Diversity Based on
-Hill Numbers*. R package version 3.2.1,
-<https://github.com/alberdilab/hilldiv3>.
+Alberdi A, Gilbert MTP, Aizpurua O (2026). hilldiv3: a unified
+Hill-number framework for neutral, phylogenetic and functional diversity
+analysis in R. bioRxiv. https://doi.org/10.64898/2026.11.12.766119
 
-    @Manual{,
-      title = {hilldiv3: Integral Analysis of Diversity Based on Hill Numbers},
-      author = {Antton Alberdi},
+    @Article{,
+      title = {hilldiv3: a unified Hill-number framework for neutral, phylogenetic and functional diversity analysis in R},
+      author = {Antton Alberdi and M. Thomas P. Gilbert and Ostaizka Aizpurua},
+      journal = {bioRxiv},
       year = {2026},
-      note = {R package version 3.2.1},
-      url = {https://github.com/alberdilab/hilldiv3},
+      doi = {10.64898/2026.11.12.766119},
+      url = {https://doi.org/10.64898/2026.11.12.766119},
     }
