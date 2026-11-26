@@ -145,9 +145,17 @@ project, you agree to abide by its terms.
 
 ## Citation
 
-If you use `hilldiv3`, please cite it using the metadata in
-[`CITATION.cff`](https://github.com/alberdilab/hilldiv3/blob/main/CITATION.cff) (GitHub's "Cite this repository" button), and
-the methodological guide:
+If you use `hilldiv3`, please cite the main manuscript:
+
+* Alberdi, A., Gilbert, M.T.P. & Aizpurua, O. (2026). hilldiv3: a unified
+  Hill-number framework for neutral, phylogenetic and functional diversity
+  analysis in R. *bioRxiv*.
+  <https://doi.org/10.64898/2026.11.12.766119>
+
+Software citation metadata is in
+[`CITATION.cff`](https://github.com/alberdilab/hilldiv3/blob/main/CITATION.cff)
+(GitHub's "Cite this repository" button), and `citation("hilldiv3")` in R. For
+the methodological background, please also cite:
 
 * Alberdi, A. & Gilbert, M.T.P. (2019). A guide to the application of Hill
   numbers to DNA-based diversity analyses. *Mol. Ecol. Resour.*, 19, 804-817.

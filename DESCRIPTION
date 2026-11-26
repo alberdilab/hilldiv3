@@ -18,6 +18,8 @@ Description: Measures and compares the diversity of biological communities
     <doi:10.1890/06-1736.1>, Chao et al. (2010)
     <doi:10.1098/rstb.2010.0272>, Chiu et al. (2014) <doi:10.1890/12-0960.1>
     and reviewed in Alberdi & Gilbert (2019) <doi:10.1111/1755-0998.13014>.
+    The package is described in Alberdi, Gilbert & Aizpurua (2026)
+    <doi:10.64898/2026.11.12.766119>.
     Optional import adapters interoperate with the Bioconductor packages
     'phyloseq', 'SummarizedExperiment' and 'TreeSummarizedExperiment',
     which are available from <https://bioconductor.org>.

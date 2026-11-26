@@ -12,6 +12,20 @@ authors:
     email: antton.alberdi@sund.ku.dk
     orcid: "https://orcid.org/0000-0002-2875-6446"
     affiliation: "University of Copenhagen"
+preferred-citation:
+  type: article
+  title: "hilldiv3: a unified Hill-number framework for neutral, phylogenetic and functional diversity analysis in R"
+  authors:
+    - family-names: Alberdi
+      given-names: Antton
+    - family-names: Gilbert
+      given-names: M. Thomas P.
+    - family-names: Aizpurua
+      given-names: Ostaizka
+  journal: "bioRxiv"
+  year: 2026
+  doi: "10.64898/2026.11.12.766119"
+  url: "https://doi.org/10.64898/2026.11.12.766119"
 keywords:
   - R
   - ecology

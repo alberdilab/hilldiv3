@@ -1,3 +1,10 @@
+# hilldiv3 (development version)
+
+* The package is now described in a bioRxiv preprint (Alberdi, Gilbert &
+  Aizpurua 2026, <https://doi.org/10.64898/2026.11.12.766119>), which is the
+  main reference to cite. It is added to the `DESCRIPTION`, `README.md`,
+  `CITATION.cff` and `citation("hilldiv3")`.
+
 # hilldiv3 3.2.1
 
 * Tests no longer open a PDF device on `/dev/null`, which does not exist on

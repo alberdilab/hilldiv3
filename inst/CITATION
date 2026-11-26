@@ -1,0 +1,19 @@
+bibentry(
+  "Article",
+  title = "hilldiv3: a unified Hill-number framework for neutral, phylogenetic and functional diversity analysis in R",
+  author = c(
+    person("Antton", "Alberdi"),
+    person("M. Thomas P.", "Gilbert"),
+    person("Ostaizka", "Aizpurua")
+  ),
+  journal = "bioRxiv",
+  year = "2026",
+  doi = "10.64898/2026.11.12.766119",
+  url = "https://doi.org/10.64898/2026.11.12.766119",
+  textVersion = paste(
+    "Alberdi A, Gilbert MTP, Aizpurua O (2026).",
+    "hilldiv3: a unified Hill-number framework for neutral, phylogenetic",
+    "and functional diversity analysis in R. bioRxiv.",
+    "https://doi.org/10.64898/2026.11.12.766119"
+  )
+)
